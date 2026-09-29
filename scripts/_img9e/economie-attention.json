@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "visage éclairé par l'écran d'un smartphone dans l'obscurité la nuit",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c8af341eb4e7.jpg",
+      "caption": "A person's glowing face is displayed on a smartphone screen held in darkness; contains 123RF watermarks.",
+      "source": "123RF",
+      "original_width": "1300px",
+      "original_height": "867px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9fcb5dd6187e.jpg",
+      "caption": "A young woman in glasses and hoodie smiles at her phone against a twilight city backdrop. Contains \"depositphotos\" watermarks and Image ID text (452243780).",
+      "source": "DepositPhotos",
+      "original_width": "1600px",
+      "original_height": "1167px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c9593e49613c.png",
+      "caption": "Blurry green night-vision view through a circular lens, showing a faint dark figure holding a rifle against bright green background.",
+      "source": "Reddit",
+      "original_width": "860px",
+      "original_height": "1573px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c27fdf44d6b.jpg",
+      "caption": "A hand holds a glowing smartphone with orange rim light in a dark, smoky blue setting. Suitable for background image.",
+      "source": "StockCake",
+      "original_width": "768px",
+      "original_height": "1344px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8d954d01e35a.jpg",
+      "caption": "Rugged 5G smartphone advertisement, front and back views, showing specs \"36GB+256GB\", \"mAh 20,000\", \"64MP AI CAMERA\", \"10:08\", \"SMTWTFS\", \"INTELLIGENT DISPLAY SCREEN\". Contains promotional text and graphics; suitable for background image.",
+      "source": "Amazon",
+      "original_width": "992px",
+      "original_height": "1000px"
+    }
+  ]
+}

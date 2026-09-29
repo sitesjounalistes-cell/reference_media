@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "vue aérienne de l'océan bleu profond avec des vagues et de l'écume",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7af57339eaa8.jpg",
+      "caption": "Aerial view of ocean waves with white foam rolling toward a sandy beach, sunlight sparkling on blue water. Contains \"dreamstime.com\" watermarks, ID 430531659, © Sanuar Husen. Not suitable for background image due to watermarks.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "990px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4e9bba31957f.jpg",
+      "caption": "Aerial view of turquoise ocean waves with white foamy crests; contains Alamy watermarks and Image ID: 2HMXC1T.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "610px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9d84f1821707.jpg",
+      "caption": "Interior with large aerial ocean wave mural, red bar stools, turquoise wire chairs, patterned black-and-white tile floor, gold pendant lights; suitable for background image.",
+      "source": "Illulart",
+      "original_width": "1512px",
+      "original_height": "2268px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b4e60f5c6edb.jpg",
+      "caption": "Framed aerial beach waves photo on beige wall above wooden console with plant, lamp, books; text \"LIVE BEAUTIFULLY\"; suitable for background image",
+      "source": "Fy!",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/37ca68343570.jpg",
+      "caption": "Turbulent ocean water with white foam, featuring multiple Alamy watermarks. Text: \"alamy\", \"Image ID: 2WGRTP0\", \"www.alamy.com\".",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "assortiment d'aliments fermentés yaourt choucroute et kéfir sur une table",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bb59fe04327b.jpg",
+      "caption": "Overhead shot of choucroute garnie: terracotta bowl with sauerkraut, sausages, potatoes, bacon, parsley on dark slate. suitable for background image",
+      "source": "Journal des Femmes Santé",
+      "original_width": "1600px",
+      "original_height": "2400px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0b0428ecb432.jpeg",
+      "caption": "A rustic wooden table displays fermented foods: kimchi, sauerkraut, kombucha (labeled \"KOMBUCHA ARTISANAL\"), yogurt with berries, pickles, and baguette.",
+      "source": "Doctissimo",
+      "original_width": "1200px",
+      "original_height": "675px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4969638f367d.webp",
+      "caption": "Fermented foods displayed on a wooden table: sauerkraut jars, kimchi, yogurt bowl, miso, bread, and cabbage.",
+      "source": "InnerBuddies",
+      "original_width": "1200px",
+      "original_height": "800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e5544d79f7c3.jpg",
+      "caption": "Wooden shelves filled with glass mason jars of home-canned vegetables, pickles, meats, and sauces in vibrant colors.",
+      "source": "Quartz",
+      "original_width": "1920px",
+      "original_height": "1339px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5564f75a5706.jpg",
+      "caption": "Shredded white vegetables garnished with fennel seeds, served in a ceramic bowl on a speckled countertop; no text, suitable for background image.",
+      "source": "Révolution Fermentation",
+      "original_width": "1400px",
+      "original_height": "788px"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "grande salle d'ordinateurs centraux vintage avec bandes magnétiques, années 1970",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9ff58b53da93.jpg",
+      "caption": "A man in a maroon suit operates an RCA Spectra 70/45 vintage mainframe computer with tape drives; contains Alamy watermarks.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "1113px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d470ea9f9237.jpg",
+      "caption": "A man operates a vintage IBM mainframe computer with tape drives and printer paper in a 1960s computer room; Alamy watermarks present.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "1030px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d5d655e2d184.jpeg",
+      "caption": "A music room featuring instruments, TV, and furniture. Text: Ampeg, Fender. Suitable for background image.",
+      "source": "Reddit",
+      "original_width": "4032px",
+      "original_height": "3024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2afa7f16aff1.jpg",
+      "caption": "A Raymarine E80 marine chartplotter/radar display showing a colorful navigation radar screen, photographed on white background.",
+      "source": "eBay",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e2ffc8f39ee5.jpg",
+      "caption": "A man leans over a table filled with vintage Minitel computers in a dimly lit room. Text: tel. suitable for background image",
+      "source": "Le Monde",
+      "original_width": "1440px",
+      "original_height": "960px"
+    }
+  ]
+}

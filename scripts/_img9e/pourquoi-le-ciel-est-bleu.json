@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "ciel bleu éclatant avec nuages blancs et soleil",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a3fe2692767a.jpg",
+      "caption": "Fluffy white cumulus clouds scattered across vivid blue sky; contains Alamy watermarks and ID \"2C4HYTM\", so not suitable as background.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "936px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f653959d54f9.jpg",
+      "caption": "Bright sun shining over scattered white clouds in a vivid blue sky; high clarity, no text or watermarks. Suitable for background image.",
+      "source": "Public Domain Pictures",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bb1e5b325a58.jpg",
+      "caption": "Fluffy white cumulus clouds fill a vivid blue sky above lush green trees and distant residential buildings, with no text. Suitable for background image.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4497px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a676797b334b.jpg",
+      "caption": "Bright sun shining through white clouds in vivid blue sky, high clarity, but contains Dreamstime watermarks and bottom text bar.",
+      "source": "Dreamstime",
+      "original_width": "1068px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/aa005ae15e4f.jpg",
+      "caption": "Bright sun shining over blue sky with scattered white clouds; contains Alamy watermarks and image ID text.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    }
+  ]
+}

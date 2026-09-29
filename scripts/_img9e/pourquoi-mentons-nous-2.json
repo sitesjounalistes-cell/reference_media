@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "portrait en clair-obscur d'un homme dont la moitié du visage est plongée dans l'ombre",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/38374bb74d1c.webp",
+      "caption": "Impressionist wall art panel: serene face emerging among swirling flowers, gold leaf accents; signature \"Walensky\" bottom right; suitable for background image.",
+      "source": "Walensky",
+      "original_width": "2031px",
+      "original_height": "2030px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/524a52862239.jpg",
+      "caption": "Text: \"BEGINNER PORTRAITS IN GOUACHE\". Two gouache portrait paintings—a smiling bespectacled man and a man in a tuxedo—on a black background.",
+      "source": "Skillshare",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ccf532997254.jpg",
+      "caption": "A black and white painted portrait of a suited man in tuxedo with bow tie, expressive brushstrokes, no text, suitable for background image.",
+      "source": "Skillshare",
+      "original_width": "1242px",
+      "original_height": "839px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bc77c5b43d31.jpg",
+      "caption": "Split image: black-and-white portrait of a dark-haired man beside a warm-toned classical painting of a woman with exposed chest.",
+      "source": "Beaux Arts Magazine",
+      "original_width": "1300px",
+      "original_height": "975px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d933ebcfacbc.jpg",
+      "caption": "",
+      "source": "Le Club de Mediapart",
+      "original_width": "1200px",
+      "original_height": "990px"
+    }
+  ]
+}

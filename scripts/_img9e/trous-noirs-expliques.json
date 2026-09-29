@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "photographie du trou noir M87 avec son disque d'accrétion observé par les astronomes",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/715300f745f5.png",
+      "caption": "A glowing black hole with an orange-red accretion disk and swirling blue jets against black space. suitable for background image",
+      "source": "Futura Sciences",
+      "original_width": "1280px",
+      "original_height": "667px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e296db84cf6.jpg",
+      "caption": "This image is an educational astronomy infographic comparing black hole rotation scenarios: Retrograde Rotation, No Black Hole Rotation, and Prograde Rotation. It contains data charts plotting X-ray Brightness versus Energy (keV, 2–50), with \"Gravitational Distortion\" labeled on the bottom chart. It is a diagram with charts, not suitable as a background image.",
+      "source": "Numerama",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c33016e9407.jpg",
+      "caption": "A bearded man in a gray shirt demonstrates a large white ring light reflector with black interior disc against dark backdrop.",
+      "source": "CNRS Le journal",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ac5a806d7dc5.jpg",
+      "caption": "A glowing orange-black cosmic scene: swirling red nebula surrounds a bright central accretion disk with a thin light jet. Suitable for background image.",
+      "source": "Eso.org",
+      "original_width": "1280px",
+      "original_height": "796px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4aa4aa69787a.png",
+      "caption": "Side-by-side comparison of black hole images: 1979 simulation versus the first real image from April 10, 2019. Text: \"First Simulated Image,\" \"1979,\" \"First Image,\" \"Apr. 10, 2019,\" \"Milky Way,\" \"Indulge Curiosity.\" Collage with watermark; not suitable as background image.",
+      "source": "Reddit",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    }
+  ]
+}

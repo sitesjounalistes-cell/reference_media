@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "allée de serveurs dans un centre de données moderne",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/707fa79d0596.jpg",
+      "caption": "Server racks with blue lights overlaid by green Matrix-style code, watermarked \"alamy\" repeatedly; Image ID: KCPAF5, www.alamy.com.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "949px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/50d4863161b7.jpg",
+      "caption": "A modern data center corridor with white server racks on both sides, black servers with colorful indicator lights, and a dark door. Suitable for background image",
+      "source": "Infomaniak News",
+      "original_width": "2410px",
+      "original_height": "1260px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/abdb487ef378.jpg",
+      "caption": "Shiny golden padlock over glowing blue circuit board server racks, symbolizing cybersecurity; contains Dreamstime watermarks and ID text.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1004px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f57d90ccf0a1.jpg",
+      "caption": "A smiling woman in a red blazer and a man in a dark suit walk through a data center corridor between white server racks.",
+      "source": "Faculté des sciences et de génie - Université Laval",
+      "original_width": "1920px",
+      "original_height": "1004px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/242f6a4f564e.jpg",
+      "caption": "Futuristic server room corridor with glowing server racks and neon blue lights; contains \"Unsplash+\" watermarks throughout.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "1472px"
+    }
+  ]
+}

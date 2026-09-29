@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "façade du siège de la Banque centrale européenne à Francfort",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0de3542c969d.jpg",
+      "caption": "Frankfurt skyline at sunset: ECB tower, arched steel bridge over Main River, city skyline, reflections, warm sky, no text.",
+      "source": "Guide de Voyage - EnVols",
+      "original_width": "1920px",
+      "original_height": "960px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9d8153f0d446.jpg",
+      "caption": "Large blue Euro sign sculpture with yellow stars in Frankfurt, surrounded by skyscrapers and greenery under clear blue sky; contains \"123RF\" watermarks.",
+      "source": "123RF",
+      "original_width": "866px",
+      "original_height": "1300px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3eaf6aab480f.jpg",
+      "caption": "Close-up of a modern building's facade featuring blue glass panels, white vertical mullions, and a clear sky. Suitable for background image.",
+      "source": "Bluewin",
+      "original_width": "1920px",
+      "original_height": "1920px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b1cf8d705e15.jpg",
+      "caption": "A grand Sofitel hotel building with beige facade, many windows, surrounded by lush green trees. Text: \"SOFITEL\". High clarity, no watermark.",
+      "source": "Accor",
+      "original_width": "1024px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0ac9a165a51d.jpg",
+      "caption": "Ornate classical building facade with golden \"Danske Bank\" signage, sculpted pediment relief, white awnings, blue sky.",
+      "source": "l'Opinion",
+      "original_width": "1486px",
+      "original_height": "987px"
+    }
+  ]
+}

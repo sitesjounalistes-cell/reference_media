@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "adulte endormi paisiblement dans son lit, lumière douce du matin",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/17da410033a3.jpg",
+      "caption": "A middle-aged man sleeping peacefully under a blue blanket in a cozy cabin bedroom, warm lamp glowing. Suitable for background image.",
+      "source": "Media.io",
+      "original_width": "928px",
+      "original_height": "1152px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/594d8295cfcc.jpg",
+      "caption": "A young man sleeps peacefully on dark blue pillows in a warm sunlit bedroom with beige bedding. No text, clear image, no watermarks. Suitable for background image",
+      "source": "Wopilo",
+      "original_width": "2568px",
+      "original_height": "1230px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8173ec9c8d94.jpeg",
+      "caption": "A bearded man in blue pajamas stretches happily on a bed labeled \"BLACKROLL\" in a bright bedroom.",
+      "source": "blackroll",
+      "original_width": "1400px",
+      "original_height": "933px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b1d3ecf70ace.webp",
+      "caption": "A woman sleeps peacefully in white bedding, illuminated by a glowing lamp casting warm flame-like projections on the wall. Suitable for background image.",
+      "source": "Aurenergie FitYoga",
+      "original_width": "2048px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c028f6a7c220.jpg",
+      "caption": "Mother comforting girl in cozy bedroom at night; French text \"Comment apaiser les terreurs nocturnes ? Comprendre, rassurer et calmer en douceur\".",
+      "source": "Madouceveilleuse",
+      "original_width": "1774px",
+      "original_height": "887px"
+    }
+  ]
+}

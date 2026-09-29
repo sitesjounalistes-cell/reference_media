@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "query": "ordinateur quantique avec son cryostat doré en laboratoire",
+  "count": 4,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/06844a8065af.jpg",
+      "caption": "A gloved hand uses tweezers to hold a small blue quantum processor chip beside metal lab equipment; text \"CQT-0084-03\" visible; no watermark; suitable for background image",
+      "source": "L'Usine Digitale",
+      "original_width": "2048px",
+      "original_height": "1366px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/224f0d8bcf53.png",
+      "caption": "The image is a data chart: a stacked bar chart comparing \"Ordinateur A\" and \"Ordinateur B\" across processing times h1–h4, showing percentages of Production, Transport, Utilisation, and Fin de vie. It contains axis labels and a French legend, with no watermarks or blurriness.",
+      "source": "Agence Science-Presse",
+      "original_width": "1600px",
+      "original_height": "821px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9bf61d6dead9.jpg",
+      "caption": "Three people in blue \"Quandela\" lab coats work in a cleanroom laboratory with equipment, shelving, and machinery.",
+      "source": "Le Parisien",
+      "original_width": "1600px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/be989c15db9b.jpg",
+      "caption": "A glowing yellow futuristic device with braided orange and teal cables on an orange surface against turquoise background. Contains Dreamstime watermarks (not suitable for background image).",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1268px"
+    }
+  ]
+}

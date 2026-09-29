@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "caddie de courses rempli dans un rayon de supermarché",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/63755e3993e1.jpg",
+      "caption": "A shopper pushes a blue basket filled with groceries through a supermarket aisle; another customer browses shelves. Text includes \"0,99€\", \"BON PLAN\", \"Coca-Cola\", \"Kapla\", \"Aluminium\". No watermark, clear image.",
+      "source": "Nice-Matin",
+      "original_width": "1128px",
+      "original_height": "752px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ebbc44f4a034.png",
+      "caption": "A shopping cart overflowing with groceries, canned goods, and packaged meat inside a warehouse store aisle.",
+      "source": "Letribunaldunet.fr",
+      "original_width": "1344px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/511e1b4d9c3a.jpg",
+      "caption": "Shopping cart with red handle filled with grocery products on white background; contains Adobe Stock watermark.",
+      "source": "Adobe Stock",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fca3a74ed5ea.jpg",
+      "caption": "",
+      "source": "Sud Ouest",
+      "original_width": "1200px",
+      "original_height": "673px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e65f221bbe0a.jpeg",
+      "caption": "A shopper pushes a cart full of fresh groceries down a bright supermarket aisle; small text visible, no watermark; suitable for background image",
+      "source": "Top Santé",
+      "original_width": "1376px",
+      "original_height": "768px"
+    }
+  ]
+}

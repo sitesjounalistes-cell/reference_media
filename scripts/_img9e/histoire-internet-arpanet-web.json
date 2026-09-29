@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "salle informatique vintage avec ordinateurs centraux des années 1970",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3aba853b826f.jpg",
+      "caption": "Vintage 1970s computer room with workers, mainframe cabinets, tape reels, and fluorescent ceiling lights. Watermarked \"alamy\" throughout; not suitable for background.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "986px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7398c8228c64.jpg",
+      "caption": "A man operates a vintage RCA mainframe computer console with reel-to-reel tape drives; Alamy watermark present; text: \"RCA\".",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "1111px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/411e113780c2.jpg",
+      "caption": "A man in a suit operates a retro mainframe computer with green screens, surrounded by scattered papers in sunlight.",
+      "source": "StockCake",
+      "original_width": "768px",
+      "original_height": "1344px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d470ea9f9237.jpg",
+      "caption": "Black and white photo of a man operating vintage IBM mainframe tape drives and printer; watermarked \"alamy\".",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "1030px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ce1c1c04c92e.jpeg",
+      "caption": "Vintage Radio Shack TRS-80 desktop computer with monitor and detached keyboard on white table.",
+      "source": "Reddit",
+      "original_width": "1280px",
+      "original_height": "853px"
+    }
+  ]
+}

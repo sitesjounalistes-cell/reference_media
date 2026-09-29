@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "immeubles végétalisés avec arbres sur les façades architecture verte",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4961ff63b2b4.jpg",
+      "caption": "Aerial view of a plant-covered skyscraper (vertical forest) beside city buildings, with French subtitle: \"en Chine, des immeubles végétalisés hors de contrôle\".",
+      "source": "Dailymotion",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cfeb235f7429.jpg",
+      "caption": "Aerial top-down view of a lush green rooftop garden with white flowers, surrounded by trees, stone patio, and driveway.",
+      "source": "AD Magazine",
+      "original_width": "1600px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ccd15c8ce71f.jpg",
+      "caption": "A modern curved apartment building with white wavy balconies surrounded by lush greenery under a clear sky.",
+      "source": "Re-création",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ca54e51e316.jpg",
+      "caption": "A multi-story building covered with balconies of white planters and greenery, surrounded by trees, other residential buildings, and a lawn path.",
+      "source": "Paris la douce",
+      "original_width": "1600px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0e4cb67f642a.jpg",
+      "caption": "A multi-story residential building with balconies lined with white potted plants, surrounded by greenery.",
+      "source": "Paris la douce",
+      "original_width": "1600px",
+      "original_height": "1200px"
+    }
+  ]
+}

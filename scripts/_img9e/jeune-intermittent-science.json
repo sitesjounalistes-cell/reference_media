@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "assiette de repas sain à côté d'une horloge concept de jeûne",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d142bafc288.jpg",
+      "caption": "A mostly eaten cupcake in a paper liner on a white plate with knife and fork. Contains 123RF watermark; not suitable for background image.",
+      "source": "123RF",
+      "original_width": "1300px",
+      "original_height": "867px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7af6a474b32e.jpeg",
+      "caption": "A smiling woman in a black checkered shirt stands in a bright white kitchen, leaning on a counter with breakfast food.",
+      "source": "Reverse Health",
+      "original_width": "1500px",
+      "original_height": "1001px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2e7fd13cfe7b.jpg",
+      "caption": "Colorful vegan dish on a blue plate: herb loaf, lentil waffle, roasted squash, chickpeas, fresh salad, and soup. Suitable for background image.",
+      "source": "Tripadvisor",
+      "original_width": "1200px",
+      "original_height": "1166px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d140757010a5.jpg",
+      "caption": "Overhead flat-lay of a healthy breakfast: fried eggs on toast, avocado, salad, oranges, and coffee on rustic wood.",
+      "source": "ELLE",
+      "original_width": "1920px",
+      "original_height": "1248px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b2800011dd87.jpg",
+      "caption": "Cartoon plate with grilled salmon, lemon slices, quinoa, broccoli, and fresh salad; contains Dreamstime watermarks and ID text.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1690px"
+    }
+  ]
+}

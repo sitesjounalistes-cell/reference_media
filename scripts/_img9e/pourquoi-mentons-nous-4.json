@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "cartes à jouer et jetons de poker sur une table verte",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/85b50154bdd4.jpg",
+      "caption": "A close-up of playing cards (King and Ace of clubs) with stacked poker chips on a green casino table. No watermarks, high clarity, strong visual impact — suitable for background image.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "1993px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/19aa04b1422a.jpg",
+      "caption": "",
+      "source": "Wallpapers.com",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/766edd4a61fa.jpg",
+      "caption": "A player's hand holding Ace of Clubs and Ace of Hearts cards at a casino poker table with colorful chips; no watermarks; high clarity. Text: \"A\", \"A\".",
+      "source": "Wallpapers.com",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/840368787a5b.jpeg",
+      "caption": "Two fanned decks of playing cards: white cards with orange/black suits and jokers, and maroon-backed cards, on white background.",
+      "source": "Walmart",
+      "original_width": "1601px",
+      "original_height": "1601px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4fc395169fd.jpg",
+      "caption": "An open aluminum poker chip case with colorful chip rolls, playing cards, dice, dealer button, and green felt mat.",
+      "source": "Leroy Merlin",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    }
+  ]
+}

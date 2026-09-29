@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "une personne murmurant à l'oreille d'une autre personne dans la rue",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/750f89ff3d21.jpg",
+      "caption": "Two women outdoors, one placing a flower in the other's hair; contains Alamy watermarks and text: 3DREBXA, www.alamy.com.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/864268b179e2.jpg",
+      "caption": "Shocked blonde woman in white coat with outstretched arms, baby stroller in background; Alamy watermarks and stock image text present.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0b9fb274f33b.jpg",
+      "caption": "An abstract illustration of diverse women's profile silhouettes in warm red, orange, yellow, and brown tones. Suitable for background image",
+      "source": "Diacritik",
+      "original_width": "1200px",
+      "original_height": "765px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e80211f992a9.jpg",
+      "caption": "A minimalist book cover with red border frame, text \"EDMOND ABOUT,\" \"L'HOMME À L'OREILLE CASSÉE,\" \"BIBEBOOK.\"",
+      "source": "Scribd",
+      "original_width": "768px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/021ff2c80e12.jpg",
+      "caption": "A joyful man playfully dips a laughing blonde woman in a brown polka-dot dress outdoors. Suitable for background image.",
+      "source": "Parler d'Amour",
+      "original_width": "2560px",
+      "original_height": "1706px"
+    }
+  ]
+}

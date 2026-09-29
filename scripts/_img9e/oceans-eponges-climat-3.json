@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "grandes vagues de l'océan avec écume blanche se brisant sur la côte",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/534407ea3ff5.jpg",
+      "caption": "A serene canvas artwork showing gentle white ocean waves washing over beige sand in soft neutral tones. suitable for background image",
+      "source": "Desenio",
+      "original_width": "2000px",
+      "original_height": "2500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c56db2bbc53c.jpg",
+      "caption": "A painting of ocean waves with white foam in blue and teal tones, featuring a small red boat, with signature \"Wolensky\".",
+      "source": "Walensky",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/96b62ae1011d.jpg",
+      "caption": "Aerial view of deep blue ocean waves crashing with white foam against a dark, rocky shoreline. Suitable for background image.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "5333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98dc73ad6c3a.jpg",
+      "caption": "Aerial view of deep turquoise ocean water with white foamy waves cresting and swirling. suitable for background image",
+      "source": "Wallpapers.com",
+      "original_width": "881px",
+      "original_height": "1761px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3c5e41264443.jpg",
+      "caption": "Thick sea foam covers a beach with a wooden fence, ocean waves, and a cloudy sky. Suitable for background image.",
+      "source": "France 3 Régions - franceinfo",
+      "original_width": "1200px",
+      "original_height": "675px"
+    }
+  ]
+}

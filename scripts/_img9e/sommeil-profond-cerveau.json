@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "personne endormie paisiblement dans son lit la nuit",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/27c4f034e8c1.jpg",
+      "caption": "A bearded young man in a white t-shirt sleeps peacefully in bed under white bedding; Dreamstime watermarks present, so not suitable as background.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1155px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ae2a714b6f36.jpg",
+      "caption": "A peaceful sleeping baby wrapped in a soft beige blanket, lying on cream bedding. No text or watermarks. Suitable for background image.",
+      "source": "Famille Epanouie",
+      "original_width": "4928px",
+      "original_height": "3264px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8ad4aa2ba1d4.png",
+      "caption": "A bearded man sleeps peacefully on white bedding; blue overlay reads \"CALMER LES PENSÉES POUR MIEUX S'ENDOR\" - text cut off.",
+      "source": "Pratiquer la Méditation",
+      "original_width": "1200px",
+      "original_height": "675px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9ef60564b1ee.jpg",
+      "caption": "A person sleeps in bed wearing a black eye mask, under white floral bedding. Contains Dreamstime watermarks and text.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1156px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/14100fd50ef7.jpg",
+      "caption": "An elderly woman with gray hair sleeps peacefully wearing a black eye mask on an orange pillow. Contains Unsplash+ watermarks.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4500px"
+    }
+  ]
+}

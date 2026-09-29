@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "gros plan macro d'une abeille butinant une fleur jaune",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e14f5f5d48cb.jpg",
+      "caption": "A honeybee collects pollen on a vibrant yellow black-eyed Susan flower; contains Dreamstime watermarks and ID text.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "990px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/07b0d7b3e2b3.jpeg",
+      "caption": "A high-clarity macro photo of a honeybee with a pollen basket collecting pollen on a yellow catkin; suitable for background image",
+      "source": "Pexels",
+      "original_width": "1125px",
+      "original_height": "750px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6981a4365413.jpg",
+      "caption": "A honeybee covered in pollen gathers nectar from a white daisy's yellow center; sharp, vivid, watermark-free close-up. suitable for background image",
+      "source": "annagatignol.github.io",
+      "original_width": "900px",
+      "original_height": "1017px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8bc24db6792c.jpg",
+      "caption": "A honeybee collecting nectar from a white clover flower against a blurred green foliage background; high clarity, no watermark.\n\nsuitable for background image",
+      "source": "20 Minutes",
+      "original_width": "1444px",
+      "original_height": "920px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/624641e7af26.jpg",
+      "caption": "A honeybee collects nectar from a vibrant purple allium flower against a blurred green background. Contains Alamy watermark, not suitable for background image.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    }
+  ]
+}

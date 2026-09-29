@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "scientifique manipulant une pipette et des tubes d'ADN en laboratoire",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/15efb979ef13.jpg",
+      "caption": "A female scientist in white lab coat, hairnet, goggles, mask, and blue gloves examines an orange liquid sample in a laboratory. Image contains repeated \"Unsplash+\" watermarks throughout.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/592400c07d8d.jpg",
+      "caption": "Pipette dropping red liquid into test tubes filled with orange liquid on blue background; contains watermarks, unsuitable for background.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1154px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ab4fd2b7de22.jpg",
+      "caption": "A gloved scientist uses a micropipette to add pink liquid into a 96-well plate; contains depositphotos watermark, not suitable for background.",
+      "source": "DepositPhotos",
+      "original_width": "1600px",
+      "original_height": "1167px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1080cc95b10d.jpg",
+      "caption": "A gloved scientist in teal pours amber liquid from a flask into a volumetric flask in a laboratory. No text, no watermark.",
+      "source": "StockCake",
+      "original_width": "936px",
+      "original_height": "1664px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/78855d349c90.jpg",
+      "caption": "This infographic about microscope maintenance contains a large amount of text information and visible watermarks throughout the image.",
+      "source": "LinkedIn Gabon",
+      "original_width": "800px",
+      "original_height": "1198px"
+    }
+  ]
+}

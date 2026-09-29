@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "des gens assis côte à côte chacun absorbé dans son téléphone portable",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/eb5f1ad9881a.webp",
+      "caption": "Three business professionals in a modern office meeting, one woman gesturing while two men listen attentively; no text, high quality.",
+      "source": "Plaud - Plaud.ai",
+      "original_width": "1254px",
+      "original_height": "1254px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3a6854e2ca51.jpeg",
+      "caption": "A green smartphone showing the Leica camera module on a light background.\nText: LEICA VARIO-SUMMILUX 1:1.6-2.2/15-75 ASPH.\nsuitable for background image",
+      "source": "Xiaomi",
+      "original_width": "1080px",
+      "original_height": "1927px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/86b388635d01.jpg",
+      "caption": "Gemini分析异常",
+      "source": "Amazon",
+      "original_width": "800px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/109e99d6f88a.jpg",
+      "caption": "A black iPhone MagSafe case product image featuring \"360°\" text, \"STURDY LENS\" labels, 12:14 screen, and December 25.",
+      "source": "Amazon",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6ec720e35afa.jpg",
+      "caption": "Two purple iPads with Apple Pencil Pro on white background; left screen shows \"Mixtape Vol.03\" artwork; suitable for background image.",
+      "source": "Apple",
+      "original_width": "2560px",
+      "original_height": "1440px"
+    }
+  ]
+}

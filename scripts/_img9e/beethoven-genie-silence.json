@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "manuscrit ancien de partition de musique classique avec notes à l'encre",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/035f6b341bc3.jpg",
+      "caption": "Wavy musical staves with black notes and treble clefs on a beige ink-splattered background; contains Dreamstime watermark and ID 18683799 © Hibrida13.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1759289fe4e1.jpg",
+      "caption": "A handwritten musical score manuscript page featuring staves, notes, and lyrics for an orchestral composition. The image contains a large amount of text information and you do not need to output the text completely.",
+      "source": "Gazette Drouot",
+      "original_width": "1361px",
+      "original_height": "767px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3342e5445b4a.jpg",
+      "caption": "",
+      "source": "Gazette Drouot",
+      "original_width": "1181px",
+      "original_height": "1600px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/75865785e000.jpg",
+      "caption": "Handwritten vertical Chinese gongche musical notation manuscript, aged and grainy, contains a large amount of text information.",
+      "source": "OpenEdition Journals",
+      "original_width": "1024px",
+      "original_height": "1501px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cf7a200ac4f5.jpg",
+      "caption": "Antique engraved music manuscript page with figured bass exercises, text \"Formula Bassi diminuti cùm Ligaturis. Tab:VI,\" dense musical notation.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4663px"
+    }
+  ]
+}

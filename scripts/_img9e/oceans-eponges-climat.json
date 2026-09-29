@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "vue aérienne de vagues sur l'océan bleu profond",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cc0f991aa9af.jpg",
+      "caption": "Aerial view of lush green cliffs and red-brown rocks meeting turquoise ocean waves on a dark shoreline. No text or watermarks. Suitable for background image.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "5333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a115cf5d1eb5.jpg",
+      "caption": "Aerial view of turquoise ocean waves washing onto a sandy beach with dark rocky cliffs; no text or watermarks; suitable for background image",
+      "source": "Fy!",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7613e7a69e82.jpg",
+      "caption": "Aerial view of deep blue ocean water with sparkling sun reflections on rippled surface; contains Alamy watermark, not suitable for background.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "957px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c1c5fa4ed418.jpg",
+      "caption": "Aerial view of turquoise ocean waves with white foam. Contains Dreamstime watermarks and \"dreamstime.com\" text, ID 285894781 © Dmytro Zaharchuk. Not suitable for background due to watermarks.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "890px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b5aad85e1897.jpg",
+      "caption": "Turbulent turquoise ocean waves with white foam and spray, containing Alamy watermarks and logo.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    }
+  ]
+}

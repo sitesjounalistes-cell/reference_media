@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "statue antique en marbre d'un dieu grec exposée dans un musée",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/33f7ae3e42d9.jpg",
+      "caption": "Classical marble statues including Venus de Milo displayed in a museum gallery, blurred reclining sculpture in foreground, no text.",
+      "source": "Le Louvre",
+      "original_width": "1546px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1e0b3861aa93.jpg",
+      "caption": "Elegant museum gallery hall displaying white classical marble sculptures on stone pedestals, with arched ceilings, marble columns, warm lighting, and geometric tiled floors.",
+      "source": "Le Louvre",
+      "original_width": "1500px",
+      "original_height": "1119px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f01daa6de987.jpg",
+      "caption": "A weathered ancient carved face sculpture fragment with a painted eye, beige and brown patina, gray background, no text.",
+      "source": "GEO",
+      "original_width": "1200px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e8bea5b49f6e.jpg",
+      "caption": "The Dying Gaul marble sculpture, reclining wounded figure in museum hall; small watermark \"WestonWestmoreland.com\" at bottom left.",
+      "source": "Reddit",
+      "original_width": "1920px",
+      "original_height": "1079px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/172b9d404fc8.jpg",
+      "caption": "Close-up of an ancient weathered marble statue of a woman with wavy hair, displayed against a plain wall. Contains watermarks (dreamstime.com), ID text 221561409 © Bruce Whittingham.",
+      "source": "Dreamstime",
+      "original_width": "1200px",
+      "original_height": "1690px"
+    }
+  ]
+}

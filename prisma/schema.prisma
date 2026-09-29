@@ -1,0 +1,160 @@
+// REFERENCE.COM - Schéma de base de données
+// Portail de référence francophone : articles, catégories, auteurs, quiz
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String
+  color       String // hex, ex: "#1B5FD9"
+  icon        String // nom d'icône lucide, ex: "FlaskConical"
+  image       String? // image de couverture
+  order       Int       @default(0)
+  articles    Article[]
+  createdAt   DateTime  @default(now())
+}
+
+model Author {
+  id       String    @id @default(cuid())
+  name     String
+  role     String
+  bio      String
+  initials String // pour l'avatar (ex: "SM")
+  color    String // couleur d'avatar
+  articles Article[]
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String // markdown
+  coverImage  String?
+  videoUrl    String? // reportage vidéo (fichier médiathèque ou URL externe)
+  // Cycle de vie éditorial géré depuis le cockpit : DRAFT | PUBLISHED | HIDDEN
+  status      String   @default("PUBLISHED")
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  authorId    String
+  author      Author   @relation(fields: [authorId], references: [id])
+  tags        String // tags séparés par des virgules (SQLite n'a pas de tableaux)
+  readMinutes Int      @default(5)
+  views       Int      @default(0)
+  featured    Boolean  @default(false)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([views])
+  @@index([publishedAt])
+  @@index([status])
+}
+
+model FunFact {
+  id      String @id @default(cuid())
+  content String
+  source  String?
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String // clé de sujet : redaction | correction | partenariat | publicite | droits | autre
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([read])
+}
+
+// ----------------------------------------------------------------------------
+// Régie publicitaire : campagnes maison + tracking des impressions et clics.
+// ----------------------------------------------------------------------------
+
+model AdCampaign {
+  id         String    @id @default(cuid())
+  name       String // nom interne de la campagne
+  advertiser String // annonceur affiché
+  headline   String // titre de la créa
+  body       String // texte de la créa
+  ctaLabel   String // libellé du bouton
+  ctaView    String // destination : "home" | "about" | "contact:publicite" | "category:<slug>"
+  color      String // hex de marque de la campagne
+  imageUrl   String? // visuel de la créa (/uploads/ads/…) — créa texte si absent
+  slots      String // emplacements compatibles, séparés par des virgules
+  active     Boolean   @default(true)
+  weight     Int       @default(1)
+  events     AdEvent[]
+  createdAt  DateTime  @default(now())
+}
+
+model AdEvent {
+  id         String     @id @default(cuid())
+  campaignId String
+  campaign   AdCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  slot       String // top | leaderboard | sidebar | rail-left | rail-right | inline | billboard | bottom
+  type       String // impression | click
+  createdAt  DateTime   @default(now())
+
+  @@index([campaignId, type])
+  @@index([createdAt])
+}
+
+// ----------------------------------------------------------------------------
+// Cockpit rédaction : médiathèque, paramètres du site, annuaire de contact
+// et réseaux sociaux — tout est modifiable depuis l'espace rédaction.
+// ----------------------------------------------------------------------------
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  filename     String   @unique // nom stocké dans public/uploads
+  originalName String
+  mimeType     String
+  size         Int // octets
+  kind         String // IMAGE | VIDEO | AUDIO | DOC
+  createdAt    DateTime @default(now())
+
+  @@index([kind])
+}
+
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model ContactChannel {
+  id      String  @id @default(cuid())
+  type    String // PHONE | EMAIL | ADDRESS | HOURS
+  label   String // ex. « Rédaction », « Publicité »
+  value   String // ex. « +33 1 84 80 20 24 »
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+model SocialLink {
+  id       String  @id @default(cuid())
+  platform String // x | facebook | instagram | youtube | linkedin | tiktok | rss
+  url      String
+  order    Int     @default(0)
+  visible  Boolean @default(true)
+}

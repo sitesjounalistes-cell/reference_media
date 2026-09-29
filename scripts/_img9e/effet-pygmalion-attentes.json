@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "enseignante encourageant ses élèves en salle de classe",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 3,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bcd4871422e4.jpg",
+      "caption": "A smiling teacher helps diverse young children, including a girl with Down syndrome, writing at a classroom table; colorful geometric logo top-left.",
+      "source": "Education International",
+      "original_width": "1448px",
+      "original_height": "762px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e7a680fe7aaa.jpeg",
+      "caption": "A teacher and two children review worksheets at a classroom table while another woman holds a colorful open notebook.",
+      "source": "Chance",
+      "original_width": "1376px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7366fe665733.jpg",
+      "caption": "",
+      "source": "Mes Histoires du Soir",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/57fb44904a87.jpg",
+      "caption": "A teacher holding a yellow folder walks between elementary students' desks in a bright classroom; contains watermarks and text.",
+      "source": "Dreamstime",
+      "original_width": "1600px",
+      "original_height": "1157px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3af72245d40a.jpg",
+      "caption": "",
+      "source": "Le Parisien",
+      "original_width": "2800px",
+      "original_height": "1863px"
+    }
+  ]
+}

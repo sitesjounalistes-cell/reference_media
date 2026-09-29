@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "portrait d'une femme le doigt sur les lèvres geste de secret",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a68965faef32.jpg",
+      "caption": "Cartoon illustration of a winking woman with long brown hair, blue glasses, pink top, finger on lips gesturing silence; watermarked with \"depositphotos\" (Image ID: 429656726).",
+      "source": "DepositPhotos",
+      "original_width": "1600px",
+      "original_height": "1700px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0cee471a329d.jpg",
+      "caption": "Blonde woman in a blue top makes a shushing gesture. Contains multiple Alamy watermarks and large text information.",
+      "source": "Alamy",
+      "original_width": "865px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/231ae0439f31.jpg",
+      "caption": "A dark-haired woman pointing to her blushed cheek, natural makeup, green plant background, no text, high clarity, suitable for background image.",
+      "source": "Magnifaïk",
+      "original_width": "768px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/03680b02694f.jpg",
+      "caption": "A beauty advertisement close-up of a blonde woman with text \"CORRIGE LE VISIBLE, RETARDE L'INVISIBLE.\" Suitable for background image.",
+      "source": "NUXE",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6dffebc8b7c8.jpg",
+      "caption": "A close-up portrait of a young woman with dark hair and light eyes, suitable for background image.",
+      "source": "cottan",
+      "original_width": "2000px",
+      "original_height": "2000px"
+    }
+  ]
+}

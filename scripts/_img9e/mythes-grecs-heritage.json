@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "buste en marbre d'un dieu de la mythologie grecque au musée",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/14eb9001e8da.jpg",
+      "caption": "White marble Apollo bust sculpture on pedestal against a gray wall, inscribed \"APOLLO.\" Suitable for background image.",
+      "source": "The Ancient Home",
+      "original_width": "1080px",
+      "original_height": "1350px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e04e9dd890ca.jpg",
+      "caption": "A white marble bust of a bearded man (Zeus-like) in an arched hall. Contains watermark \"YOU FINE\" logo and text.",
+      "source": "Alibaba",
+      "original_width": "900px",
+      "original_height": "900px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/739ceb802974.jpg",
+      "caption": "A white plaster sculpture of Hypnos with a winged head, isolated on white background, high clarity, no text.",
+      "source": "Amazon",
+      "original_width": "1000px",
+      "original_height": "905px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9f8822b3ad2f.jpg",
+      "caption": "A marble statue of a bearded nude male with arms raised, displayed against a stone wall; contains Alamy watermarks.",
+      "source": "Alamy",
+      "original_width": "865px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8ea45f7ee793.jpg",
+      "caption": "White marble classical female bust sculpture on pedestal, indoor setting, with \"YOU FINE\" watermark logo — contains watermark, not suitable for background image.",
+      "source": "Alibaba",
+      "original_width": "900px",
+      "original_height": "900px"
+    }
+  ]
+}

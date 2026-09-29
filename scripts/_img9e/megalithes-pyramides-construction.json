@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "les grandes pyramides de Gizeh en Égypte vues du désert",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0c3471636a29.jpg",
+      "caption": "A close-up view of an ancient Egyptian pyramid's weathered stone blocks under an overcast sky. Suitable for background image.",
+      "source": "Reddit",
+      "original_width": "1920px",
+      "original_height": "2560px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c1deb0f821be.jpg",
+      "caption": "A tourist walks through the Giza pyramid complex, with the Great Pyramid and Sphinx visible under a hazy sky. Suitable for background image.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "2000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1326a0a89f6e.jpg",
+      "caption": "The Pyramids of Giza under a clear blue sky, with camels and horse-drawn carriages in the sandy desert foreground. Suitable for background image.",
+      "source": "Tripadvisor",
+      "original_width": "1200px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b9c3c5cd3f67.jpg",
+      "caption": "Silhouetted camel riders traverse a hazy desert before Egypt's Great Pyramid under a bright sun; no text, high visual impact, suitable for background image.",
+      "source": "www.booking.com",
+      "original_width": "1200px",
+      "original_height": "800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c7f2401bc3cc.jpg",
+      "caption": "A blonde woman wearing a blue headscarf and dress sits on a decorated camel before Egypt's Giza pyramids under a clear sky.",
+      "source": "TourRadar",
+      "original_width": "1500px",
+      "original_height": "800px"
+    }
+  ]
+}

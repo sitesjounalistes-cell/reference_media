@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "une personne plongée dans son smartphone dans le noir, le visage éclairé par l'écran",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3507fa15d6cd.jpg",
+      "caption": "A hand holds a lavender Galaxy Z Fold8 against a purple background with \"FOLD\" text: \"The all-new Galaxy Z Fold8, Galaxy AI\". Suitable for background image.",
+      "source": "Samsung",
+      "original_width": "1366px",
+      "original_height": "607px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e5c888453832.jpg",
+      "caption": "Black iPhone 16e product image showing front and back views with Apple logo. Text: \"iPhone 16e\". Contains watermark-like text; not suitable as background image.",
+      "source": "eBay",
+      "original_width": "987px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2051c0109277.jpg",
+      "caption": "Blue smartphone shown front and back, displaying \"3 Ans Garantie,\" \"12Go RAM,\" \"256Go ROM,\" gift icons; promotional product image.",
+      "source": "Amazon",
+      "original_width": "857px",
+      "original_height": "1000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/48ac123db6d3.jpg",
+      "caption": "Before/after Lightroom photo edit comparison: red-haired woman in field, \"Lr\" logo, color palette bars shown.",
+      "source": "Skillshare",
+      "original_width": "1280px",
+      "original_height": "720px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b51fca7ab247.jpg",
+      "caption": "A hand holds an iPhone displaying \"hello\" and \"Swipe up to open\" against blurred green foliage. Text: 7:24, SOS.",
+      "source": "TechRadar",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    }
+  ]
+}

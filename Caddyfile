@@ -1,0 +1,13 @@
+# REFERENCE.COM — reverse proxy frontal.
+# ⚠️ Sécurité : le bloc historique « XTransformPort » (proxy dynamique vers
+# n'importe quel port localhost via ?XTransformPort=…) a été SUPPRIMÉ :
+# il constituait un pivot SSRF ouvert vers les services internes.
+# Toute redirection vers un autre service doit être déclarée explicitement ici.
+:81 {
+	reverse_proxy localhost:3000 {
+		header_up Host {host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
+	}
+}

@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "jeune femme allongée dans le noir le visage éclairé par la lumière de son téléphone",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8708fa6980b8.jpg",
+      "caption": "A young woman lies in bed at night, face lit by blue smartphone glow, with visible \"Unsplash+\" watermark.",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4501px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/80450042eeb8.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b00efd4a447c.jpg",
+      "caption": "Black-and-white portrait of a young blonde woman in floral dress looking down, dark background; watermarked (Dreamstime ID 125507910).",
+      "source": "Dreamstime",
+      "original_width": "1115px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1b8a254c6f51.jpg",
+      "caption": "A tired man lying in bed at night looks at his smartphone; image contains Alamy watermarks and ID text (3D2D45W).",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/47624a126b67.jpg",
+      "caption": "A dark-haired woman reclines dramatically against a black leather couch, dramatic makeup, moody low-key lighting. Suitable for background image",
+      "source": "Unsplash",
+      "original_width": "3000px",
+      "original_height": "4500px"
+    }
+  ]
+}

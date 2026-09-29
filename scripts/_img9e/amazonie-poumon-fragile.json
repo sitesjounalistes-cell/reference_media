@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "vue aérienne de la forêt amazonienne traversée par une rivière",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 4,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7e1500edfd32.jpg",
+      "caption": "Aerial view of floating red-roofed lodge buildings on a dark river surrounded by dense Amazon rainforest. Suitable for background image",
+      "source": "PlanetaEXO",
+      "original_width": "1920px",
+      "original_height": "1536px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/80a188c5498d.jpg",
+      "caption": "Aerial view of a winding river cutting through vast dense Amazon rainforest, vivid green canopy, no text, high clarity, no watermarks. Suitable for background image.",
+      "source": "Double Sens",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ca8dec7cf3ea.jpg",
+      "caption": "",
+      "source": "Agence locale Pérou",
+      "original_width": "2560px",
+      "original_height": "1440px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ed0eea6b9389.jpg",
+      "caption": "Aerial view of deforested land with scattered debris and dirt paths; dense forest remains at top. Alamy watermark present; not suitable for background image.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "957px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/16fb2b62bce0.jpeg",
+      "caption": "Aerial view of lush green mangrove forests winding through blue rivers and sandy inlets, no text, high clarity. Suitable for background image.",
+      "source": "LiveAboard.com",
+      "original_width": "4945px",
+      "original_height": "3294px"
+    }
+  ]
+}

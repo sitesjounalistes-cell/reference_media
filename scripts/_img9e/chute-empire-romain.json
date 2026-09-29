@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "ruines antiques du Forum romain à Rome au coucher du soleil",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6bdcb5cc48ef.jpg",
+      "caption": "Roman Forum ruins in Rome with ancient columns and church dome under a dramatic orange sunset sky. Contains Alamy watermarks.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3629103ddcb1.jpg",
+      "caption": "Roman Forum ruins at twilight with ancient columns and domed church, illuminated. Contains Alamy watermarks; not suitable for background.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cd749d67a849.jpg",
+      "caption": "Panoramic view of the Roman Forum ruins in Rome with ancient columns, domed church, blue sky; Alamy watermark visible.",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/390ce62ce99a.jpg",
+      "caption": "Roman Forum featuring the Arch of Septimius Severus. The image contains a large amount of text information.",
+      "source": "Go City",
+      "original_width": "3840px",
+      "original_height": "2560px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0361b3f6820a.jpg",
+      "caption": "Castel Sant'Angelo and Sant'Angelo Bridge reflected in the Tiber River at sunset, Rome. Graffiti visible on embankment wall. Suitable for background image.",
+      "source": "Withlocals",
+      "original_width": "1440px",
+      "original_height": "810px"
+    }
+  ]
+}

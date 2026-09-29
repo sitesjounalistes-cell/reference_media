@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "portrait historique de Marie Curie dans son laboratoire de physique",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e1a991485e56.jpg",
+      "caption": "A vintage sepia photograph of scientist Marie Curie seated at a laboratory workbench with experimental equipment.",
+      "source": "CNRS Le journal",
+      "original_width": "1200px",
+      "original_height": "825px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bc152f7de50a.jpg",
+      "caption": "A colorized vintage photo of Marie Curie in a dark dress working in her laboratory, no text, suitable for background image.",
+      "source": "Sciences et Avenir",
+      "original_width": "1200px",
+      "original_height": "899px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0493cd170ac4.jpg",
+      "caption": "An elderly white-haired man examines a flask in a dim vintage chemistry laboratory, black-and-white grainy photograph, no text.",
+      "source": "Centre des sciences de Montréal",
+      "original_width": "2400px",
+      "original_height": "3124px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d8dce1568fd.jpg",
+      "caption": "A vintage black-and-white photograph of Pierre and Marie Curie standing together, both in dark formal clothing.",
+      "source": "Educ'ARTE",
+      "original_width": "1600px",
+      "original_height": "814px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c6deaad2307c.jpg",
+      "caption": "An open French book page \"Les portraits\" showing cartoon biographies of Henri Becquerel, Pierre Curie, Bronia Dhuska, Irène Joliot-Curie.",
+      "source": "Quelle Histoire",
+      "original_width": "2048px",
+      "original_height": "1831px"
+    }
+  ]
+}

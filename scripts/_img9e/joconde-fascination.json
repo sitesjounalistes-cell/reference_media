@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "query": "la Joconde de Léonard de Vinci exposée au musée du Louvre",
+  "count": 5,
+  "ranked": true,
+  "captioned_count": 5,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cf922d6302fb.jpg",
+      "caption": "The Mona Lisa displayed behind protective glass in an ornate golden frame at a dimly lit museum gallery.",
+      "source": "Numerama",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5276baa4bcc6.jpg",
+      "caption": "Leonardo da Vinci's Mona Lisa painting with Enigmatic smile, set against a misty landscape background, marked with watermarks.",
+      "source": "Alamy",
+      "original_width": "863px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3976714d5285.jpg",
+      "caption": "A painter's wooden paintbox rests before a gallery wall displaying the Mona Lisa between two ornate framed Renaissance paintings, rendered in rich sepia tones.",
+      "source": "Sud Ouest",
+      "original_width": "1200px",
+      "original_height": "954px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e17a324a7f01.jpg",
+      "caption": "The Mona Lisa painting displayed in an ornate golden frame. Contains Alamy watermarks and image ID CC032M, www.alamy.com.",
+      "source": "Alamy",
+      "original_width": "904px",
+      "original_height": "1390px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/793cb7d44a3f.jpg",
+      "caption": "The Mona Lisa in an ornate golden frame hangs on a museum wall, with blurred visitors' heads in the foreground.",
+      "source": "Paris Tickets",
+      "original_width": "1920px",
+      "original_height": "1280px"
+    }
+  ]
+}
