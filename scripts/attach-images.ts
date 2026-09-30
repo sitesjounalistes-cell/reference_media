@@ -1,5 +1,14 @@
-// Attache les images récupérées (prisma/images.json) aux articles et catégories.
-import { readFileSync } from "fs"
+// Attache les images aux articles et catégories (idempotent, rejouable).
+//
+// Articles   : /uploads/<slug>.jpg — fichiers locaux déjà commités dans
+//              public/uploads (servis par Next/Vercel sans dépendance externe).
+// Catégories : images de prisma/images.json (URL z-cdn) — stockées telles
+//              quelles, le rendu a un repli dégradé si l'URL meurt.
+//
+// Exécution : bun scripts/attach-images.ts
+import { existsSync, readFileSync } from "fs"
+import { join } from "path"
+
 import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
@@ -42,8 +51,9 @@ const KEY_TO_SLUG: Record<string, string> = {
 }
 
 async function main() {
+  // Correspondance clé → URL d'origine (utile pour les rubriques).
   const mapping = JSON.parse(
-    readFileSync("/home/z/my-project/prisma/images.json", "utf8")
+    readFileSync(join(process.cwd(), "prisma", "images.json"), "utf8")
   ) as Record<string, string>
 
   let categories = 0
@@ -55,16 +65,23 @@ async function main() {
       console.warn(`⚠ clé inconnue : ${key}`)
       continue
     }
+
     if (key.startsWith("cat-")) {
+      // Rubrique : URL d'origine (le composant a un repli dégradé si absente).
       const res = await prisma.category.updateMany({
         where: { slug },
         data: { image: url },
       })
       categories += res.count
     } else {
+      // Article : fichier local prioritaire, URL d'origine en repli.
+      const local = `/uploads/${slug}.jpg`
+      const cover = existsSync(join(process.cwd(), "public", "uploads", `${slug}.jpg`))
+        ? local
+        : url
       const res = await prisma.article.updateMany({
         where: { slug },
-        data: { coverImage: url },
+        data: { coverImage: cover },
       })
       articles += res.count
     }

@@ -439,3 +439,15 @@ Work Log:
 
 Stage Summary:
 - Surface d'attaque réduite à 2 advisories hors-runtime (CLI Prisma) ; toutes les actions admin et connexions tracées ; uploads invérifiables impossibles ; CSP production minimale ; chaîne d'approvisionnement surveillée (Dependabot + CI + alertes GitHub) ; chaîne complète vérifiée verte
+
+---
+Task ID: 22
+Agent: main (ZCode)
+Task: Fix images absentes en production + build Vercel
+
+Work Log:
+- Build Vercel : output standalone entravait onBuildComplete (ENOENT next-server.js.nft.json) → standalone conditionnel (désactivé si process.env.VERCEL), copy-standalone.mjs no-op sur Vercel ; build validé localement bout en bout (polices OK après libération disque, copie standalone portée en Node)
+- Images : diagnostic — 0/24 articles référencés sur Neon (l'étape attach-images.ts n'avait pas été rejouée lors de la migration SQLite→Neon) alors que les 24 fichiers /uploads sont bien déployés ; attach-images.ts réécrit (chemin relatif, fichiers locaux prioritaires, repli URL, idempotent) puis exécuté → 24/24 articles + 8/8 rubriques reliés (effet immédiat, sans redéploiement)
+
+Stage Summary:
+- Production Vercel fonctionnelle ; images de couverture et de rubriques restaurées sur toute la ligne éditoriale ; scripts de déploiement portables (Windows/Linux/Vercel)
