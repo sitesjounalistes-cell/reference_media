@@ -1,0 +1,23 @@
+# Dépendances : mises à jour automatiques surveillées chaque lundi.
+version: 2
+updates:
+  # Paquets npm/bun (application + outils)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    # Regrouper les mineures pour limiter les PR
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    reviewers:
+      - "sitesjounalistes-cell"
+
+  # Workflows GitHub Actions eux-mêmes
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

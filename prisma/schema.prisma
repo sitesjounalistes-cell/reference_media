@@ -152,9 +152,27 @@ model ContactChannel {
 }
 
 model SocialLink {
-  id       String  @id @default(cuid())
+  id      String  @id @default(cuid())
   platform String // x | facebook | instagram | youtube | linkedin | tiktok | rss
-  url      String
-  order    Int     @default(0)
-  visible  Boolean @default(true)
+  url     String
+  order   Int     @default(0)
+  visible Boolean @default(true)
+}
+
+// ----------------------------------------------------------------------------
+// Journal d'audit : chaque action sensible (mutations admin, tentatives de
+// connexion) est tracée avec son émetteur IP. Table alimentée par
+// src/lib/admin-auth.ts (requireAdmin + login) — jamais exposée par l'API.
+// ----------------------------------------------------------------------------
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String // login.success | login.failed | login.rate-limited | admin.mutation
+  method    String
+  path      String
+  ip        String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
 }

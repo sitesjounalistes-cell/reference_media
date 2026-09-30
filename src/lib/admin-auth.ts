@@ -16,7 +16,19 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypt
 
 import { NextResponse } from "next/server"
 
-export const ADMIN_COOKIE = "reference_admin_session"
+import { db } from "@/lib/db"
+import { clientIp } from "@/lib/rate-limit"
+
+const IS_PROD = process.env.NODE_ENV === "production"
+
+/**
+ * Nom du cookie de session. En production, le préfixe « __Host- » impose au
+ * navigateur : Secure + Path=/ + aucun attribut Domain (anti cookie-tossing
+ * depuis un sous-domaine). En dev (HTTP local), le nom simple est requis.
+ */
+export const ADMIN_COOKIE = IS_PROD
+  ? "__Host-reference_admin_session"
+  : "reference_admin_session"
 
 /** Durée de vie d'une session : 12 heures. */
 export const SESSION_TTL_MS = 12 * 60 * 60 * 1000
@@ -107,6 +119,30 @@ export function clearedCookieOptions() {
   }
 }
 
+/* ------------------------------ Journal d'audit ---------------------------- */
+
+/**
+ * Trace une action sensible dans AuditLog. Fire-and-forget : une panne de la
+ * base ne doit jamais bloquer la requête protégée.
+ */
+export function audit(
+  action: "login.success" | "login.failed" | "login.rate-limited" | "admin.mutation",
+  detail: { method: string; path: string; ip: string }
+): void {
+  void db.auditLog
+    .create({
+      data: {
+        action,
+        method: detail.method.toUpperCase().slice(0, 10),
+        path: detail.path.slice(0, 200),
+        ip: detail.ip.slice(0, 64),
+      },
+    })
+    .catch((error) => {
+      console.error("[audit] écriture impossible", error)
+    })
+}
+
 /* ------------------------------ Garde d'accès ------------------------------ */
 
 /** Lit la valeur d'un cookie depuis l'en-tête brut (compatible Request/NextRequest). */
@@ -154,6 +190,7 @@ export function assertSameOrigin(request: Request): NextResponse | null {
  *   if (denied) return denied
  *
  * Retourne une réponse 401/403 à retourner immédiatement, ou null si autorisé.
+ * Toute mutation autorisée est tracée dans le journal d'audit.
  */
 export async function requireAdmin(request: Request): Promise<NextResponse | null> {
   const originDenied = assertSameOrigin(request)
@@ -165,6 +202,17 @@ export async function requireAdmin(request: Request): Promise<NextResponse | nul
       { error: "Session administrateur requise" },
       { status: 401 }
     )
+  }
+
+  // Traçabilité des actions de gestion (hors lectures).
+  const method = request.method.toUpperCase()
+  if (method !== "GET" && method !== "HEAD") {
+    try {
+      const path = new URL(request.url).pathname
+      audit("admin.mutation", { method, path, ip: clientIp(request) })
+    } catch {
+      // URL inexploitable : pas de trace, mais requête autorisée
+    }
   }
   return null
 }

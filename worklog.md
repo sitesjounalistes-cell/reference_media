@@ -421,3 +421,21 @@ Work Log:
 
 Stage Summary:
 - Base Neon peuplée et vérifiée (24 articles, 11 campagnes, 14 271 événements pub, paramètres cockpit) ; projet publié sur github.com/sitesjounalistes-cell/reference_media sans aucun secret ; secrets cockpit rotationnés après brève exposition
+
+---
+Task ID: 21
+Agent: main (ZCode)
+Task: Durcissement final — dépendances, audit trail, upload, CSP, cookie, CI/CD
+
+Work Log:
+- DÉPENDANCES : bun audit initial = 90 vulnérabilités (3 critiques) — dont 2 RCE Next.js <16.3.3 (Windows + AVIF) ; next-auth (inutilisé depuis l'auth maison) SUPPRIMÉ ; bun audit fix (78 correctifs, 20 paquets) → next 16.3.3 ; sharp 0.34.5→0.35.5 ; overrides bun.json js-yaml ^4.3.2 et prismjs ^1.30.0 → reste 2 high = transitives de la CLI Prisma (outillage dev, hors runtime web)
+- JOURNAL D'AUDIT : modèle AuditLog (action/method/path/ip + index) poussé sur Neon ; helper audit() dans admin-auth — trace login.success/failed/rate-limited et toutes les mutations admin via requireAdmin (1 point central pour les 33 handlers) ; fire-and-forget sans jamais bloquer la requête
+- UPLOAD MÉDIATHÈQUE : garde Content-Length précoce (413 avant buffering mémoire) ; images réellement décodées via sharp — fichiers tronqués/corrompus refusés, plafond 40 Mpx anti-bombe de décompression
+- COOKIE SESSION : préfixe __Host- en production (Secure + Path=/ + sans Domain → anti cookie-tossing sous-domaine), nom simple conservé en dev HTTP
+- EN-TÊTES : CSP sans unsafe-eval en production (réservé au HMR de dev), + Cross-Origin-Opener-Policy (same-origin-allow-popups) et Cross-Origin-Resource-Policy (same-origin)
+- SUPPLY CHAIN : .github/dependabot.yml (npm + actions, hebdo, regroupement mineures) ; .github/workflows/ci.yml (bun install --frozen-lockfile, prisma generate, tsc strict, eslint, tests sécurité 26)
+- DÉPÔT GITHUB (via PAT) : alertes vulnérabilités ACTIVÉES, correctifs automatiques automatiques ACTIVÉS, secret scanning + push protection confirmés ENABLED
+- Vérifications : AuditLog écrit+relu sur Neon ; tests 26/26 ; tsc 0 erreur ; eslint 0 erreur ; staging balayé (aucun secret)
+
+Stage Summary:
+- Surface d'attaque réduite à 2 advisories hors-runtime (CLI Prisma) ; toutes les actions admin et connexions tracées ; uploads invérifiables impossibles ; CSP production minimale ; chaîne d'approvisionnement surveillée (Dependabot + CI + alertes GitHub) ; chaîne complète vérifiée verte

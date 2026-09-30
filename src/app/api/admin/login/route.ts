@@ -4,6 +4,7 @@ import { z } from "zod"
 import {
   ADMIN_COOKIE,
   assertSameOrigin,
+  audit,
   createSessionToken,
   isAdminConfigured,
   sessionCookieOptions,
@@ -30,7 +31,10 @@ export async function POST(request: Request) {
     if (originDenied) return originDenied
 
     const limit = rateLimit(`login:${clientIp(request)}`, 10, 10 * 60 * 1000)
-    if (!limit.ok) return tooManyRequests(limit.retryAfterS)
+    if (!limit.ok) {
+      audit("login.rate-limited", { method: "POST", path: "/api/admin/login", ip: clientIp(request) })
+      return tooManyRequests(limit.retryAfterS)
+    }
 
     if (!isAdminConfigured()) {
       return NextResponse.json(
@@ -61,8 +65,11 @@ export async function POST(request: Request) {
     }
 
     if (!verifyAdminPassword(parsed.data.password)) {
+      audit("login.failed", { method: "POST", path: "/api/admin/login", ip: clientIp(request) })
       return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 401 })
     }
+
+    audit("login.success", { method: "POST", path: "/api/admin/login", ip: clientIp(request) })
 
     const response = NextResponse.json({ ok: true })
     response.cookies.set(ADMIN_COOKIE, createSessionToken(), sessionCookieOptions())

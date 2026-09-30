@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto"
 import { writeFile } from "fs/promises"
 import { join } from "path"
 
+import sharp from "sharp"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
@@ -218,6 +219,28 @@ function sniffMagic(buffer: Buffer): "dangerous" | "unknown" | { kind: string } 
   return "unknown"
 }
 
+/** Résolution maximale acceptée : 40 Mpx (garde anti bombe de décompression). */
+const MAX_IMAGE_PIXELS = 40_000_000
+
+/**
+ * Contrôle réel de décodabilité d'une image via sharp :
+ * - refuse les fichiers illisibles ou tronqués ;
+ * - refuse les résolutions délirantes (bombe de décompression).
+ */
+async function assertDecodableImage(buffer: Buffer): Promise<string | null> {
+  try {
+    const meta = await sharp(buffer).metadata()
+    if (!meta.format) return "Image illisible ou corrompue"
+    const pixels = (meta.width ?? 0) * (meta.height ?? 0)
+    if (pixels > MAX_IMAGE_PIXELS) {
+      return `Résolution trop grande (${Math.round(pixels / 1_000_000)} Mpx — 40 Mpx maximum)`
+    }
+    return null
+  } catch {
+    return "Image illisible ou corrompue"
+  }
+}
+
 function mapMedia(row: {
   id: string
   filename: string
@@ -279,6 +302,21 @@ export async function POST(request: Request) {
     const limit = rateLimit(`upload:${clientIp(request)}`, 30, 60 * 60 * 1000)
     if (!limit.ok) return tooManyRequests(limit.retryAfterS)
 
+    // Refus précoce des corps surdimensionnés AVANT tout buffering mémoire.
+    const declaredLength = Number.parseInt(
+      request.headers.get("content-length") ?? "",
+      10
+    )
+    if (
+      Number.isFinite(declaredLength) &&
+      declaredLength > MAX_UPLOAD_SIZE + 1024 * 1024
+    ) {
+      return NextResponse.json(
+        { error: `Fichier trop volumineux (${MAX_UPLOAD_SIZE_MO} Mo maximum)` },
+        { status: 413 }
+      )
+    }
+
     let form: FormData
     try {
       form = await request.formData()
@@ -329,6 +367,15 @@ export async function POST(request: Request) {
         { error: "Fichier refusé : le contenu ne correspond pas au type déclaré" },
         { status: 400 }
       )
+    }
+
+    // Les images sont réellement décodées (sharp) : anti-fichier tronqué,
+    // anti-métadonnées mensongères et anti-bombe de décompression.
+    if (mimeInfo.kind === "IMAGE") {
+      const imageError = await assertDecodableImage(buffer)
+      if (imageError) {
+        return NextResponse.json({ error: imageError }, { status: 400 })
+      }
     }
 
     const filename = `${randomUUID()}${mimeInfo.ext}`
