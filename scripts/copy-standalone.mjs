@@ -14,6 +14,12 @@ const root = process.cwd()
 const standalone = join(root, ".next", "standalone")
 
 if (!existsSync(standalone)) {
+  // Sur Vercel, la sortie standalone est désactivée (voir next.config.ts) :
+  // absence normale, sortie propre sans échec du build.
+  if (process.env.VERCEL) {
+    console.log("Vercel détecté : sortie standalone désactivée, rien à copier.")
+    process.exit(0)
+  }
   console.error("Dossier .next/standalone introuvable — lancez d'abord `next build`.")
   process.exit(1)
 }

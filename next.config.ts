@@ -45,14 +45,17 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Sortie standalone UNIQUEMENT hors Vercel (auto-hébergement : bun run start).
+  // Sur Vercel (process.env.VERCEL défini), ce mode casse l'étape onBuildComplete
+  // qui attend .next/next-server.js.nft.json — Vercel gère son propre format.
+  ...(process.env.VERCEL ? {} : { output: "standalone" as const }),
   // Les erreurs de type DOIVENT bloquer le build (aucun contournement silencieux).
   typescript: {
     ignoreBuildErrors: false,
   },
   reactStrictMode: true,
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [{ source: "/:path*", headers: securityHeaders }]
   },
 };
 
