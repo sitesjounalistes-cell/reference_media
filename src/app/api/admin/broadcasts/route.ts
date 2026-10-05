@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { requireAdmin } from "@/lib/admin-auth"
-import { cloudinaryConfigured, cloudinaryUpload } from "@/lib/cloudinary"
 import { db } from "@/lib/db"
 import { isSafeAssetUrl } from "@/app/api/admin/_lib"
 
@@ -52,40 +51,24 @@ export async function POST(request: Request) {
   if (denied) return denied
   try {
     const body = (await request.json()) as Record<string, unknown>
-    // Import Google Drive (sans API) : { importDrive: "https://drive.google.com/file/d/…/view" }
-    if (typeof body.importDrive === "string") {
-      const match = body.importDrive.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([A-Za-z0-9_-]{10,})/)
+    // Lier un audio Google Drive : normalisation du lien SANS téléchargement —
+    // le fichier reste dans Drive et est lu directement par le lecteur du site.
+    if (typeof body.resolveDrive === "string") {
+      const match = body.resolveDrive.match(
+        /drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*id=)([A-Za-z0-9_-]{10,})/
+      )
       if (!match) {
         return NextResponse.json(
           { error: "Lien Google Drive non reconnu — utilisez le lien de partage du FICHIER (pas d'un dossier)." },
           { status: 400 }
         )
       }
-      if (!cloudinaryConfigured()) {
-        return NextResponse.json(
-          { error: "Cloudinary non configuré — ajoutez CLOUDINARY_* dans l'environnement." },
-          { status: 500 }
-        )
-      }
-      try {
-        const direct = "https://drive.google.com/uc?export=download&id=" + match[1]
-        const res = await fetch(direct, { redirect: "follow", signal: AbortSignal.timeout(120000) })
-        if (!res.ok) throw new Error("Drive HTTP " + res.status)
-        const contentType = res.headers.get("content-type") ?? ""
-        if (!/^(audio|video|application\/octet-stream)/.test(contentType)) {
-          throw new Error("Le lien ne pointe pas directement vers un média (fichier privé ou trop volumineux ?)")
-        }
-        const buffer = Buffer.from(await res.arrayBuffer())
-        if (buffer.length > 200 * 1024 * 1024) throw new Error("Fichier trop volumineux (200 Mo maximum)")
-        const kind = contentType.startsWith("video") ? "VIDEO" : "AUDIO"
-        const uploaded = await cloudinaryUpload(buffer, kind, match[1])
-        return NextResponse.json({ imported: { url: uploaded.secureUrl, kind } })
-      } catch (err) {
-        return NextResponse.json(
-          { error: "Import Drive impossible : " + (err instanceof Error ? err.message : "erreur inconnue") },
-          { status: 400 }
-        )
-      }
+      return NextResponse.json({
+        resolved: {
+          url: "https://drive.google.com/file/d/" + match[1] + "/view",
+          fileId: match[1],
+        },
+      })
     }
     const parsed = broadcastSchema.safeParse(body)
     if (!parsed.success) {

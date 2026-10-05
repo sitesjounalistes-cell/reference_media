@@ -94,22 +94,21 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
     if (!driveUrl.trim() || importing) return
     setImporting(true)
     try {
-      const res = await fetchJson<{ imported: { url: string; kind: string } }>(
+      const res = await fetchJson<{ resolved: { url: string } }>(
         "/api/admin/broadcasts",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ importDrive: driveUrl.trim() }),
+          body: JSON.stringify({ resolveDrive: driveUrl.trim() }),
         }
       )
-      setMediaUrl(res.imported.url)
-      if (res.imported.kind === "VIDEO") setKind("VIDEO")
+      setMediaUrl(res.resolved.url)
       setDriveUrl("")
-      toast({ title: "Média importé depuis Drive", description: "Hébergé sur Cloudinary — prêt à publier." })
+      toast({ title: "Audio Drive lié", description: "Lecture directe depuis Drive — le fichier reste dans son dossier." })
     } catch (err) {
       toast({
         title: "Import Drive impossible",
-        description: err instanceof Error ? err.message : "Vérifiez que le fichier est partagé publiquement.",
+        description: err instanceof Error ? err.message : "Vérifiez que le fichier est partagé en accès public (lien).",
         variant: "destructive",
       })
     } finally {
@@ -240,7 +239,7 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
               )}
             </div>
             <div className="space-y-1.5">
-              <Label className="kicker text-muted-foreground" htmlFor="bc-drive">Importer depuis Google Drive (fichier public)</Label>
+              <Label className="kicker text-muted-foreground" htmlFor="bc-drive">Lier un audio Google Drive (lecture directe)</Label>
               <div className="flex gap-2">
                 <Input
                   id="bc-drive"
@@ -255,7 +254,7 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
                 </Button>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Le fichier est téléchargé puis hébergé sur Cloudinary (diffusion CDN fiable).
+                L'audio reste dans Drive — le site le lit directement, rien n'est copié (Vercel/Cloudinary intacts). Partage requis : « Tous les utilisateurs disposant du lien ».
                 Astuce TV : collez simplement un lien YouTube dans « Média » — le lecteur s'intègre automatiquement.
               </p>
             </div>

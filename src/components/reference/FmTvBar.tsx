@@ -29,6 +29,37 @@ interface BroadcastDto {
   publishedAt: string
 }
 
+/** Identifiant de fichier Google Drive (partage public), le cas échéant. */
+function driveFileId(url: string): string | null {
+  const match = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*id=)([A-Za-z0-9_-]{10,})/)
+  return match ? match[1] : null
+}
+
+/** Lecteur audio streamé DIRECTEMENT depuis Google Drive (aucune copie). En cas de blocage Google, repli sur le player officiel intégré. */
+function DriveAudioPlayer({ fileId, title }: { fileId: string; title: string }) {
+  const [fallback, setFallback] = React.useState(false)
+  if (fallback) {
+    return (
+      <iframe
+        src={`https://drive.google.com/file/d/${fileId}/preview`}
+        title={title}
+        allow="autoplay"
+        loading="lazy"
+        className="aspect-video w-full max-w-xl border bg-zinc-100"
+      />
+    )
+  }
+  return (
+    <audio
+      src={`https://drive.google.com/uc?export=download&id=${fileId}`}
+      controls
+      preload="metadata"
+      onError={() => setFallback(true)}
+      className="w-full"
+    />
+  )
+}
+
 /** Extrait l'identifiant d'une URL YouTube (watch, youtu.be, shorts, embed, live). */
 function youTubeId(url: string): string | null {
   const match = url.match(
@@ -199,6 +230,7 @@ function BroadcastPanel({
                       </div>
                       {(() => {
                         const yt = youTubeId(item.mediaUrl)
+                        const drive = driveFileId(item.mediaUrl)
                         if (yt) {
                           return (
                             <div className="mt-3 aspect-video w-full border bg-black">
@@ -214,6 +246,18 @@ function BroadcastPanel({
                           )
                         }
                         if (isTv) {
+                          if (drive) {
+                            return (
+                              <iframe
+                                src={`https://drive.google.com/file/d/${drive}/preview`}
+                                title={item.title}
+                                allow="autoplay"
+                                allowFullScreen
+                                loading="lazy"
+                                className="mt-3 aspect-video w-full border bg-black"
+                              />
+                            )
+                          }
                           return (
                             <video src={item.mediaUrl} controls playsInline preload="metadata" className="mt-3 aspect-video w-full bg-black" />
                           )
@@ -224,7 +268,14 @@ function BroadcastPanel({
                                
                               <img src={item.thumbnailUrl} alt="" className="h-24 w-24 shrink-0 border object-cover" loading="lazy" />
                             ) : null}
-                            <audio src={item.mediaUrl} controls preload="metadata" className="w-full" />
+                            {(() => {
+                              const drive = driveFileId(item.mediaUrl)
+                              return drive ? (
+                                <DriveAudioPlayer fileId={drive} title={item.title} />
+                              ) : (
+                                <audio src={item.mediaUrl} controls preload="metadata" className="w-full" />
+                              )
+                            })()}
                           </div>
                         )
                       })()}
