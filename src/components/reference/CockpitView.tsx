@@ -134,7 +134,12 @@ export function CockpitView({
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
   }, [])
 
-  const backToSite = React.useCallback(() => navigate({ type: "home" }), [navigate])
+  // Retour au site public : rechargement complet pour resservir des données
+  // fraîches (rubriques, à la une) immédiatement après les modifications.
+  const backToSite = React.useCallback(() => {
+    window.location.href = "/"
+  }, [navigate])
+  void navigate
 
   // Échap → retour au site public.
   React.useEffect(() => {

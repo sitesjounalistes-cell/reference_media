@@ -155,22 +155,37 @@ function createMarkdownComponents({ lead = false } = {}): MarkdownComponents {
         {children}
       </a>
     ),
-    img: ({ src, alt }) => (
-      <span className="my-8 block border border-border bg-muted">
-        <img
-          src={typeof src === "string" ? src : undefined}
-          alt={alt ?? ""}
-          loading="lazy"
-          decoding="async"
-          className="block max-h-[560px] w-full object-cover"
-        />
-        {alt ? (
-          <span className="block px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">
-            {alt}
-          </span>
-        ) : null}
-      </span>
-    ),
+    img: ({ src, alt }) => {
+      const url = typeof src === "string" ? src : undefined
+      // Un fichier vidéo inséré en markdown (![](…mp4)) est rendu en lecteur.
+      const isVideo = Boolean(url && /\.(mp4|webm|mov|m4v|ogv)(\?|$)/i.test(url))
+      return (
+        <span className="my-8 block border border-border bg-muted">
+          {isVideo ? (
+            <video
+              src={url}
+              controls
+              playsInline
+              preload="metadata"
+              className="block aspect-video w-full bg-black"
+            />
+          ) : (
+            <img
+              src={url}
+              alt={alt ?? ""}
+              loading="lazy"
+              decoding="async"
+              className="block max-h-[560px] w-full object-cover"
+            />
+          )}
+          {alt ? (
+            <span className="block px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">
+              {alt}
+            </span>
+          ) : null}
+        </span>
+      )
+    },
     hr: () => <hr className="mt-10 border-border" />,
   }
 }
