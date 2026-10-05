@@ -300,30 +300,26 @@
     border-bottom: 1px solid var(--border);
   }
 
+  /* ─── Défilement sans barre visible ───────────────────────────────────
+     Windows affiche des barres classiques persistantes (contrairement aux
+     barres superposées de macOS) : elles polluent la mise en page éditoriale.
+     Les zones défilantes gardent leur défilement (molette/tactile/clavier)
+     mais n'affichent plus AUCUNE barre. */
+
+  /* Aucun débordement horizontal de la page (carrousel, pistes, RTL…). */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  /* Barres internes invisibles sur tous les navigateurs. */
   .nice-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: oklch(0.7 0 0 / 0.45) transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   .nice-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  .nice-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .nice-scrollbar::-webkit-scrollbar-thumb {
-    background-color: oklch(0.7 0 0 / 0.45);
-  }
-  .nice-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: oklch(0.55 0 0 / 0.6);
-  }
-  .dark .nice-scrollbar {
-    scrollbar-color: oklch(0.55 0 0 / 0.6) transparent;
-  }
-  .dark .nice-scrollbar::-webkit-scrollbar-thumb {
-    background-color: oklch(0.55 0 0 / 0.6);
-  }
-  .dark .nice-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: oklch(0.7 0 0 / 0.7);
+    width: 0;
+    height: 0;
+    display: none;
   }
 }
