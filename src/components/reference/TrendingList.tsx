@@ -3,7 +3,8 @@
 import { Eye } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { formatViews, useFetch } from "@/components/reference/lib"
+import { formatViews } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { ErrorState } from "@/components/reference/ErrorState"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { ArticlesResponse } from "@/components/reference/types"
@@ -15,7 +16,8 @@ interface TrendingListProps {
 
 /** « Les plus lus » : classement 01→05 des articles les plus consultés. */
 export function TrendingList({ onOpen, className }: TrendingListProps) {
-  const { data, error, loading, retry } = useFetch<ArticlesResponse>(
+  const { t } = useI18n()
+  const { data, error, loading, retry } = useI18nFetch<ArticlesResponse>(
     "/api/trending?limit=5"
   )
 
@@ -26,13 +28,13 @@ export function TrendingList({ onOpen, className }: TrendingListProps) {
     >
       <p className="kicker flex items-center gap-2 text-brand-red">
         <span aria-hidden="true" className="brand-square bg-brand-red" />
-        Classement
+        {t("home.summary")}
       </p>
       <h2
         id="trending-heading"
         className="headline mt-1.5 border-b-2 border-foreground pb-3 text-xl font-bold tracking-tight"
       >
-        Les plus lus
+        {t("trending.title")}
       </h2>
 
       {loading ? (

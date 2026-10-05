@@ -1,11 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server"
 
 import { db } from "@/lib/db"
-import { toListItem } from "@/lib/reference-api"
+import { langParam, toListItem } from "@/lib/reference-api"
+import { translateLabels, translateMany } from "@/lib/translate"
 
 export const dynamic = "force-dynamic"
 
-/** GET /api/trending?limit=5 — les articles les plus lus. */
+/** GET /api/trending?limit=5 — les articles les plus lus. ?lang= traduit. */
 export async function GET(request: NextRequest) {
   try {
     const limitParam = Number.parseInt(
@@ -29,7 +30,31 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({ articles: articles.map(toListItem) })
+    const items = articles.map(toListItem)
+
+    const lang = langParam(request)
+    if (lang !== "fr" && items.length > 0) {
+      const [translations, categoryLabels] = await Promise.all([
+        translateMany(articles, lang, false),
+        translateLabels(
+          Array.from(new Set(articles.map((row) => row.category.name))),
+          lang
+        ),
+      ])
+      for (const item of items) {
+        const translated = translations.get(item.id)
+        if (translated) {
+          item.title = translated.title
+          item.excerpt = translated.excerpt
+        }
+        const categoryName = categoryLabels.get(item.category.name)
+        if (categoryName) {
+          item.category = { ...item.category, name: categoryName }
+        }
+      }
+    }
+
+    return NextResponse.json({ articles: items })
   } catch (error) {
     console.error("GET /api/trending", error)
     return NextResponse.json(

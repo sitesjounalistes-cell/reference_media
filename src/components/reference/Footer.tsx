@@ -12,6 +12,7 @@ import {
 } from "@/components/reference/lib"
 import { Logo } from "@/components/reference/Logo"
 import { NewsletterForm } from "@/components/reference/NewsletterForm"
+import { useI18n } from "@/components/reference/lang-context"
 import type {
   Category,
   ContactChannelDto,
@@ -25,10 +26,6 @@ interface FooterProps {
   categories: Category[]
   onOpenSearch: () => void
 }
-
-/** Mention de droits affichée faute de footerNote configuré côté cockpit. */
-const FALLBACK_FOOTER_NOTE =
-  "© 2025 REFERENCE.COM — Comprendre le monde, article par article."
 
 function demoPageToast() {
   toast({
@@ -86,6 +83,7 @@ function ContactLine({ channel }: { channel: ContactChannelDto }) {
  * Réseaux sociaux + annuaire pilotés depuis le cockpit (GET /api/settings).
  */
 export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
+  const { t } = useI18n()
   const linkClass =
     "text-sm text-zinc-400 transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
 
@@ -113,7 +111,8 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
     [settingsData]
   )
 
-  const footerNote = settingsData?.settings?.footerNote?.trim() || FALLBACK_FOOTER_NOTE
+  const footerNote =
+    settingsData?.settings?.footerNote?.trim() || t("footer.copyright")
   const showSocials = socials.length > 0
   const showChannels = channels.length > 0
 
@@ -127,10 +126,10 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
         <Logo className="h-10 brightness-110" />
         <div className="md:text-right">
           <p className="headline text-lg font-bold italic text-white">
-            Le portail de référence francophone.
+            {t("footer.brandLine")}
           </p>
           <p className="kicker mt-2 text-zinc-400">
-            Comprendre le monde, article par article
+            {t("header.taglineFallback")}
           </p>
         </div>
       </div>
@@ -138,10 +137,10 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
       {/* Colonnes éditoriales */}
       <div className="mx-auto grid max-w-7xl gap-10 border-t border-white/10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 xl:grid-cols-5">
         {/* Rubriques */}
-        <nav aria-label="Rubriques du pied de page">
+        <nav aria-label={t("header.categories")}>
           <h3 className={headingClass}>
             <span aria-hidden="true" className="size-1.5 bg-brand-red" />
-            Rubriques
+            {t("header.categories")}
           </h3>
           <ul className="mt-5 space-y-2.5 border-l border-white/10 pl-4">
             {categories.map((category) => (
@@ -164,35 +163,35 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
         </nav>
 
         {/* Navigation */}
-        <nav aria-label="Navigation du pied de page">
+        <nav aria-label={t("header.navigation")}>
           <h3 className={headingClass}>
             <span aria-hidden="true" className="size-1.5 bg-brand-red" />
-            Navigation
+            {t("header.navigation")}
           </h3>
           <ul className="mt-5 space-y-2.5 border-l border-white/10 pl-4">
             <li>
               <button type="button" onClick={() => navigate({ type: "home" })} className={linkClass}>
-                Accueil
+                {t("header.home")}
               </button>
             </li>
             <li>
               <button type="button" onClick={() => navigate({ type: "dashboard" })} className={linkClass}>
-                Tableau de bord
+                {t("header.dashboard")}
               </button>
             </li>
             <li>
               <button type="button" onClick={() => navigate({ type: "about" })} className={linkClass}>
-                À propos
+                {t("header.about")}
               </button>
             </li>
             <li>
               <button type="button" onClick={() => navigate({ type: "contact" })} className={linkClass}>
-                Contact
+                {t("header.contact")}
               </button>
             </li>
             <li>
               <button type="button" onClick={onOpenSearch} className={linkClass}>
-                Recherche
+                {t("common.search")}
               </button>
             </li>
           </ul>
@@ -202,7 +201,7 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
         <div>
           <h3 className={headingClass}>
             <span aria-hidden="true" className="size-1.5 bg-brand-red" />
-            Contact
+            {t("header.contact")}
           </h3>
           {showChannels ? (
             <ul className="mt-5 space-y-2.5 border-l border-white/10 pl-4">
@@ -231,11 +230,10 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
         <div>
           <h3 className={headingClass}>
             <span aria-hidden="true" className="size-1.5 bg-brand-red" />
-            Newsletter
+            {t("footer.newsletter")}
           </h3>
           <p className="mt-5 text-sm leading-relaxed text-zinc-400">
-            Le meilleur de nos dossiers, une fois par semaine, directement dans votre
-            boîte mail.
+            {t("footer.newsletterPitch")}
           </p>
           <div className="mt-4">
             <NewsletterForm variant="onBlue" stacked />
@@ -246,7 +244,7 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
         <div>
           <h3 className={headingClass}>
             <span aria-hidden="true" className="size-1.5 bg-brand-red" />
-            Nous suivre
+            {t("footer.follow")}
           </h3>
           {showSocials ? (
             <ul
@@ -279,31 +277,31 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
             <button
               type="button"
               onClick={() => navigate({ type: "cockpit" })}
-              title="Espace rédaction : gestion des articles, des médias et du site"
+              title={t("header.cockpitFull")}
               className="transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
             >
-              Cockpit rédaction
+              {t("header.cockpitFull")}
             </button>
             <button
               type="button"
               onClick={demoPageToast}
               className="transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
             >
-              Mentions légales
+              {t("footer.legal")}
             </button>
             <button
               type="button"
               onClick={demoPageToast}
               className="transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
             >
-              Confidentialité
+              {t("footer.privacy")}
             </button>
             <button
               type="button"
               onClick={() => navigate({ type: "contact" })}
               className="transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
             >
-              Contact
+              {t("header.contact")}
             </button>
           </div>
         </div>

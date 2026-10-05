@@ -451,3 +451,19 @@ Work Log:
 
 Stage Summary:
 - Production Vercel fonctionnelle ; images de couverture et de rubriques restaurées sur toute la ligne éditoriale ; scripts de déploiement portables (Windows/Linux/Vercel)
+
+---
+Task ID: 23
+Agent: main (ZCode)
+Task: 4 évolutions éditoriales — carrousel à la une, flash info, typographie, i18n complet
+
+Work Log:
+- CARROUSEL À LA UNE : FeaturedCarousel (embla, boucle infinie, avance auto 6 s gauche→droite, flèches + pastilles, pause survol/focus/onglet masqué, repli carte unique) ; HomeView : à la une pleine largeur x tous les articles featured + « Le fil » en dessous
+- FLASH INFO : audit complet — boucle sans couture (double piste + translateX(-50 %)), pause survol/focus, pastille pulsée, replis chargement/vide : CONFORME, aucun correctif requis
+- TYPOGRAPHIE ÉDITORIALE : champ Article.typography JSON {title, excerpt, content}×{font serif/sans/archivo/mono, bold, italic} — schéma poussé sur Neon, zod validé (API POST/PATCH), panneau « Typographie » dans l'éditeur (police + B/I par champ, réinitialisation), aperçu live sur titre/chapô + onglet Aperçu, rendu public sur ArticleView (h1, chapô, corps markdown) via textStyleToCss ; parse sûr côté sérialisation
+- I18N COMPLET (fr source + en/es/it/ar RTL/zh) : dictionnaire 128 clés x 6 langues généré (scripts/gen-i18n.mjs, source unique) ; contexte I18nProvider + useI18n/useI18nFetch (localStorage, dir=rtl arabe, rechargement propre au changement) ; sélecteur Globe dans le header (bureau + mobile) ; traduction SERVEUR des contenus via Google gtx (translate.ts : découpage paragraphe, concurrence 3, cache persistant ArticleTranslation enrichi progressivement — listes titre+chapô, lecture contenu complet, staleness sur updatedAt) ; ?lang= sur /api/articles, /api/articles/[slug] (rubriques, tags, liés), /api/categories, /api/trending, /api/facts/random ; rebranchage intégral : Header (date localisée date-fns), Ticker, Home, Fil, Category, Article, SearchView, SearchDialog, Newsletter, Contact (formulaire complet), Footer — restent en français : prose statique À propos et libellés détaillés du Dashboard public (itération suivante)
+- INCIDENT outillé : script d'ajout de clés dupliqué → dédoublonneur buggy (Set global) a vidé 5 dictionnaires → reconstruction par GÉNÉRATEUR (table unique clé→[6 langues]) : plus robuste et reproductible
+- Vérifications : tsc 0 erreur ; eslint src/ 0 erreur ; tests sécurité 26/26 ; traduction live validée (EN/ZH/AR corrects depuis le français)
+
+Stage Summary:
+- À la une vivante (carrousel auto de tous les featured), flash info confirmé, éditeur avec police/gras/italique par niveau (titre, chapô, contenu) persistés et rendus, site traduisible en 6 langues avec RTL arabe — interface par dictionnaires, contenus par traduction serveur cachée en base

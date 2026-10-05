@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { RefreshCw } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useFetch } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import type { FactResponse } from "@/components/reference/types"
 
 interface FactWidgetProps {
@@ -15,7 +15,8 @@ interface FactWidgetProps {
 
 /** « Le saviez-vous ? » : encart marine, anecdote aléatoire actualisable. */
 export function FactWidget({ className }: FactWidgetProps) {
-  const { data, error, loading, retry } = useFetch<FactResponse>(
+  const { t } = useI18n()
+  const { data, error, loading, retry } = useI18nFetch<FactResponse>(
     "/api/facts/random"
   )
   const [spin, setSpin] = React.useState(0)
@@ -36,13 +37,13 @@ export function FactWidget({ className }: FactWidgetProps) {
             aria-hidden="true"
             className="pulse-dot inline-block size-2 shrink-0 bg-brand-red"
           />
-          Le saviez-vous ?
+          {t("fact.title")}
         </p>
         <button
           type="button"
           onClick={refresh}
           disabled={loading}
-          aria-label="Afficher une autre anecdote"
+          aria-label={t("fact.title")}
           className="inline-flex size-9 shrink-0 items-center justify-center text-zinc-400 outline-none transition-colors hover:text-white focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-white/60 disabled:opacity-60"
         >
           <motion.span

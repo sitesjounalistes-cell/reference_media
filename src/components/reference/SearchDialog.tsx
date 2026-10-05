@@ -13,6 +13,8 @@ import {
 } from "lucide-react"
 
 import { fetchJson } from "@/components/reference/lib"
+import { useI18n } from "@/components/reference/lang-context"
+import { DEFAULT_LANG } from "@/lib/i18n"
 import {
   Command,
   CommandEmpty,
@@ -51,6 +53,7 @@ const Kbd = ({ children }: { children: React.ReactNode }) => (
  * La logique (fetch, filtres, navigation) est inchangée.
  */
 export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: SearchDialogProps) {
+  const { t, lang } = useI18n()
   const [query, setQuery] = React.useState("")
   const [results, setResults] = React.useState<ArticleListItem[]>([])
   const [searching, setSearching] = React.useState(false)
@@ -70,9 +73,10 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
     const controller = new AbortController()
     setSearching(true)
     setError(null)
+    const langQuery = lang !== DEFAULT_LANG ? `&lang=${lang}` : ""
     const timer = setTimeout(() => {
       fetchJson<ArticlesResponse>(
-        `/api/articles?q=${encodeURIComponent(trimmed)}&pageSize=8`,
+        `/api/articles?q=${encodeURIComponent(trimmed)}&pageSize=8${langQuery}`,
         { signal: controller.signal }
       )
         .then((res) => {
@@ -89,7 +93,7 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
       controller.abort()
       clearTimeout(timer)
     }
-  }, [trimmed, open, nonce])
+  }, [trimmed, open, nonce, lang])
 
   const reset = () => {
     setQuery("")
@@ -119,9 +123,9 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
     >
       <DialogContent className="overflow-hidden p-0 sm:max-w-xl" showCloseButton={false}>
         <DialogHeader className="sr-only">
-          <DialogTitle>Rechercher sur REFERENCE.COM</DialogTitle>
+          <DialogTitle>{t("search.dialogTitle")}</DialogTitle>
           <DialogDescription>
-            Tapez au moins deux caractères pour chercher un article.
+            {t("search.dialogPlaceholder")}
           </DialogDescription>
         </DialogHeader>
         <Command
@@ -131,7 +135,7 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
           {/* En-tête éditorial : kicker « Recherche » + filet bicolore de marque */}
           <div className="border-b">
             <div className="flex items-center justify-between px-4 pt-4">
-              <span className="kicker text-foreground">Recherche</span>
+              <span className="kicker text-foreground">{t("search.title")}</span>
               <Kbd>⌘K</Kbd>
             </div>
             <div aria-hidden="true" className="rule-brand ml-4 mt-2.5 h-[3px] w-12" />
@@ -141,14 +145,14 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
                 aria-hidden="true"
               />
               <label htmlFor="search-dialog-input" className="sr-only">
-                Rechercher un article
+                {t("search.dialogPlaceholder")}
               </label>
               <input
                 id="search-dialog-input"
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Rechercher un article, un dossier…"
+                placeholder={t("search.dialogPlaceholder")}
                 autoComplete="off"
                 className="flex h-12 w-full bg-transparent py-3 pl-9 pr-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -216,7 +220,7 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
               <CommandEmpty className="flex flex-col items-center gap-2 py-8 text-center">
                 <SearchX className="size-8 text-muted-foreground/60" aria-hidden="true" />
                 <span>
-                  Aucun résultat pour «&nbsp;{trimmed}&nbsp;».
+                  {t("search.noneFor", { query: trimmed })}
                 </span>
                 <span className="text-xs text-muted-foreground">
                   Essayez un autre mot-clé ou explorez les catégories.

@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { useFetch } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import type { ArticlesResponse, Navigate } from "@/components/reference/types"
 
 /** Les 8 derniers articles publiés alimentent la piste « En direct ». */
@@ -22,11 +22,11 @@ function Diamond({ className }: { className?: string }) {
 }
 
 /** Bloc rouge « En direct » (pastille pulsée), présent dans tous les états. */
-function LiveBadge() {
+function LiveBadge({ label }: { label: string }) {
   return (
     <div className="flex h-11 shrink-0 items-center gap-2 bg-brand-red px-3 text-white">
       <span aria-hidden="true" className="pulse-dot size-1.5 shrink-0 bg-white" />
-      <span className="kicker whitespace-nowrap">En direct</span>
+      <span className="kicker whitespace-nowrap">{label}</span>
     </div>
   )
 }
@@ -40,7 +40,8 @@ function LiveBadge() {
  * seul) si la liste est vide ou en erreur.
  */
 export function BreakingTicker({ navigate }: { navigate: Navigate }) {
-  const { data, loading } = useFetch<ArticlesResponse>(TICKER_URL)
+  const { t } = useI18n()
+  const { data, loading } = useI18nFetch<ArticlesResponse>(TICKER_URL)
   const articles = data?.articles ?? []
   const hasArticles = articles.length > 0
 
@@ -79,7 +80,7 @@ export function BreakingTicker({ navigate }: { navigate: Navigate }) {
     return (
       <div className="band-paper dark:bg-background border-b">
         <div className="flex h-11 items-stretch overflow-hidden">
-          <LiveBadge />
+          <LiveBadge label={t("ticker.live")} />
           <div
             aria-hidden="true"
             className="flex min-w-0 flex-1 items-center gap-4 overflow-hidden px-4"
@@ -98,7 +99,7 @@ export function BreakingTicker({ navigate }: { navigate: Navigate }) {
   if (!hasArticles) {
     return (
       <div className="w-fit border-b bg-brand-red text-white">
-        <LiveBadge />
+        <LiveBadge label={t("ticker.live")} />
       </div>
     )
   }
@@ -107,7 +108,7 @@ export function BreakingTicker({ navigate }: { navigate: Navigate }) {
   return (
     <div className="band-paper dark:bg-background border-b">
       <div className="flex h-11 items-stretch overflow-hidden">
-        <LiveBadge />
+        <LiveBadge label={t("ticker.live")} />
         <div className="ticker-hover-pause relative min-w-0 flex-1 overflow-hidden [&:focus-within_.ticker-track]:[animation-play-state:paused]">
           <div
             className="ticker-track h-11"

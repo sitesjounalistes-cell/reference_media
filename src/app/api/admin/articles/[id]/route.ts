@@ -126,6 +126,12 @@ export async function PATCH(
         status: data.status,
         coverImage: data.coverImage,
         videoUrl: data.videoUrl,
+        typography:
+          data.typography === undefined
+            ? undefined
+            : data.typography
+              ? JSON.stringify(data.typography)
+              : null,
       },
       include: {
         category: { select: { slug: true, name: true, color: true } },

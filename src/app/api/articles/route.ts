@@ -2,7 +2,8 @@ import { NextResponse, type NextRequest } from "next/server"
 import type { Prisma } from "@prisma/client"
 
 import { db } from "@/lib/db"
-import { articleInclude, parseListParams, toListItem } from "@/lib/reference-api"
+import { translateLabels, translateMany } from "@/lib/translate"
+import { articleInclude, langParam, parseListParams, toListItem } from "@/lib/reference-api"
 
 export const dynamic = "force-dynamic"
 
@@ -50,8 +51,33 @@ export async function GET(request: NextRequest) {
       include: articleInclude,
     })
 
+    const items = rows.map(toListItem)
+
+    // Traduction à la demande (titre + chapô + nom de rubrique).
+    const lang = langParam(request)
+    if (lang !== "fr" && items.length > 0) {
+      const [translations, categoryLabels] = await Promise.all([
+        translateMany(rows, lang, false),
+        translateLabels(
+          Array.from(new Set(rows.map((row) => row.category.name))),
+          lang
+        ),
+      ])
+      for (const item of items) {
+        const translated = translations.get(item.id)
+        if (translated) {
+          item.title = translated.title
+          item.excerpt = translated.excerpt
+        }
+        const categoryName = categoryLabels.get(item.category.name)
+        if (categoryName) {
+          item.category = { ...item.category, name: categoryName }
+        }
+      }
+    }
+
     return NextResponse.json({
-      articles: rows.map(toListItem),
+      articles: items,
       total,
       page: safePage,
       pageSize: params.pageSize,

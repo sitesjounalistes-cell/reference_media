@@ -3,7 +3,8 @@
 import * as React from "react"
 
 import { format } from "date-fns"
-import { fr } from "date-fns/locale"
+import { ar, enUS, es, fr, it, zhCN } from "date-fns/locale"
+import type { Locale } from "date-fns/locale"
 import { useTheme } from "next-themes"
 import {
   ChevronRight,
@@ -19,9 +20,12 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import type { Lang } from "@/lib/i18n"
 import { useFetch } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { Logo } from "@/components/reference/Logo"
 import { BreakingTicker } from "@/components/reference/BreakingTicker"
+import { LanguageSwitcher } from "@/components/reference/LanguageSwitcher"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -33,12 +37,16 @@ import {
 } from "@/components/ui/sheet"
 import type { Category, Navigate, SiteSettingsResponse, View } from "@/components/reference/types"
 
+/** Locales date-fns par langue du site. */
+const DATE_LOCALES: Record<Lang, Locale> = { fr, en: enUS, es, it, ar, zh: zhCN }
+
 /* -------------------------------------------------------------------------- */
 /*                                  Helpers                                   */
 /* -------------------------------------------------------------------------- */
 
 function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme()
+  const { t } = useI18n()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
   const isDark = mounted ? resolvedTheme === "dark" : false
@@ -49,7 +57,7 @@ function ThemeToggle({ className }: { className?: string }) {
       size="icon"
       className={cn("size-11 text-muted-foreground hover:text-foreground", className)}
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={isDark ? "Passer en thème clair" : "Passer en thème sombre"}
+      aria-label={isDark ? t("header.themeLight") : t("header.themeDark")}
     >
       {mounted ? (
         isDark ? (
@@ -68,20 +76,20 @@ function ThemeToggle({ className }: { className?: string }) {
 /*      Étage 0 — barre d'édition marine : date, tagline, liens rapides       */
 /* -------------------------------------------------------------------------- */
 
-/** Accroche affichée faute de tagline configuré côté cockpit. */
-const FALLBACK_TAGLINE = "Comprendre le monde, article par article"
-
 function UtilityBar({ navigate }: { navigate: Navigate }) {
   const [dateLabel, setDateLabel] = React.useState("")
+  const { t, lang } = useI18n()
 
   // Accroche de marque pilotée depuis le cockpit (GET /api/settings).
   const { data: settingsData } = useFetch<SiteSettingsResponse>("/api/settings")
-  const tagline = settingsData?.settings?.tagline?.trim() || FALLBACK_TAGLINE
+  const tagline = settingsData?.settings?.tagline?.trim() || t("header.taglineFallback")
 
   React.useEffect(() => {
-    const label = format(new Date(), "EEEE d MMMM yyyy", { locale: fr })
-    setDateLabel(label.charAt(0).toUpperCase() + label.slice(1))
-  }, [])
+    const label = format(new Date(), "EEEE d MMMM yyyy", {
+      locale: DATE_LOCALES[lang] ?? fr,
+    })
+    setDateLabel(lang === "fr" ? label.charAt(0).toUpperCase() + label.slice(1) : label)
+  }, [lang])
 
   const quickLinkClass =
     "kicker link-underline shrink-0 text-zinc-300 outline-none transition-colors hover:text-white focus-visible:ring-[3px] focus-visible:ring-white/30"
@@ -90,7 +98,7 @@ function UtilityBar({ navigate }: { navigate: Navigate }) {
     <div className="band-navy-deep hidden text-zinc-300 md:block">
       <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <p className="kicker truncate text-zinc-300" aria-hidden={dateLabel === ""}>
-          {dateLabel ? `Édition du ${dateLabel.toLowerCase()}` : "\u00A0"}
+          {dateLabel ? t("header.edition", { date: dateLabel.toLowerCase() }) : "\u00A0"}
         </p>
         <div className="flex shrink-0 items-center gap-3">
           <p className="kicker hidden text-zinc-400 lg:block">{tagline}</p>
@@ -100,7 +108,7 @@ function UtilityBar({ navigate }: { navigate: Navigate }) {
             onClick={() => navigate({ type: "about" })}
             className={quickLinkClass}
           >
-            À propos
+            {t("header.about")}
           </button>
           <span aria-hidden="true" className="h-3 w-px bg-white/20" />
           <button
@@ -108,8 +116,10 @@ function UtilityBar({ navigate }: { navigate: Navigate }) {
             onClick={() => navigate({ type: "contact" })}
             className={quickLinkClass}
           >
-            Contact
+            {t("header.contact")}
           </button>
+          <span aria-hidden="true" className="hidden h-3 w-px bg-white/20 lg:block" />
+          <LanguageSwitcher className="hidden h-9 !text-zinc-300 hover:!text-white lg:inline-flex" />
         </div>
       </div>
     </div>
@@ -131,13 +141,14 @@ function Masthead({
   onOpenMobile: (open: boolean) => void
   mobileOpen: boolean
 }) {
+  const { t } = useI18n()
   return (
     <div className="border-b bg-background">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 md:h-20">
         <button
           type="button"
           onClick={() => navigate({ type: "home" })}
-          aria-label="REFERENCE.COM — Retour à l’accueil"
+          aria-label={t("header.homeAria")}
           className="shrink-0 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
         >
           <Logo className="h-9 md:h-11" />
@@ -149,16 +160,17 @@ function Masthead({
             type="button"
             onClick={onOpenSearch}
             className="inline-flex h-11 items-center justify-center gap-2 bg-brand-red px-3 text-white transition-colors hover:bg-[#c8101f] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:px-4"
-            aria-label="Rechercher (Ctrl+K)"
+            aria-label={t("header.searchAria")}
           >
             <Search className="size-4 shrink-0" aria-hidden="true" />
             <span className="hidden text-sm font-bold uppercase tracking-[0.08em] sm:inline">
-              Rechercher
+              {t("common.search")}
             </span>
             <kbd className="pointer-events-none hidden select-none border border-white/40 bg-white/10 px-1.5 font-mono text-[10px] font-semibold text-white lg:inline-flex">
               ⌘K
             </kbd>
           </button>
+          <LanguageSwitcher className="lg:hidden" />
           <ThemeToggle />
 
           {/* Burger — mobile et tablette uniquement */}
@@ -168,7 +180,7 @@ function Masthead({
                 variant="outline"
                 size="icon"
                 className="size-11 lg:hidden"
-                aria-label="Ouvrir le menu de navigation"
+                aria-label={t("header.openMenu")}
               >
                 <Menu className="size-5" aria-hidden="true" />
               </Button>
@@ -184,20 +196,99 @@ function Masthead({
 /*   Étage 2 — navigation principale (lg+) : Accueil + rubriques + services    */
 /* -------------------------------------------------------------------------- */
 
-const NAV_HOME: { label: string; view: View } = { label: "Accueil", view: { type: "home" } }
-const NAV_DASHBOARD: { label: string; view: View; icon: LucideIcon } = {
-  label: "Tableau de bord",
-  view: { type: "dashboard" },
-  icon: LayoutDashboard,
-}
-const NAV_ABOUT: { label: string; view: View } = { label: "À propos", view: { type: "about" } }
-const NAV_CONTACT: { label: string; view: View } = { label: "Contact", view: { type: "contact" } }
-const NAV_COCKPIT: { label: string; view: View; icon: LucideIcon } = {
-  label: "Cockpit",
-  view: { type: "cockpit" },
-  icon: SquarePen,
+function DesktopNav({
+  view,
+  navigate,
+  categories,
+  categoriesLoading,
+  categoriesError,
+  onRetryCategories,
+}: {
+  view: View
+  navigate: Navigate
+  categories: Category[]
+  categoriesLoading: boolean
+  categoriesError: string | null
+  onRetryCategories: () => void
+}) {
+  const { t } = useI18n()
+  return (
+    <nav
+      aria-label={t("header.navigation")}
+      className="sticky top-0 z-50 hidden border-y bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/85 lg:block"
+    >
+      <div className="nice-scrollbar mx-auto flex max-w-7xl items-stretch justify-between overflow-x-auto px-4 sm:px-6">
+        <NavItem
+          label={t("header.home")}
+          active={view.type === "home"}
+          onClick={() => navigate({ type: "home" })}
+        />
+
+        <div className="flex items-stretch">
+          {categoriesLoading && categories.length === 0
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  className="mx-2.5 my-4 h-3 w-14 animate-pulse self-center bg-muted"
+                />
+              ))
+            : categories.map((category) => {
+                const active = view.type === "category" && view.slug === category.slug
+                return (
+                  <NavItem
+                    key={category.slug}
+                    label={category.name}
+                    active={active}
+                    dotColor={category.color}
+                    onClick={() => navigate({ type: "category", slug: category.slug })}
+                  />
+                )
+              })}
+          {!categoriesLoading && categoriesError && categories.length === 0 ? (
+            <button
+              type="button"
+              onClick={onRetryCategories}
+              className="mx-2.5 inline-flex items-center gap-1.5 font-display text-[10.5px] font-bold uppercase tracking-[0.12em] text-brand-red outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            >
+              <RotateCw className="size-3" aria-hidden="true" />
+              {t("common.retry")}
+            </button>
+          ) : null}
+        </div>
+
+        <div className="flex items-stretch">
+          <span aria-hidden="true" className="my-2.5 w-px bg-border" />
+          <NavItem
+            label={t("header.dashboard")}
+            icon={LayoutDashboard}
+            active={view.type === "dashboard"}
+            onClick={() => navigate({ type: "dashboard" })}
+          />
+          <NavItem
+            label={t("header.cockpit")}
+            icon={SquarePen}
+            active={view.type === "cockpit"}
+            tone="cockpit"
+            onClick={() => navigate({ type: "cockpit" })}
+          />
+          <NavItem
+            label={t("header.about")}
+            active={view.type === "about"}
+            onClick={() => navigate({ type: "about" })}
+          />
+          <NavItem
+            label={t("header.contact")}
+            active={view.type === "contact"}
+            onClick={() => navigate({ type: "contact" })}
+          />
+        </div>
+      </div>
+    </nav>
+  )
 }
 
+/** Élément de navigation (bureau) : libellé, pastille de rubrique, icône. */
 function NavItem({
   label,
   active,
@@ -248,96 +339,6 @@ function NavItem({
   )
 }
 
-function DesktopNav({
-  view,
-  navigate,
-  categories,
-  categoriesLoading,
-  categoriesError,
-  onRetryCategories,
-}: {
-  view: View
-  navigate: Navigate
-  categories: Category[]
-  categoriesLoading: boolean
-  categoriesError: string | null
-  onRetryCategories: () => void
-}) {
-  return (
-    <nav
-      aria-label="Navigation principale"
-      className="sticky top-0 z-50 hidden border-y bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/85 lg:block"
-    >
-      <div className="nice-scrollbar mx-auto flex max-w-7xl items-stretch justify-between overflow-x-auto px-4 sm:px-6">
-        <NavItem
-          label={NAV_HOME.label}
-          active={view.type === "home"}
-          onClick={() => navigate(NAV_HOME.view)}
-        />
-
-        <div className="flex items-stretch">
-          {categoriesLoading && categories.length === 0
-            ? Array.from({ length: 8 }).map((_, i) => (
-                <span
-                  key={i}
-                  aria-hidden="true"
-                  className="mx-2.5 my-4 h-3 w-14 animate-pulse self-center bg-muted"
-                />
-              ))
-            : categories.map((category) => {
-                const active = view.type === "category" && view.slug === category.slug
-                return (
-                  <NavItem
-                    key={category.slug}
-                    label={category.name}
-                    active={active}
-                    dotColor={category.color}
-                    onClick={() => navigate({ type: "category", slug: category.slug })}
-                  />
-                )
-              })}
-          {!categoriesLoading && categoriesError && categories.length === 0 ? (
-            <button
-              type="button"
-              onClick={onRetryCategories}
-              className="mx-2.5 inline-flex items-center gap-1.5 font-display text-[10.5px] font-bold uppercase tracking-[0.12em] text-brand-red outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50"
-            >
-              <RotateCw className="size-3" aria-hidden="true" />
-              Réessayer
-            </button>
-          ) : null}
-        </div>
-
-        <div className="flex items-stretch">
-          <span aria-hidden="true" className="my-2.5 w-px bg-border" />
-          <NavItem
-            label={NAV_DASHBOARD.label}
-            icon={NAV_DASHBOARD.icon}
-            active={view.type === "dashboard"}
-            onClick={() => navigate(NAV_DASHBOARD.view)}
-          />
-          <NavItem
-            label={NAV_COCKPIT.label}
-            icon={NAV_COCKPIT.icon}
-            active={view.type === "cockpit"}
-            tone="cockpit"
-            onClick={() => navigate(NAV_COCKPIT.view)}
-          />
-          <NavItem
-            label={NAV_ABOUT.label}
-            active={view.type === "about"}
-            onClick={() => navigate(NAV_ABOUT.view)}
-          />
-          <NavItem
-            label={NAV_CONTACT.label}
-            active={view.type === "contact"}
-            onClick={() => navigate(NAV_CONTACT.view)}
-          />
-        </div>
-      </div>
-    </nav>
-  )
-}
 
 /* -------------------------------------------------------------------------- */
 /*        Menu mobile (burger) : panneau marine profond structuré en blocs     */
@@ -361,6 +362,8 @@ function MobileMenu({
     navigate(v)
   }
 
+  const { t } = useI18n()
+
   const rowClass = (active: boolean) =>
     cn(
       "flex w-full items-center gap-3 border-b border-white/10 px-4 py-3.5 text-left text-sm outline-none transition-colors hover:bg-white/5 focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-white/30",
@@ -368,22 +371,22 @@ function MobileMenu({
     )
 
   const staticLinks: Array<{ label: string; view: View; active: boolean; icon?: LucideIcon }> = [
-    { label: "Accueil", view: { type: "home" }, active: view.type === "home" },
+    { label: t("header.home"), view: { type: "home" }, active: view.type === "home" },
     {
-      label: "Tableau de bord",
+      label: t("header.dashboard"),
       view: { type: "dashboard" },
       active: view.type === "dashboard",
       icon: LayoutDashboard,
     },
     {
-      label: "Cockpit rédaction",
+      label: t("header.cockpitFull"),
       view: { type: "cockpit" },
       active: view.type === "cockpit",
       icon: SquarePen,
     },
-    { label: "Recherche", view: { type: "search", q: "" }, active: view.type === "search" },
-    { label: "À propos", view: { type: "about" }, active: view.type === "about" },
-    { label: "Contact", view: { type: "contact" }, active: view.type === "contact" },
+    { label: t("common.search"), view: { type: "search", q: "" }, active: view.type === "search" },
+    { label: t("header.about"), view: { type: "about" }, active: view.type === "about" },
+    { label: t("header.contact"), view: { type: "contact" }, active: view.type === "contact" },
   ]
 
   return (
@@ -399,7 +402,7 @@ function MobileMenu({
                 type="button"
                 onClick={() => go({ type: "home" })}
                 className="outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
-                aria-label="REFERENCE.COM — Retour à l’accueil"
+                aria-label={t("header.homeAria")}
               >
                 <Logo className="h-8" />
                 <span className="sr-only">REFERENCE.COM</span>
@@ -407,13 +410,13 @@ function MobileMenu({
             </SheetTitle>
           </div>
           <SheetDescription className="kicker px-4 pb-4 text-zinc-400 sm:px-5">
-            Le portail de référence francophone
+            {t("header.taglineFallback")}
           </SheetDescription>
         </SheetHeader>
 
-        <nav aria-label="Navigation mobile" className="pb-8">
+        <nav aria-label={t("header.navigation")} className="pb-8">
           {/* Bloc principal */}
-          <p className="kicker px-4 pb-2 pt-5 text-zinc-500 sm:px-5">Navigation</p>
+          <p className="kicker px-4 pb-2 pt-5 text-zinc-500 sm:px-5">{t("header.navigation")}</p>
           <div className="border-y border-white/10">
             {staticLinks.map((link) => (
               <button
@@ -439,7 +442,7 @@ function MobileMenu({
           </div>
 
           {/* Bloc rubriques */}
-          <p className="kicker px-4 pb-2 pt-6 text-zinc-500 sm:px-5">Rubriques</p>
+          <p className="kicker px-4 pb-2 pt-6 text-zinc-500 sm:px-5">{t("header.categories")}</p>
           <div className="border-y border-white/10">
             {categories.map((category) => {
               const active = view.type === "category" && view.slug === category.slug
@@ -472,7 +475,7 @@ function MobileMenu({
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-white px-4 text-sm font-bold uppercase tracking-[0.13em] text-[#0a1e3c] transition-colors hover:bg-brand-red hover:text-white focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-white/40"
             >
               <Mail className="size-4" aria-hidden="true" />
-              Écrire à la rédaction
+              {t("header.writeToRedaction")}
             </a>
           </div>
         </nav>

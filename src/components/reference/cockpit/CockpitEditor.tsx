@@ -19,6 +19,7 @@ import {
   List,
   Quote,
   Send,
+  Type,
   Upload,
   X,
 } from "lucide-react"
@@ -26,6 +27,15 @@ import ReactMarkdown from "react-markdown"
 
 import { cn } from "@/lib/utils"
 import { fetchJson, useFetch } from "@/components/reference/lib"
+import {
+  ARTICLE_FONT_LABELS,
+  textStyleToCss,
+} from "@/components/reference/typography"
+import type {
+  ArticleFont,
+  ArticleTextStyle,
+  ArticleTypography,
+} from "@/components/reference/types"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
@@ -82,6 +92,8 @@ interface FormState {
   status: ArticleStatus
   coverImage: string
   videoUrl: string
+  /** Typographie éditoriale par champ ({} = thème par défaut). */
+  typography: ArticleTypography
 }
 
 function toForm(article: AdminArticleDto | null): FormState {
@@ -98,6 +110,7 @@ function toForm(article: AdminArticleDto | null): FormState {
     status: article?.status ?? "DRAFT",
     coverImage: article?.coverImage ?? "",
     videoUrl: article?.videoUrl ?? "",
+    typography: article?.typography ?? {},
   }
 }
 
@@ -117,6 +130,139 @@ const TOOLS: Tool[] = [
 ]
 
 /* -------------------------- sélecteur de médiathèque ---------------------- */
+
+/* --------------------- typographie par champ (panneau) -------------------- */
+
+type TypographyField = "title" | "excerpt" | "content"
+
+const TYPOGRAPHY_ROWS: Array<{ field: TypographyField; label: string }> = [
+  { field: "title", label: "Titre" },
+  { field: "excerpt", label: "Chapô" },
+  { field: "content", label: "Contenu" },
+]
+
+const FONT_OPTIONS: Array<{ value: ArticleFont | ""; label: string }> = [
+  { value: "", label: "Thème du site" },
+  ...(Object.keys(ARTICLE_FONT_LABELS) as ArticleFont[]).map((font) => ({
+    value: font,
+    label: ARTICLE_FONT_LABELS[font],
+  })),
+]
+
+/** Bouton Gras / Italique (maintenu = actif). */
+function StyleToggleButton({
+  active,
+  label,
+  children,
+  onClick,
+}: {
+  active: boolean
+  label: string
+  children: React.ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "inline-flex size-8 items-center justify-center border text-xs outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        active
+          ? "border-foreground bg-foreground text-background"
+          : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
+      )}
+    >
+      {children}
+    </button>
+  )
+}
+
+/** Panneau latéral : police + gras + italique pour titre, chapô et contenu. */
+function TypographyCard({
+  typography,
+  onChange,
+}: {
+  typography: ArticleTypography
+  onChange: (
+    field: TypographyField,
+    patch: Partial<ArticleTextStyle>
+  ) => void
+}) {
+  return (
+    <Card
+      title="Typographie"
+      description="Police, gras et italique pour chaque niveau de l'article."
+    >
+      <div className="space-y-4">
+        {TYPOGRAPHY_ROWS.map(({ field, label }) => {
+          const style = typography[field]
+          const hasStyle = Boolean(style && Object.keys(style).length > 0)
+          return (
+            <div key={field} className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="kicker text-muted-foreground">{label}</span>
+                {hasStyle ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onChange(field, { font: undefined, bold: undefined, italic: undefined })
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground outline-none transition-colors hover:text-brand-red focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  >
+                    <X className="size-3" aria-hidden="true" />
+                    Réinitialiser
+                  </button>
+                ) : null}
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Select
+                  value={style?.font ?? "theme"}
+                  onValueChange={(value) =>
+                    onChange(field, {
+                      font: (value === "theme" ? undefined : value) as ArticleFont | undefined,
+                    })
+                  }
+                >
+                  <SelectTrigger
+                    className="h-8 min-w-0 flex-1 rounded-none text-xs"
+                    aria-label={`Police du ${label.toLowerCase()}`}
+                  >
+                    <Type className="size-3.5 shrink-0" aria-hidden="true" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-none">
+                    {FONT_OPTIONS.map((option) => (
+                      <SelectItem key={option.value || "theme"} value={option.value || "theme"}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <StyleToggleButton
+                  active={Boolean(style?.bold)}
+                  label={`${label} en gras`}
+                  onClick={() => onChange(field, { bold: !style?.bold || undefined })}
+                >
+                  <Bold className="size-3.5" aria-hidden="true" />
+                </StyleToggleButton>
+                <StyleToggleButton
+                  active={Boolean(style?.italic)}
+                  label={`${label} en italique`}
+                  onClick={() => onChange(field, { italic: !style?.italic || undefined })}
+                >
+                  <Italic className="size-3.5" aria-hidden="true" />
+                </StyleToggleButton>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </Card>
+  )
+}
 
 function MediaPickerDialog({
   open,
@@ -232,6 +378,24 @@ export function CockpitEditor({
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((current) => ({ ...current, [key]: value }))
 
+  /** Applique un réglage de style à un champ (titre / chapô / contenu).
+   * Un patch à valeur indéfinie retire le réglage ; une fois le style vide,
+   * le champ disparaît de la typographie (retour au thème). */
+  const setStyle = (
+    field: "title" | "excerpt" | "content",
+    patch: Partial<ArticleTextStyle>
+  ) =>
+    setForm((current) => {
+      const next = { ...current.typography }
+      const merged: Partial<ArticleTextStyle> = { ...next[field], ...patch }
+      for (const key of Object.keys(merged) as Array<keyof ArticleTextStyle>) {
+        if (merged[key] === undefined) delete merged[key]
+      }
+      if (Object.keys(merged).length === 0) delete next[field]
+      else next[field] = merged
+      return { ...current, typography: next }
+    })
+
   /** Slug auto : uniquement tant que l'utilisateur ne l'a pas édité. */
   React.useEffect(() => {
     if (!slugTouched) set("slug", slugify(form.title))
@@ -336,6 +500,7 @@ export function CockpitEditor({
       status,
       coverImage: form.coverImage.trim() || null,
       videoUrl: form.videoUrl.trim() || null,
+      typography: Object.keys(form.typography).length > 0 ? form.typography : null,
     }
     try {
       if (savedArticle) {
@@ -442,6 +607,7 @@ export function CockpitEditor({
               onChange={(event) => set("title", event.target.value)}
               placeholder="Titre de l'article…"
               className="h-auto rounded-none border-0 border-b-2 px-0 py-3 font-serif text-2xl font-bold tracking-tight shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 md:text-3xl"
+              style={textStyleToCss(form.typography.title)}
             />
             {errors.title ? (
               <p className="mt-1.5 text-xs font-medium text-brand-red">{errors.title}</p>
@@ -469,6 +635,7 @@ export function CockpitEditor({
               rows={2}
               placeholder="Le chapô qui apparaîtra sur la page d'accueil et dans les listes…"
               className="rounded-none"
+              style={textStyleToCss(form.typography.excerpt)}
             />
             <p className="text-right text-[11px] tabular-nums text-muted-foreground">
               {form.excerpt.length}/400
@@ -534,7 +701,10 @@ export function CockpitEditor({
               <TabsContent value="preview" className="mt-0">
                 <article className="min-h-[440px] border bg-muted/10 p-5 md:p-8">
                   {form.content.trim() ? (
-                    <div className="article-body">
+                    <div
+                      className="article-body"
+                      style={textStyleToCss(form.typography.content)}
+                    >
                       <ReactMarkdown>{form.content}</ReactMarkdown>
                     </div>
                   ) : (
@@ -595,6 +765,8 @@ export function CockpitEditor({
               </Field>
             </div>
           </Card>
+
+          <TypographyCard typography={form.typography} onChange={setStyle} />
 
           <Card title="Image de couverture">
             {form.coverImage ? (

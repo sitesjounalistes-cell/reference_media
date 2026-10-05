@@ -123,6 +123,7 @@ export async function POST(request: NextRequest) {
           .join(","),
         readMinutes: data.readMinutes,
         featured: data.featured,
+        typography: data.typography ? JSON.stringify(data.typography) : null,
       },
       include: {
         category: { select: { slug: true, name: true, color: true } },

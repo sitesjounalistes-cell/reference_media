@@ -5,7 +5,52 @@
 import { Prisma } from "@prisma/client"
 
 import { db } from "@/lib/db"
+import { isLang, type Lang } from "@/lib/i18n"
 import type { NextRequest } from "next/server"
+import type {
+  ArticleTextStyle,
+  ArticleTypography,
+} from "@/components/reference/types"
+
+/**
+ * Typographie éditoriale stockée en base (JSON) → objet sûr.
+ * Null si absent, corrompu ou structure inattendue (jamais de crash).
+ */
+export function parseTypography(
+  raw: string | null | undefined
+): ArticleTypography | null {
+  if (!raw) return null
+  try {
+    const value = JSON.parse(raw) as Partial<ArticleTypography>
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+      return null
+    }
+    const clean: ArticleTypography = {}
+    let touched = false
+    for (const field of ["title", "excerpt", "content"] as const) {
+      const style = value[field]
+      if (!style || typeof style !== "object") continue
+      const safe: ArticleTextStyle = {}
+      if (
+        style.font === "serif" ||
+        style.font === "sans" ||
+        style.font === "archivo" ||
+        style.font === "mono"
+      ) {
+        safe.font = style.font
+      }
+      if (typeof style.bold === "boolean") safe.bold = style.bold
+      if (typeof style.italic === "boolean") safe.italic = style.italic
+      if (Object.keys(safe).length > 0) {
+        clean[field] = safe
+        touched = true
+      }
+    }
+    return touched ? clean : null
+  } catch {
+    return null
+  }
+}
 
 export const articleInclude = {
   category: { select: { slug: true, name: true, color: true } },
@@ -42,11 +87,12 @@ export function toListItem(article: ArticleWithRelations) {
   }
 }
 
-/** Article complet → DTO détaillé (avec content, updatedAt et bio de l'auteur). */
+/** Article complet → DTO détaillé (avec content, typographie et bio de l'auteur). */
 export function toFullItem(article: ArticleWithRelations) {
   return {
     ...toListItem(article),
     content: article.content,
+    typography: parseTypography(article.typography),
     updatedAt: article.updatedAt.toISOString(),
     author: {
       ...toListItem(article).author,
@@ -56,6 +102,17 @@ export function toFullItem(article: ArticleWithRelations) {
 }
 
 /** Paramètres de liste partagés (?category=…&q=…&sort=…&page=…&pageSize=…). */
+
+/** Langue demandée par un client public : ?lang=fr|en|es|it|ar|zh (fr par défaut). */
+export function langParam(request: NextRequest | Request): Lang {
+  const nextRequest = request as NextRequest
+  const params =
+    typeof nextRequest.nextUrl !== "undefined"
+      ? nextRequest.nextUrl.searchParams
+      : new URL(request.url).searchParams
+  const value = params.get("lang")
+  return isLang(value) ? value : "fr"
+}
 export interface ListParams {
   category?: string | null
   q?: string | null

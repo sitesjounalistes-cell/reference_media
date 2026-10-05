@@ -5,7 +5,8 @@ import * as React from "react"
 import { AnimatePresence, motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
-import { useFetch } from "@/components/reference/lib"
+import { useI18nFetch } from "@/components/reference/lang-context"
+import { I18nProvider } from "@/components/reference/lang-context"
 import { AboutView } from "@/components/reference/AboutView"
 import { AdSlot } from "@/components/reference/AdSlot"
 import { ArticleView } from "@/components/reference/ArticleView"
@@ -22,13 +23,22 @@ import { viewKey } from "@/components/reference/types"
 import type { CategoriesResponse, View } from "@/components/reference/types"
 
 export default function Home() {
+  return (
+    <I18nProvider>
+      <HomeInner />
+    </I18nProvider>
+  )
+}
+
+function HomeInner() {
   const [view, setView] = React.useState<View>({ type: "home" })
   const [searchOpen, setSearchOpen] = React.useState(false)
   /** Masque les rails fixes lorsque le pied de page entre dans le viewport. */
   const [railsHidden, setRailsHidden] = React.useState(false)
 
-  // Catégories chargées une seule fois et partagées par toutes les vues.
-  const categoriesState = useFetch<CategoriesResponse>("/api/categories")
+  // Catégories chargées une seule fois et partagées par toutes les vues
+  // (dans la langue active : le serveur traduit les rubriques).
+  const categoriesState = useI18nFetch<CategoriesResponse>("/api/categories")
   const categories = categoriesState.data?.categories ?? []
 
   const navigate = React.useCallback((next: View) => {

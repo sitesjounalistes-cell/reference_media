@@ -5,7 +5,8 @@ import * as React from "react"
 import { motion } from "framer-motion"
 import { ArrowUpRight, Search } from "lucide-react"
 
-import { formatDateShort, useFetch } from "@/components/reference/lib"
+import { formatDateShort } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { usePagedArticles } from "@/components/reference/use-paged-articles"
 import { ErrorState } from "@/components/reference/ErrorState"
 import { SmartImage } from "@/components/reference/SmartImage"
@@ -123,6 +124,7 @@ export function SearchView({ q, navigate, categories }: SearchViewProps) {
   const [input, setInput] = React.useState(q)
   const [query, setQuery] = React.useState(q)
   const [sort, setSort] = React.useState<SortKey>("recent")
+  const { t } = useI18n()
 
   // Synchronise quand la vue est ouverte depuis la barre de recherche.
   React.useEffect(() => {
@@ -131,7 +133,7 @@ export function SearchView({ q, navigate, categories }: SearchViewProps) {
   }, [q])
 
   const results = usePagedArticles({ q: query || undefined, sort, pageSize: 12 })
-  const suggestions = useFetch<ArticlesResponse>(
+  const suggestions = useI18nFetch<ArticlesResponse>(
     query ? null : "/api/trending?limit=5"
   )
 
@@ -164,37 +166,37 @@ export function SearchView({ q, navigate, categories }: SearchViewProps) {
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 md:py-12">
           <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#c8102c]">
             <span aria-hidden="true" className="size-2 shrink-0 bg-brand-red" />
-            Recherche
+            {t("search.title")}
           </p>
           <h1 className="headline mt-3 text-3xl font-black tracking-tight text-zinc-950 md:text-4xl">
             {hasQuery ? (
               results.loading ? (
-                "Recherche en cours…"
+                t("search.loading")
               ) : total !== null ? (
                 <>
-                  <span className="tabular-nums">{total}</span> résultat
-                  {total > 1 ? "s" : ""} pour{" "}
+                  <span className="tabular-nums">{total}</span>{" "}
+                  {t("search.resultsWord")} {t("search.resultsForWord")}{" "}
                   <span className="text-brand-blue">« {query} »</span>
                 </>
               ) : (
                 <>
-                  Résultats pour{" "}
+                  {t("search.resultsForWord")}{" "}
                   <span className="text-brand-blue">« {query} »</span>
                 </>
               )
             ) : (
-              "Chercher un dossier"
+              t("search.prompt")
             )}
           </h1>
           <form onSubmit={submit} className="mt-6 flex max-w-xl gap-2" role="search">
             <label htmlFor="search-view-input" className="sr-only">
-              Votre recherche
+              {t("search.label")}
             </label>
             <input
               id="search-view-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Essayez « abeilles », « inflation », « sommeil »…"
+              placeholder={t("search.placeholderExamples")}
               autoComplete="off"
               className="h-11 min-h-11 flex-1 border-2 border-zinc-300 bg-white px-3.5 text-[15px] text-zinc-950 outline-none transition-colors placeholder:text-zinc-400 focus:border-brand-blue focus-visible:ring-[3px] focus-visible:ring-brand-blue/30"
             />
@@ -216,15 +218,15 @@ export function SearchView({ q, navigate, categories }: SearchViewProps) {
             <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-b pb-4">
               <p className="text-sm text-muted-foreground" aria-live="polite">
                 {results.loading
-                  ? "Recherche en cours…"
+                  ? t("search.loading")
                   : results.data
-                    ? `${results.data.total} résultat${results.data.total > 1 ? "s" : ""}`
+                    ? `${results.data.total} ${t("search.resultsWord")}`
                     : null}
               </p>
               <Tabs value={sort} onValueChange={(v) => setSort(v as SortKey)}>
                 <TabsList>
-                  <TabsTrigger value="recent">Récent</TabsTrigger>
-                  <TabsTrigger value="popular">Populaire</TabsTrigger>
+                  <TabsTrigger value="recent">{t("category.recent")}</TabsTrigger>
+                  <TabsTrigger value="popular">{t("category.popular")}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -258,10 +260,10 @@ export function SearchView({ q, navigate, categories }: SearchViewProps) {
                 </span>
                 <div>
                   <p className="headline text-lg font-bold">
-                    Aucun résultat pour « {query} »
+                    {t("search.noneFor", { query })}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Vérifiez l&apos;orthographe ou explorez une rubrique ci-dessous.
+                    {t("search.spellHint")}
                   </p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2">

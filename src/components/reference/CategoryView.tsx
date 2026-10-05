@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { ArrowUpRight, FileText, Loader2, Newspaper } from "lucide-react"
 
 import { formatDateShort } from "@/components/reference/lib"
+import { useI18n } from "@/components/reference/lang-context"
 import { usePagedArticles } from "@/components/reference/use-paged-articles"
 import { AdSlot } from "@/components/reference/AdSlot"
 import { CategoryPills } from "@/components/reference/CategoryPills"
@@ -190,6 +191,7 @@ export function CategoryView({
   onRetryCategories,
 }: CategoryViewProps) {
   const [sort, setSort] = React.useState<SortKey>("recent")
+  const { t } = useI18n()
 
   const category = categories.find((c) => c.slug === slug) ?? null
 
@@ -310,13 +312,13 @@ export function CategoryView({
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-b pb-4">
           <p className="text-sm text-muted-foreground" aria-live="polite">
             {articles.data
-              ? `${articles.data.total} article${articles.data.total > 1 ? "s" : ""}`
-              : "Chargement…"}
+              ? t("category.count", { count: articles.data.total })
+              : t("common.loading")}
           </p>
           <Tabs value={sort} onValueChange={(v) => setSort(v as SortKey)}>
             <TabsList>
-              <TabsTrigger value="recent">Récent</TabsTrigger>
-              <TabsTrigger value="popular">Populaire</TabsTrigger>
+              <TabsTrigger value="recent">{t("category.recent")}</TabsTrigger>
+              <TabsTrigger value="popular">{t("category.popular")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -357,17 +359,17 @@ export function CategoryView({
                   {articles.loadingMore ? (
                     <>
                       <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-                      Chargement…
+                      {t("common.loading")}
                     </>
                   ) : (
-                    "Charger plus"
+                    t("common.loadMore")
                   )}
                 </button>
               </div>
             ) : (
               <p className="mt-10 flex items-center justify-center gap-2 border-t pt-6 text-sm text-muted-foreground">
                 <Newspaper className="size-4" aria-hidden="true" />
-                Vous avez exploré toute cette catégorie.
+                {t("category.explored")}
               </p>
             )}
           </>
@@ -375,7 +377,7 @@ export function CategoryView({
           <div className="mt-8 flex flex-col items-center gap-3 border border-dashed p-10 text-center">
             <Newspaper className="size-8 text-muted-foreground" aria-hidden="true" />
             <p className="text-muted-foreground">
-              Aucun article dans cette catégorie pour le moment.
+              {t("category.none")}
             </p>
           </div>
         )}

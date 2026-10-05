@@ -2,7 +2,8 @@ import { NextResponse } from "next/server"
 
 import { requireAdmin } from "@/lib/admin-auth"
 import { db } from "@/lib/db"
-import { toFullItem, toListItem } from "@/lib/reference-api"
+import { langParam, toFullItem, toListItem } from "@/lib/reference-api"
+import { translateArticle, translateLabels, translateMany } from "@/lib/translate"
 
 export const dynamic = "force-dynamic"
 
@@ -50,9 +51,50 @@ export async function GET(
       },
     })
 
+    const articleDto = toFullItem(article)
+    const relatedItems = related.map(toListItem)
+
+    // Traduction complète à la demande (titre, chapô, contenu, rubrique, tags).
+    const lang = langParam(request)
+    if (lang !== "fr") {
+      const tags = article.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+      const [full, relatedTranslations, labels] = await Promise.all([
+        translateArticle(article, lang, true),
+        translateMany(related, lang, false),
+        translateLabels(
+          Array.from(
+            new Set([article.category.name, ...related.map((row) => row.category.name), ...tags])
+          ),
+          lang
+        ),
+      ])
+
+      articleDto.title = full.title
+      articleDto.excerpt = full.excerpt
+      articleDto.content = full.content
+      articleDto.category = {
+        ...articleDto.category,
+        name: labels.get(article.category.name) ?? article.category.name,
+      }
+      articleDto.tags = tags.map((tag) => labels.get(tag) ?? tag)
+
+      for (const item of relatedItems) {
+        const translated = relatedTranslations.get(item.id)
+        if (translated) {
+          item.title = translated.title
+          item.excerpt = translated.excerpt
+        }
+        const categoryName = labels.get(item.category.name)
+        if (categoryName) item.category = { ...item.category, name: categoryName }
+      }
+    }
+
     return NextResponse.json({
-      article: toFullItem(article),
-      related: related.map(toListItem),
+      article: articleDto,
+      related: relatedItems,
     })
   } catch (error) {
     console.error("GET /api/articles/[slug]", error)

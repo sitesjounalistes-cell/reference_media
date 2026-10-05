@@ -28,6 +28,26 @@ export interface ArticleCategoryRef {
   color: string
 }
 
+/* -------------------- Typographie éditoriale (titre/chapô/contenu) -------- */
+
+/** Police proposée à la rédaction (variables CSS du thème). */
+export type ArticleFont = "serif" | "sans" | "archivo" | "mono"
+
+/** Style d'un champ : police + gras + italique (tous optionnels). */
+export interface ArticleTextStyle {
+  font?: ArticleFont
+  bold?: boolean
+  italic?: boolean
+}
+
+/** Typographie d'un article, définie dans le cockpit. */
+export interface ArticleTypography {
+  title?: ArticleTextStyle
+  excerpt?: ArticleTextStyle
+  content?: ArticleTextStyle
+}
+
+
 export interface ArticleListItem {
   id: string
   slug: string
@@ -49,6 +69,8 @@ export interface ArticleFull extends ArticleListItem {
   content: string
   /** reportage vidéo attaché (URL ou /uploads/...), optionnel */
   videoUrl?: string | null
+  /** typographie éditoriale (police/gras/italique par champ), optionnelle */
+  typography?: ArticleTypography | null
   /** date ISO */
   updatedAt: string
 }
@@ -309,6 +331,8 @@ export interface AdminArticleDto {
   publishedAt: string
   createdAt: string
   updatedAt: string
+  /** typographie éditoriale (null = valeurs par défaut du thème) */
+  typography: ArticleTypography | null
 }
 
 /** Charge utile de création / mise à jour d'un article. */
@@ -325,6 +349,8 @@ export interface AdminArticleInput {
   status?: ArticleStatus
   coverImage?: string | null
   videoUrl?: string | null
+  /** null = effacer les styles personnalisés */
+  typography?: ArticleTypography | null
 }
 
 export interface AdminArticlesResponse {

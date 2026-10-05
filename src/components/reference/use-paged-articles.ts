@@ -3,6 +3,8 @@
 import * as React from "react"
 
 import { fetchJson } from "@/components/reference/lib"
+import { useI18n } from "@/components/reference/lang-context"
+import { DEFAULT_LANG } from "@/lib/i18n"
 import type { ArticlesResponse, SortKey } from "@/components/reference/types"
 
 export interface PagedArticlesParams {
@@ -13,7 +15,7 @@ export interface PagedArticlesParams {
   pageSize?: number
 }
 
-function buildUrl(params: PagedArticlesParams, page: number): string {
+function buildUrl(params: PagedArticlesParams, page: number, lang: string): string {
   const search = new URLSearchParams()
   if (params.category) search.set("category", params.category)
   if (params.q) search.set("q", params.q)
@@ -21,6 +23,7 @@ function buildUrl(params: PagedArticlesParams, page: number): string {
   if (params.featured) search.set("featured", "true")
   search.set("page", String(page))
   search.set("pageSize", String(params.pageSize ?? 12))
+  if (lang !== DEFAULT_LANG) search.set("lang", lang)
   return `/api/articles?${search.toString()}`
 }
 
@@ -39,7 +42,8 @@ export interface PagedArticlesState {
  * paramètres changent, ajoute les pages suivantes sans perdre l’existant.
  */
 export function usePagedArticles(params: PagedArticlesParams): PagedArticlesState {
-  const key = JSON.stringify(params)
+  const { lang } = useI18n()
+  const key = JSON.stringify(params) + `|${lang}`
   const [data, setData] = React.useState<ArticlesResponse | null>(null)
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(true)
@@ -51,7 +55,7 @@ export function usePagedArticles(params: PagedArticlesParams): PagedArticlesStat
     let active = true
     setLoading(true)
     setError(null)
-    fetchJson<ArticlesResponse>(buildUrl(params, 1), { signal: controller.signal })
+    fetchJson<ArticlesResponse>(buildUrl(params, 1, lang), { signal: controller.signal })
       .then((result) => {
         if (!active) return
         setData(result)
@@ -66,7 +70,7 @@ export function usePagedArticles(params: PagedArticlesParams): PagedArticlesStat
       active = false
       controller.abort()
     }
-  }, [key, nonce])
+  }, [key, lang, nonce])
 
   const loadMore = React.useCallback(async () => {
     if (!data || loadingMore) return
@@ -74,7 +78,7 @@ export function usePagedArticles(params: PagedArticlesParams): PagedArticlesStat
     setLoadingMore(true)
     setError(null)
     try {
-      const result = await fetchJson<ArticlesResponse>(buildUrl(params, nextPage))
+      const result = await fetchJson<ArticlesResponse>(buildUrl(params, nextPage, lang))
       setData((prev) =>
         prev
           ? { ...result, articles: [...prev.articles, ...result.articles] }
@@ -85,7 +89,7 @@ export function usePagedArticles(params: PagedArticlesParams): PagedArticlesStat
     } finally {
       setLoadingMore(false)
     }
-  }, [data, key, loadingMore])
+  }, [data, key, lang, loadingMore])
 
   const hasMore = Boolean(data && (data.page ?? 1) < data.totalPages)
 

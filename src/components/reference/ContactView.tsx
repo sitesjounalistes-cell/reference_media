@@ -23,6 +23,8 @@ import {
   useFetch,
 } from "@/components/reference/lib"
 import { Logo } from "@/components/reference/Logo"
+import { useI18n } from "@/components/reference/lang-context"
+import type { TranslationKey } from "@/lib/i18n"
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -39,16 +41,16 @@ import type { SiteSettingsResponse } from "@/components/reference/types"
 
 /* ------------------------------ Sujets du form ----------------------------- */
 
-const SUBJECTS = [
-  { value: "redaction", label: "Rédaction — question sur un article" },
-  { value: "correction", label: "Correction — signaler une erreur" },
-  { value: "partenariat", label: "Partenariat éditorial" },
-  { value: "publicite", label: "Publicité & sponsorship" },
-  { value: "droits", label: "Droits & réutilisation" },
-  { value: "autre", label: "Autre demande" },
-] as const
+const SUBJECTS: Array<{ value: SubjectValue; labelKey: TranslationKey }> = [
+  { value: "redaction", labelKey: "contact.subjects.redactionLong" },
+  { value: "correction", labelKey: "contact.subjects.correctionLong" },
+  { value: "partenariat", labelKey: "contact.subjects.partenariatLong" },
+  { value: "publicite", labelKey: "contact.subjects.publiciteLong" },
+  { value: "droits", labelKey: "contact.subjects.droitsLong" },
+  { value: "autre", labelKey: "contact.subjects.autreLong" },
+]
 
-type SubjectValue = (typeof SUBJECTS)[number]["value"]
+type SubjectValue = "redaction" | "correction" | "partenariat" | "publicite" | "droits" | "autre"
 
 const SUBJECT_REDACTION = new Set<string>(SUBJECTS.map((s) => s.value))
 
@@ -101,6 +103,7 @@ function NavyChannelEntry({
 
 /** Vue « Contact » : formulaire rédaction + annuaire marine piloté par le cockpit. */
 export function ContactView({ initialSubject }: { initialSubject?: string }) {
+  const { t } = useI18n()
   const inputId = React.useId()
 
   // Annuaire de la rédaction piloté depuis le cockpit (GET /api/settings).
@@ -141,15 +144,15 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
 
     // Validations express côté client (le serveur revérifie tout).
     if (name.trim().length < 2) {
-      setFormError("Veuillez indiquer votre nom (2 caractères minimum).")
+      setFormError(t("contact.errName"))
       return
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
-      setFormError("Veuillez saisir une adresse e-mail valide.")
+      setFormError(t("newsletter.invalidLong"))
       return
     }
     if (!subject || !SUBJECT_REDACTION.has(subject)) {
-      setFormError("Veuillez sélectionner un sujet.")
+      setFormError(t("contact.errSubject"))
       return
     }
     if (message.trim().length < 10) {
@@ -175,13 +178,13 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
       )
       setStatus("success")
       toast({
-        title: "Message envoyé",
+        title: t("contact.sent"),
         description: res.message,
       })
     } catch (err) {
       setStatus("idle")
       const description =
-        err instanceof Error ? err.message : "Une erreur est survenue, réessayez."
+        err instanceof Error ? err.message : t("newsletter.error")
       setFormError(description)
       toast({
         variant: "destructive",
@@ -254,7 +257,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
             >
               <CheckCircle2 className="size-8 text-brand-red" aria-hidden="true" />
               <h3 className="headline mt-4 text-xl font-bold">
-                Message bien reçu
+                {t("contact.received")}
               </h3>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
                 Merci {name.trim().split(" ")[0] ? name.trim().split(" ")[0] : ""} !
@@ -270,7 +273,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
                   className="min-h-11 border-foreground px-5 font-semibold hover:bg-foreground hover:text-background"
                 >
                   <PenLine aria-hidden="true" />
-                  Écrire un autre message
+                  {t("contact.another")}
                 </Button>
               </div>
             </motion.div>
@@ -280,14 +283,14 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor={`${inputId}-name`} className="kicker text-zinc-500">
-                    Nom complet *
+                    {t("contact.nameFull")}
                   </Label>
                   <Input
                     id={`${inputId}-name`}
                     name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Votre nom et prénom"
+                    placeholder={t("contact.namePlaceholder")}
                     autoComplete="name"
                     maxLength={80}
                     disabled={status === "loading"}
@@ -317,7 +320,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
               {/* Sujet */}
               <div className="space-y-2">
                 <Label htmlFor={`${inputId}-subject`} className="kicker text-zinc-500">
-                  Sujet *
+                  {t("contact.subjectLabel")}
                 </Label>
                 <Select
                   value={subject}
@@ -332,12 +335,12 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
                       "data-[size=default]:h-11 data-[placeholder]:text-muted-foreground"
                     )}
                   >
-                    <SelectValue placeholder="Sélectionnez le motif de votre message" />
+                    <SelectValue placeholder={t("contact.subjectPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent className="border">
                     {SUBJECTS.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
-                        {option.label}
+                        {t(option.labelKey)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -348,7 +351,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
               <div className="space-y-2">
                 <div className="flex items-end justify-between gap-4">
                   <Label htmlFor={`${inputId}-message`} className="kicker text-zinc-500">
-                    Message *
+                    {t("contact.messageLabel")}
                   </Label>
                   <span
                     aria-live="polite"
@@ -365,7 +368,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
                   name="message"
                   value={message}
                   onChange={(e) => setMessage(e.target.value.slice(0, 2000))}
-                  placeholder="Décrivez votre demande avec le plus de détails possible…"
+                  placeholder={t("contact.messagePlaceholder")}
                   rows={6}
                   maxLength={2000}
                   disabled={status === "loading"}
@@ -397,12 +400,12 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
                   {status === "loading" ? (
                     <>
                       <Loader2 className="animate-spin" aria-hidden="true" />
-                      Envoi en cours…
+                      {t("contact.sending")}
                     </>
                   ) : (
                     <>
                       <Send aria-hidden="true" />
-                      Envoyer le message
+                      {t("contact.send")}
                     </>
                   )}
                 </Button>
@@ -512,9 +515,9 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
             <div className="mt-8 grid grid-cols-2 gap-px border bg-border lg:hidden">
               <div className="flex flex-col items-center gap-1.5 bg-background p-4 text-center">
                 <Mail className="size-4 text-brand-blue" aria-hidden="true" />
-                <p className="text-xs font-semibold">E-mail</p>
+                <p className="text-xs font-semibold">{t("contact.email")}</p>
                 <p className="break-all text-[11px] text-muted-foreground">
-                  {quickEmail?.value ?? "Réponse sous 48 h"}
+                  {quickEmail?.value ?? t("contact.replyDelay")}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-1.5 bg-background p-4 text-center">

@@ -22,11 +22,12 @@ import {
   formatDate,
   formatDateShort,
   formatViews,
-  useFetch,
 } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { AdSlot } from "@/components/reference/AdSlot"
 import { ErrorState } from "@/components/reference/ErrorState"
 import { SmartImage } from "@/components/reference/SmartImage"
+import { textStyleToCss } from "@/components/reference/typography"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "@/hooks/use-toast"
@@ -177,20 +178,23 @@ function createMarkdownComponents({ lead = false } = {}): MarkdownComponents {
 const BODY_COMPONENTS = createMarkdownComponents()
 const LEAD_COMPONENTS = createMarkdownComponents({ lead: true })
 
-/** Corps d'article en markdown : lettrine optionnelle + prose maison. */
+/** Corps d'article en markdown : lettrine optionnelle + prose maison.
+ * La typographie « contenu » choisie dans le cockpit est appliquée ici. */
 function MarkdownBody({
   content,
   dropCap = false,
+  style,
 }: {
   content: string
   dropCap?: boolean
+  style?: React.CSSProperties
 }) {
   const { lead, rest } = React.useMemo(
     () => (dropCap ? splitLeadParagraph(content) : { lead: null, rest: content }),
     [content, dropCap]
   )
   return (
-    <div className="text-[17px] leading-[1.85] text-foreground/90">
+    <div className="text-[17px] leading-[1.85] text-foreground/90" style={style}>
       {lead ? <ReactMarkdown components={LEAD_COMPONENTS}>{lead}</ReactMarkdown> : null}
       {rest ? <ReactMarkdown components={BODY_COMPONENTS}>{rest}</ReactMarkdown> : null}
     </div>
@@ -305,7 +309,8 @@ function ArticleSkeleton() {
 
 /** Vue « lecture d'article » : expérience de lecture signature de la marque. */
 export function ArticleView({ slug, navigate, preview = false }: ArticleViewProps) {
-  const { data, error, loading, retry, status } = useFetch<ArticleResponse>(
+  const { t } = useI18n()
+  const { data, error, loading, retry, status } = useI18nFetch<ArticleResponse>(
     preview
       ? `/api/articles/${encodeURIComponent(slug)}?preview=1`
       : `/api/articles/${encodeURIComponent(slug)}`
@@ -357,7 +362,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
         {status === 404 ? (
           <div className="flex flex-col items-center gap-4 border border-dashed p-10 text-center">
             <span className="headline text-6xl font-black text-brand-red">404</span>
-            <h1 className="headline text-xl font-bold">Article introuvable</h1>
+            <h1 className="headline text-xl font-bold">{t("article.notFound")}</h1>
             <p className="max-w-sm text-sm text-muted-foreground">
               Cet article n&apos;existe pas ou a été déplacé.
             </p>
@@ -444,12 +449,18 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
             ) : null}
           </div>
 
-          <h1 className="headline mt-5 text-4xl font-black leading-[1.05] text-zinc-950 md:text-[3.4rem]">
+          <h1
+            className="headline mt-5 text-4xl font-black leading-[1.05] text-zinc-950 md:text-[3.4rem]"
+            style={textStyleToCss(article.typography?.title)}
+          >
             {article.title}
           </h1>
 
           {article.excerpt ? (
-            <p className="mt-5 font-serif text-lg italic leading-relaxed text-zinc-600 md:text-xl md:leading-relaxed">
+            <p
+              className="mt-5 font-serif text-lg italic leading-relaxed text-zinc-600 md:text-xl md:leading-relaxed"
+              style={textStyleToCss(article.typography?.excerpt)}
+            >
               {article.excerpt}
             </p>
           ) : null}
@@ -479,12 +490,12 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
                 </time>
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <Clock className="size-4" aria-hidden="true" />
-                {article.readMinutes} min de lecture
-              </span>
+              <Clock className="size-4" aria-hidden="true" />
+              {article.readMinutes} {t("common.readTime")}
+            </span>
               <span className="inline-flex items-center gap-1.5">
                 <Eye className="size-4" aria-hidden="true" />
-                {formatViews(article.views)} lectures
+                {formatViews(article.views)} {t("common.views")}
               </span>
             </div>
           </div>
@@ -501,7 +512,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
                 className="aspect-video w-full border-2 border-zinc-950 bg-black"
               />
               <figcaption className="mt-2 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
-                Reportage vidéo
+                {t("article.video")}
               </figcaption>
             </figure>
           ) : null}
@@ -525,7 +536,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
             />
           </motion.div>
           <figcaption className="mt-2 flex items-center justify-between gap-4 text-xs text-zinc-500 dark:text-zinc-400">
-            <span className="truncate">Illustration — {article.category.name}</span>
+            <span className="truncate">{t("article.illustration")} — {article.category.name}</span>
             <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.22em]">
               © REFERENCE.COM
             </span>
@@ -542,12 +553,19 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
       >
         {markdownSplit ? (
           <>
-            <MarkdownBody content={markdownSplit.before} dropCap />
+            <MarkdownBody
+              content={markdownSplit.before}
+              dropCap
+              style={textStyleToCss(article.typography?.content)}
+            />
             <div className="my-10">
               <AdSlot slot="inline" navigate={navigate} bare />
             </div>
             {markdownSplit.after ? (
-              <MarkdownBody content={markdownSplit.after} />
+              <MarkdownBody
+                content={markdownSplit.after}
+                style={textStyleToCss(article.typography?.content)}
+              />
             ) : null}
           </>
         ) : null}
@@ -555,7 +573,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
         {/* Tags */}
         {article.tags.length > 0 ? (
           <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-border pt-6">
-            <span className="kicker mr-2 text-muted-foreground">Sujets</span>
+            <span className="kicker mr-2 text-muted-foreground">{t("article.topics")}</span>
             {article.tags.map((tag) => (
               <span
                 key={tag}
@@ -663,7 +681,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
                 id="related-heading"
                 className="headline mt-1.5 text-2xl font-bold tracking-tight md:text-[1.75rem]"
               >
-                À lire aussi
+                {t("article.related")}
               </h2>
             </div>
             <button

@@ -6,6 +6,7 @@ import { CheckCircle2, Loader2, Send } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { fetchJson } from "@/components/reference/lib"
+import { useI18n } from "@/components/reference/lang-context"
 import { toast } from "@/hooks/use-toast"
 import type { NewsletterResponse } from "@/components/reference/types"
 
@@ -26,6 +27,7 @@ export function NewsletterForm({
   className,
 }: NewsletterFormProps) {
   const inputId = React.useId()
+  const { t } = useI18n()
   const [email, setEmail] = React.useState("")
   const [status, setStatus] = React.useState<"idle" | "loading" | "success">("idle")
   const [inlineError, setInlineError] = React.useState<string | null>(null)
@@ -35,11 +37,11 @@ export function NewsletterForm({
     event.preventDefault()
     const value = email.trim()
     if (!EMAIL_RE.test(value)) {
-      setInlineError("Veuillez saisir une adresse e-mail valide.")
+      setInlineError(t("newsletter.invalid"))
       toast({
         variant: "destructive",
-        title: "Adresse e-mail invalide",
-        description: "Vérifiez votre saisie puis réessayez.",
+        title: t("newsletter.invalid"),
+        description: t("newsletter.check"),
       })
       return
     }
@@ -54,17 +56,17 @@ export function NewsletterForm({
       setStatus("success")
       setEmail("")
       toast({
-        title: "Inscription confirmée",
-        description: res.message || "Merci, vous êtes bien abonné·e à la newsletter.",
+        title: t("newsletter.confirmed"),
+        description: res.message || t("newsletter.fallback"),
       })
     } catch (err) {
       setStatus("idle")
       const description =
-        err instanceof Error ? err.message : "Une erreur est survenue, réessayez."
+        err instanceof Error ? err.message : t("newsletter.error")
       setInlineError(description)
       toast({
         variant: "destructive",
-        title: "Inscription impossible",
+        title: t("newsletter.failed"),
         description,
       })
     }
@@ -74,7 +76,7 @@ export function NewsletterForm({
     <form onSubmit={handleSubmit} className={cn("w-full", className)} noValidate>
       <div className={cn(stacked ? "flex flex-col gap-2" : "flex gap-2")}>
         <label htmlFor={inputId} className="sr-only">
-          Adresse e-mail
+          {t("newsletter.placeholder")}
         </label>
         <input
           id={inputId}
@@ -108,12 +110,12 @@ export function NewsletterForm({
           {status === "loading" ? (
             <>
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-              Envoi…
+              {t("newsletter.sending")}
             </>
           ) : (
             <>
               <Send className="size-4" aria-hidden="true" />
-              S’inscrire
+              {t("newsletter.subscribe")}
             </>
           )}
         </button>
@@ -127,7 +129,7 @@ export function NewsletterForm({
             )}
           >
             <CheckCircle2 className="size-4" aria-hidden="true" />
-            Bienvenue ! Vérifiez votre boîte mail.
+            {t("newsletter.welcome")}
           </p>
         ) : inlineError ? (
           <p className={onBlue ? "text-white/90" : "text-destructive"}>{inlineError}</p>

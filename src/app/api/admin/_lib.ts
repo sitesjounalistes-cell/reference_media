@@ -7,6 +7,9 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
+import { parseTypography } from "@/lib/reference-api"
+
+export { parseTypography }
 
 /* ------------------------------- Réponses -------------------------------- */
 
@@ -161,6 +164,22 @@ export type AdminAdSlot = (typeof AD_SLOTS)[number]
 export const MAX_UPLOAD_SIZE_MO = 200
 export const MAX_UPLOAD_SIZE = MAX_UPLOAD_SIZE_MO * 1024 * 1024
 
+/* ------------------------- Typographie éditoriale ------------------------- */
+
+export const ARTICLE_FONTS = ["serif", "sans", "archivo", "mono"] as const
+
+const textStyleSchema = z.object({
+  font: z.enum(ARTICLE_FONTS, { error: "Police invalide" }).optional(),
+  bold: z.boolean({ error: "Gras : booléen attendu" }).optional(),
+  italic: z.boolean({ error: "Italique : booléen attendu" }).optional(),
+})
+
+export const typographySchema = z.object({
+  title: textStyleSchema.optional(),
+  excerpt: textStyleSchema.optional(),
+  content: textStyleSchema.optional(),
+})
+
 /* ----------------------------- Articles (zod) ------------------------------ */
 
 export const articleStatusSchema = z.enum(["DRAFT", "PUBLISHED", "HIDDEN"], {
@@ -223,6 +242,7 @@ const articleBase = z.object({
     .nullable()
     .optional()
     .refine(isSafeAssetUrl, ASSET_URL_ERROR),
+  typography: typographySchema.nullable().optional(),
 })
 
 export const articleInputSchema = articleBase.extend({
@@ -435,6 +455,7 @@ export interface AdminArticleRow {
   tags: string
   categoryId: string
   authorId: string
+  typography: string | null
   publishedAt: Date
   createdAt: Date
   updatedAt: Date
@@ -464,6 +485,7 @@ export function mapAdminArticle(row: AdminArticleRow) {
     categoryName: row.category.name,
     authorId: row.authorId,
     authorName: row.author.name,
+    typography: parseTypography(row.typography),
     publishedAt: row.publishedAt.toISOString(),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

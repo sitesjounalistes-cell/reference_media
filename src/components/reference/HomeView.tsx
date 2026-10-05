@@ -9,9 +9,11 @@ import { AdSlot } from "@/components/reference/AdSlot"
 import { ArticleCard } from "@/components/reference/ArticleCard"
 import { ErrorState } from "@/components/reference/ErrorState"
 import { FactWidget } from "@/components/reference/FactWidget"
+import { FeaturedCarousel } from "@/components/reference/FeaturedCarousel"
 import { NewsletterForm } from "@/components/reference/NewsletterForm"
 import { TrendingList } from "@/components/reference/TrendingList"
 import { getCategoryIcon, useFetch } from "@/components/reference/lib"
+import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { usePagedArticles } from "@/components/reference/use-paged-articles"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
@@ -251,7 +253,8 @@ export function HomeView({
   categoriesError,
   onRetryCategories,
 }: HomeViewProps) {
-  const featured = useFetch<ArticlesResponse>(
+  const { t } = useI18n()
+  const featured = useI18nFetch<ArticlesResponse>(
     "/api/articles?featured=true&pageSize=6"
   )
   const recent = usePagedArticles({ sort: "recent", pageSize: 9 })
@@ -268,16 +271,10 @@ export function HomeView({
   )
 
   const heroArticles = featured.data?.articles ?? []
-  const [heroMain, ...heroRest] = heroArticles
-  const sideArticles = heroRest.slice(0, 2)
-  const filFromFeatured = heroRest.slice(2, 5)
-  /** « Le fil » : articles suivants de la une, sinon récents hors une. */
-  const filArticles =
-    filFromFeatured.length > 0
-      ? filFromFeatured
-      : (recent.data?.articles ?? [])
-          .filter((article) => !heroArticles.some((h) => h.slug === article.slug))
-          .slice(0, 3)
+  /** « Le fil » : articles récents hors une, sous le carrousel. */
+  const filArticles = (recent.data?.articles ?? [])
+    .filter((article) => !heroArticles.some((h) => h.slug === article.slug))
+    .slice(0, 3)
 
   return (
     <div>
@@ -286,12 +283,12 @@ export function HomeView({
 
       {/* ------------------------------- À la une ----------------------------- */}
       <section
-        aria-label="À la une"
+        aria-label={t("home.featured")}
         className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 md:pt-10"
       >
         <div className="mb-5 flex items-center gap-3 md:mb-6">
           <span aria-hidden="true" className="brand-square bg-brand-red" />
-          <p className="kicker text-brand-red">À la une</p>
+          <p className="kicker text-brand-red">{t("home.featured")}</p>
           <span aria-hidden="true" className="h-px flex-1 bg-border" />
         </div>
 
@@ -317,33 +314,14 @@ export function HomeView({
         ) : featured.error ? (
           <ErrorState message={featured.error} onRetry={featured.retry} />
         ) : heroArticles.length === 0 ? (
-          <EmptyBlock message="Les articles à la une arrivent très bientôt." />
+          <EmptyBlock message={t("home.featuredEmpty")} />
         ) : (
-          <Reveal className="grid gap-6 lg:grid-cols-12">
-            {heroMain ? (
-              <ArticleCard
-                article={heroMain}
-                variant="hero"
-                onOpen={openArticle}
-                eager
-                className="lg:col-span-7"
-              />
+          <Reveal className="space-y-6">
+            {/* Défilement de TOUS les articles à la une (boucle automatique). */}
+            <FeaturedCarousel articles={heroArticles} onOpen={openArticle} />
+            {filArticles.length > 0 ? (
+              <FilBlock articles={filArticles} onOpen={openArticle} />
             ) : null}
-            <div className="flex flex-col gap-6 lg:col-span-5">
-              {sideArticles.map((article) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  variant="standard"
-                  onOpen={openArticle}
-                  eager
-                  imageAspect="16/9"
-                />
-              ))}
-              {filArticles.length > 0 ? (
-                <FilBlock articles={filArticles} onOpen={openArticle} />
-              ) : null}
-            </div>
           </Reveal>
         )}
       </section>
@@ -355,8 +333,8 @@ export function HomeView({
       >
         <SectionHeading
           id="categories-heading"
-          label="Sommaire"
-          title="Explorer par rubrique"
+          label={t("home.summary")}
+          title={t("home.exploreCategories")}
         />
         {categoriesLoading ? (
           <div
@@ -394,8 +372,8 @@ export function HomeView({
           <div className="lg:col-span-8">
             <SectionHeading
               id="latest-heading"
-              label="En continu"
-              title="Derniers articles"
+              label={t("home.continuous")}
+              title={t("home.latest")}
             />
             {recent.loading ? (
               <div className="divide-y divide-border" aria-hidden="true">
