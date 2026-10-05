@@ -22,9 +22,19 @@ interface BroadcastDto {
   title: string
   description: string
   mediaUrl: string
+  thumbnailUrl: string | null
+  isLive: boolean
   duration: number | null
   featured: boolean
   publishedAt: string
+}
+
+/** Extrait l'identifiant d'une URL YouTube (watch, youtu.be, shorts, embed, live). */
+function youTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  )
+  return match ? match[1] : null
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -173,6 +183,7 @@ function BroadcastPanel({
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <p className="font-serif text-base font-bold leading-snug">
+                            {item.isLive ? <span className="mr-2 inline-flex items-center gap-1 bg-brand-red px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-widest text-white"><span aria-hidden="true" className="pulse-dot size-1 bg-white" />En direct</span> : null}
                             {item.featured ? <span className="mr-2 bg-brand-red px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-widest text-white">À la une</span> : null}
                             {item.title}
                           </p>
@@ -186,17 +197,37 @@ function BroadcastPanel({
                           </span>
                         ) : null}
                       </div>
-                      {isTv ? (
-                        <video
-                          src={item.mediaUrl}
-                          controls
-                          playsInline
-                          preload="metadata"
-                          className="mt-3 aspect-video w-full bg-black"
-                        />
-                      ) : (
-                        <audio src={item.mediaUrl} controls preload="metadata" className="mt-3 w-full" />
-                      )}
+                      {(() => {
+                        const yt = youTubeId(item.mediaUrl)
+                        if (yt) {
+                          return (
+                            <div className="mt-3 aspect-video w-full border bg-black">
+                              <iframe
+                                src={"https://www.youtube.com/embed/" + yt + (item.isLive ? "?autoplay=0" : "")}
+                                title={item.title}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                loading="lazy"
+                                className="size-full"
+                              />
+                            </div>
+                          )
+                        }
+                        if (isTv) {
+                          return (
+                            <video src={item.mediaUrl} controls playsInline preload="metadata" className="mt-3 aspect-video w-full bg-black" />
+                          )
+                        }
+                        return (
+                          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+                            {item.thumbnailUrl ? (
+                               
+                              <img src={item.thumbnailUrl} alt="" className="h-24 w-24 shrink-0 border object-cover" loading="lazy" />
+                            ) : null}
+                            <audio src={item.mediaUrl} controls preload="metadata" className="w-full" />
+                          </div>
+                        )
+                      })()}
                     </li>
                   ))}
                 </ul>

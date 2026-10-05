@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 
 import { requireAdmin } from "@/lib/admin-auth"
+import { cloudinaryConfigured, cloudinaryUpload } from "@/lib/cloudinary"
 import { db } from "@/lib/db"
 import { isSafeAssetUrl } from "@/app/api/admin/_lib"
 
@@ -16,12 +17,14 @@ const broadcastSchema = z.object({
   description: z.string().trim().min(10, "Description : 10 caractères minimum").max(600),
   mediaUrl: z.string().trim().min(1, "Média requis").max(1000).refine(isSafeAssetUrl, "URL invalide"),
   duration: z.number().int().min(1).max(600).nullable().optional(),
+  thumbnailUrl: z.string().trim().max(1000).nullable().optional().refine(isSafeAssetUrl, "URL de visuel invalide"),
+  isLive: z.boolean().optional(),
   featured: z.boolean().optional(),
 })
 
 function map(row: {
   id: string; kind: string; section: string; title: string; description: string
-  mediaUrl: string; duration: number | null; featured: boolean; publishedAt: Date
+  mediaUrl: string; thumbnailUrl: string | null; isLive: boolean; duration: number | null; featured: boolean; publishedAt: Date
 }) {
   return { ...row, publishedAt: row.publishedAt.toISOString() }
 }
@@ -48,7 +51,43 @@ export async function POST(request: Request) {
   const denied = await requireAdmin(request)
   if (denied) return denied
   try {
-    const parsed = broadcastSchema.safeParse(await request.json())
+    const body = (await request.json()) as Record<string, unknown>
+    // Import Google Drive (sans API) : { importDrive: "https://drive.google.com/file/d/…/view" }
+    if (typeof body.importDrive === "string") {
+      const match = body.importDrive.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([A-Za-z0-9_-]{10,})/)
+      if (!match) {
+        return NextResponse.json(
+          { error: "Lien Google Drive non reconnu — utilisez le lien de partage du FICHIER (pas d'un dossier)." },
+          { status: 400 }
+        )
+      }
+      if (!cloudinaryConfigured()) {
+        return NextResponse.json(
+          { error: "Cloudinary non configuré — ajoutez CLOUDINARY_* dans l'environnement." },
+          { status: 500 }
+        )
+      }
+      try {
+        const direct = "https://drive.google.com/uc?export=download&id=" + match[1]
+        const res = await fetch(direct, { redirect: "follow", signal: AbortSignal.timeout(120000) })
+        if (!res.ok) throw new Error("Drive HTTP " + res.status)
+        const contentType = res.headers.get("content-type") ?? ""
+        if (!/^(audio|video|application\/octet-stream)/.test(contentType)) {
+          throw new Error("Le lien ne pointe pas directement vers un média (fichier privé ou trop volumineux ?)")
+        }
+        const buffer = Buffer.from(await res.arrayBuffer())
+        if (buffer.length > 200 * 1024 * 1024) throw new Error("Fichier trop volumineux (200 Mo maximum)")
+        const kind = contentType.startsWith("video") ? "VIDEO" : "AUDIO"
+        const uploaded = await cloudinaryUpload(buffer, kind, match[1])
+        return NextResponse.json({ imported: { url: uploaded.secureUrl, kind } })
+      } catch (err) {
+        return NextResponse.json(
+          { error: "Import Drive impossible : " + (err instanceof Error ? err.message : "erreur inconnue") },
+          { status: 400 }
+        )
+      }
+    }
+    const parsed = broadcastSchema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Contenu invalide" }, { status: 400 })
     }
@@ -61,6 +100,8 @@ export async function POST(request: Request) {
         description: data.description,
         mediaUrl: data.mediaUrl,
         duration: data.duration ?? null,
+        thumbnailUrl: data.thumbnailUrl || null,
+        isLive: data.isLive ?? false,
         featured: data.featured ?? false,
       },
     })

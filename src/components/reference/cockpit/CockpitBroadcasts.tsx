@@ -33,6 +33,8 @@ interface BroadcastDto {
   title: string
   description: string
   mediaUrl: string
+  thumbnailUrl: string | null
+  isLive: boolean
   duration: number | null
   featured: boolean
   publishedAt: string
@@ -57,6 +59,10 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
   const [title, setTitle] = React.useState("")
   const [description, setDescription] = React.useState("")
   const [mediaUrl, setMediaUrl] = React.useState("")
+  const [thumbnailUrl, setThumbnailUrl] = React.useState("")
+  const [isLive, setIsLive] = React.useState(false)
+  const [driveUrl, setDriveUrl] = React.useState("")
+  const [importing, setImporting] = React.useState(false)
   const [duration, setDuration] = React.useState("")
   const [featured, setFeatured] = React.useState(false)
   const [saving, setSaving] = React.useState(false)
@@ -69,6 +75,8 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
   )
   const items = list.data?.broadcasts ?? []
   const assets = media.data?.media ?? []
+  const images = useFetch<MediaListResponse>(`/api/admin/media?kind=IMAGE&_r=${refreshKey}`)
+  const imageAssets = images.data?.media ?? []
 
   React.useEffect(() => {
     setSection(SECTION_OPTIONS[kind][0].value)
@@ -79,6 +87,34 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
 
   function isSafe(url: string) {
     return url.startsWith("/") || /^https:\/\/\S+$/i.test(url)
+  }
+
+  /** Import Google Drive sans API : téléchargement serveur → Cloudinary. */
+  const importFromDrive = async () => {
+    if (!driveUrl.trim() || importing) return
+    setImporting(true)
+    try {
+      const res = await fetchJson<{ imported: { url: string; kind: string } }>(
+        "/api/admin/broadcasts",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ importDrive: driveUrl.trim() }),
+        }
+      )
+      setMediaUrl(res.imported.url)
+      if (res.imported.kind === "VIDEO") setKind("VIDEO")
+      setDriveUrl("")
+      toast({ title: "Média importé depuis Drive", description: "Hébergé sur Cloudinary — prêt à publier." })
+    } catch (err) {
+      toast({
+        title: "Import Drive impossible",
+        description: err instanceof Error ? err.message : "Vérifiez que le fichier est partagé publiquement.",
+        variant: "destructive",
+      })
+    } finally {
+      setImporting(false)
+    }
   }
 
   const save = async () => {
@@ -94,6 +130,8 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
           title: title.trim(),
           description: description.trim(),
           mediaUrl: mediaUrl.trim(),
+          thumbnailUrl: thumbnailUrl.trim() || null,
+          isLive,
           duration: duration ? Math.min(Math.max(Number.parseInt(duration, 10) || 1, 1), 600) : null,
           featured,
         }),
@@ -201,6 +239,52 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
                 </p>
               )}
             </div>
+            <div className="space-y-1.5">
+              <Label className="kicker text-muted-foreground" htmlFor="bc-drive">Importer depuis Google Drive (fichier public)</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="bc-drive"
+                  value={driveUrl}
+                  onChange={(e) => setDriveUrl(e.target.value)}
+                  className="h-10 rounded-none font-mono text-xs"
+                  placeholder="https://drive.google.com/file/d/…/view"
+                />
+                <Button variant="outline" onClick={() => void importFromDrive()} disabled={!driveUrl.trim() || importing} className="min-h-10 shrink-0 rounded-none">
+                  {importing ? <Spinner /> : null}
+                  {importing ? "Import…" : "Récupérer"}
+                </Button>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Le fichier est téléchargé puis hébergé sur Cloudinary (diffusion CDN fiable).
+                Astuce TV : collez simplement un lien YouTube dans « Média » — le lecteur s'intègre automatiquement.
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="kicker text-muted-foreground" htmlFor="bc-thumb">Visuel associé (vignette)</Label>
+              <Input
+                id="bc-thumb"
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                className="h-10 rounded-none font-mono text-xs"
+                placeholder="URL de l'image (choisissez ci-dessous ou https://…)"
+              />
+              {imageAssets.length > 0 ? (
+                <div className="mt-2 flex max-h-24 gap-2 overflow-x-auto border p-1.5 nice-scrollbar">
+                  {imageAssets.slice(0, 12).map((asset) => (
+                    <button
+                      key={asset.id}
+                      type="button"
+                      onClick={() => setThumbnailUrl(asset.url)}
+                      className={thumbnailUrl === asset.url ? "size-16 shrink-0 border-2 border-brand-red" : "size-16 shrink-0 border hover:opacity-80"}
+                      title={asset.originalName}
+                    >
+                      { }
+                      <img src={asset.url} alt={asset.originalName} className="size-full object-cover" loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
             <div className="flex items-end gap-4">
               <div className="w-32 space-y-1.5">
                 <Label className="kicker text-muted-foreground" htmlFor="bc-dur">Durée (min)</Label>
@@ -209,6 +293,10 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
               <div className="flex items-center gap-2 pb-2">
                 <Switch checked={featured} onCheckedChange={setFeatured} aria-label="Mettre à la une" />
                 <span className="text-xs text-muted-foreground">À la une</span>
+              </div>
+              <div className="flex items-center gap-2 pb-2">
+                <Switch checked={isLive} onCheckedChange={setIsLive} aria-label="Diffusion en direct" />
+                <span className="text-xs text-muted-foreground">En direct {isLive ? "(badge pulsé)" : ""}</span>
               </div>
             </div>
             <Button onClick={() => void save()} disabled={!valid || saving} className="min-h-10 gap-2 rounded-none">
@@ -237,7 +325,7 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
                     <p className="truncate text-sm font-semibold">{item.title}</p>
                     <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
                       {SECTION_OPTIONS[item.kind as "AUDIO" | "VIDEO"]?.find((s) => s.value === item.section)?.label ?? item.section}
-                      {" · "}{formatDateShort(item.publishedAt)}
+                      {item.isLive ? " · EN DIRECT" : ""}{" · "}{formatDateShort(item.publishedAt)}
                     </p>
                   </div>
                   <Switch checked={item.featured} onCheckedChange={() => void toggleFeatured(item)} aria-label="Mettre à la une" />
