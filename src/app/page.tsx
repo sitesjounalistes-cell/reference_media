@@ -15,6 +15,7 @@ import { CockpitView } from "@/components/reference/CockpitView"
 import { ContactView } from "@/components/reference/ContactView"
 import { DashboardView } from "@/components/reference/DashboardView"
 import { Footer } from "@/components/reference/Footer"
+import { FmTvBar } from "@/components/reference/FmTvBar"
 import { Header } from "@/components/reference/Header"
 import { HomeView } from "@/components/reference/HomeView"
 import { SearchDialog } from "@/components/reference/SearchDialog"
@@ -144,6 +145,9 @@ function HomeInner() {
         categories={categories}
         onOpenSearch={() => setSearchOpen(true)}
       />
+
+      {/* Barre FM / TV — n'apparaît que si activée depuis le cockpit */}
+      <FmTvBar />
 
       {/* Rails publicitaires latéraux fixes — très grands écrans uniquement.
           Ils s'estompent quand le pied de page entre dans le viewport. */}

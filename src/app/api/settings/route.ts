@@ -13,6 +13,13 @@ const PUBLIC_SETTING_KEYS = new Set([
   "tagline",
   "footerNote",
   "aboutLead",
+  // FM/TV : interrupteurs cockpit + flux publics (audio radio / vidéo TV).
+  "fmEnabled",
+  "fmLabel",
+  "fmStreamUrl",
+  "tvEnabled",
+  "tvLabel",
+  "tvStreamUrl",
 ])
 
 /**

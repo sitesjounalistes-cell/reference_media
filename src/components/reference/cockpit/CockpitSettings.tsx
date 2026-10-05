@@ -551,6 +551,137 @@ function SocialsCard({ refreshKey, onMutated }: { refreshKey: number; onMutated:
 
 /* ------------------------------ section complète --------------------------- */
 
+/* ------------------------------- FM / TV ----------------------------------- */
+
+/** Interrupteurs FM et TV + flux associés, visibles sur le site public. */
+function FmTvCard({ refreshKey }: { refreshKey: number }) {
+  const { toast } = useToast()
+  const { data, loading, error } = useCockpitData<SiteSettingsResponse>(
+    "/api/admin/settings",
+    refreshKey
+  )
+  const [saving, setSaving] = React.useState(false)
+  const [form, setForm] = React.useState({
+    fmEnabled: false,
+    fmLabel: "",
+    fmStreamUrl: "",
+    tvEnabled: false,
+    tvLabel: "",
+    tvStreamUrl: "",
+  })
+
+  React.useEffect(() => {
+    if (!data) return
+    setForm({
+      fmEnabled: data.settings.fmEnabled === "true",
+      fmLabel: data.settings.fmLabel ?? "",
+      fmStreamUrl: data.settings.fmStreamUrl ?? "",
+      tvEnabled: data.settings.tvEnabled === "true",
+      tvLabel: data.settings.tvLabel ?? "",
+      tvStreamUrl: data.settings.tvStreamUrl ?? "",
+    })
+  }, [data])
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await fetchJson("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fmEnabled: String(form.fmEnabled),
+          fmLabel: form.fmLabel.trim(),
+          fmStreamUrl: form.fmStreamUrl.trim(),
+          tvEnabled: String(form.tvEnabled),
+          tvLabel: form.tvLabel.trim(),
+          tvStreamUrl: form.tvStreamUrl.trim(),
+        }),
+      })
+      toast({ title: "FM / TV mis à jour", description: "Les changements sont visibles immédiatement sur le site." })
+    } catch (err) {
+      toast({
+        title: "Enregistrement impossible",
+        description: err instanceof Error ? err.message : "Une erreur est survenue",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const inputClass = "h-9 rounded-none"
+
+  return (
+    <Card
+      title="FM & TV"
+      description="Activez la radio et la chaîne TV : elles apparaissent en barre flottante sur le site public."
+    >
+      {loading ? (
+        <Spinner />
+      ) : error ? (
+        <ErrorPanel message={error} />
+      ) : (
+        <div className="space-y-5">
+          {/* FM */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <span className="kicker text-muted-foreground">Radio FM</span>
+              <Switch
+                checked={form.fmEnabled}
+                onCheckedChange={(checked) => setForm((f) => ({ ...f, fmEnabled: checked }))}
+                aria-label="Activer la radio FM"
+              />
+            </div>
+            <Input
+              value={form.fmLabel}
+              onChange={(e) => setForm((f) => ({ ...f, fmLabel: e.target.value }))}
+              placeholder="Libellé du bouton (ex. FM Paris)"
+              className={inputClass}
+              aria-label="Libellé FM"
+            />
+            <Input
+              value={form.fmStreamUrl}
+              onChange={(e) => setForm((f) => ({ ...f, fmStreamUrl: e.target.value }))}
+              placeholder="URL du flux audio (https://…/stream.mp3)"
+              className={inputClass}
+              aria-label="URL du flux FM"
+            />
+          </div>
+          {/* TV */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <span className="kicker text-muted-foreground">Chaîne TV</span>
+              <Switch
+                checked={form.tvEnabled}
+                onCheckedChange={(checked) => setForm((f) => ({ ...f, tvEnabled: checked }))}
+                aria-label="Activer la chaîne TV"
+              />
+            </div>
+            <Input
+              value={form.tvLabel}
+              onChange={(e) => setForm((f) => ({ ...f, tvLabel: e.target.value }))}
+              placeholder="Libellé du bouton (ex. Réf TV)"
+              className={inputClass}
+              aria-label="Libellé TV"
+            />
+            <Input
+              value={form.tvStreamUrl}
+              onChange={(e) => setForm((f) => ({ ...f, tvStreamUrl: e.target.value }))}
+              placeholder="URL du flux vidéo (https://….mp4 / .m3u8)"
+              className={inputClass}
+              aria-label="URL du flux TV"
+            />
+          </div>
+          <Button onClick={() => void save()} disabled={saving} className="min-h-10 gap-2 rounded-none">
+            {saving ? <Spinner className="text-primary-foreground" /> : <Save className="size-4" aria-hidden="true" />}
+            Enregistrer FM / TV
+          </Button>
+        </div>
+      )}
+    </Card>
+  )
+}
+
 export function CockpitSettings({
   refreshKey,
   onMutated,
@@ -568,6 +699,7 @@ export function CockpitSettings({
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <div className="space-y-6">
           <GeneralCard refreshKey={refreshKey} />
+          <FmTvCard refreshKey={refreshKey} />
         </div>
         <div className="space-y-6">
           <ChannelsCard refreshKey={refreshKey} onMutated={onMutated} />
