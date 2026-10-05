@@ -287,6 +287,7 @@ export type CockpitSection =
   | "media"
   | "categories"
   | "campaigns"
+  | "broadcasts"
   | "messages"
   | "settings"
 
@@ -297,6 +298,7 @@ export const COCKPIT_SECTIONS: CockpitSection[] = [
   "media",
   "categories",
   "campaigns",
+  "broadcasts",
   "messages",
   "settings",
 ]

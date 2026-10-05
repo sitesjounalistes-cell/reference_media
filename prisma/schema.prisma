@@ -192,6 +192,28 @@ model SocialLink {
 // src/lib/admin-auth.ts (requireAdmin + login) — jamais exposée par l'API.
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// FM & TV : contenus audio et vidéo structurés comme une rédaction.
+// kind AUDIO (FM) ou VIDEO (TV) ; section = podcast | chronique | interview
+// (FM) ou reportage | emission (TV). Fichiers servis via Cloudinary/médiathèque.
+// ----------------------------------------------------------------------------
+
+model Broadcast {
+  id          String   @id @default(cuid())
+  kind        String // AUDIO | VIDEO
+  section     String // podcast | chronique | interview | reportage | emission
+  title       String
+  description String
+  mediaUrl    String
+  duration    Int? // minutes, facultatif
+  featured    Boolean  @default(false)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([kind, section])
+  @@index([publishedAt])
+}
+
 model AuditLog {
   id        String   @id @default(cuid())
   action    String // login.success | login.failed | login.rate-limited | admin.mutation
