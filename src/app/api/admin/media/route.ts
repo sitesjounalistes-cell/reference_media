@@ -7,6 +7,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 import { requireAdmin } from "@/lib/admin-auth"
+import { cloudinaryConfigured, cloudinaryUpload } from "@/lib/cloudinary"
 import { clientIp, rateLimit, tooManyRequests } from "@/lib/rate-limit"
 import { db } from "@/lib/db"
 import { MAX_UPLOAD_SIZE, MAX_UPLOAD_SIZE_MO } from "../_lib"
@@ -257,7 +258,7 @@ function mapMedia(row: {
     mimeType: row.mimeType,
     size: row.size,
     kind: row.kind,
-    url: `/uploads/${row.filename}`,
+    url: row.filename.startsWith("http") ? row.filename : `/uploads/${row.filename}`,
     createdAt: row.createdAt.toISOString(),
   }
 }
@@ -378,8 +379,24 @@ export async function POST(request: Request) {
       }
     }
 
-    const filename = `${randomUUID()}${mimeInfo.ext}`
+    // Stockage : Cloudinary CDN si configuré (persistant en production),
+    // sinon fichier local (développement).
+    if (cloudinaryConfigured()) {
+      const uploaded = await cloudinaryUpload(buffer, mimeInfo.kind, originalName)
+      const asset = await db.mediaAsset.create({
+        data: {
+          filename: uploaded.secureUrl,
+          cloudinaryId: uploaded.publicId,
+          originalName,
+          mimeType: file.type,
+          size: uploaded.bytes || file.size,
+          kind: mimeInfo.kind,
+        },
+      })
+      return NextResponse.json({ media: mapMedia(asset) }, { status: 201 })
+    }
 
+    const filename = `${randomUUID()}${mimeInfo.ext}`
     await writeFile(join(UPLOADS_DIR, filename), buffer)
 
     const asset = await db.mediaAsset.create({

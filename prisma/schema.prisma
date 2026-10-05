@@ -152,7 +152,8 @@ model AdEvent {
 
 model MediaAsset {
   id           String   @id @default(cuid())
-  filename     String   @unique // nom stocké dans public/uploads
+  filename     String   @unique // URL CDN Cloudinary (ou nom local public/uploads)
+  cloudinaryId String?  // public_id Cloudinary (suppression distante)
   originalName String
   mimeType     String
   size         Int // octets

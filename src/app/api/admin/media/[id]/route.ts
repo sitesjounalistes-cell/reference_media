@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
 import { requireAdmin } from "@/lib/admin-auth"
+import { cloudinaryConfigured, cloudinaryDestroy } from "@/lib/cloudinary"
 import { db } from "@/lib/db"
 import { noContent } from "../../_lib"
 
@@ -28,11 +29,15 @@ export async function DELETE(
       return NextResponse.json({ error: "Média introuvable" }, { status: 404 })
     }
 
-    // Suppression du fichier : silencieuse (le fichier peut déjà avoir disparu).
-    try {
-      await rm(join(UPLOADS_DIR, asset.filename), { force: true })
-    } catch {
-      // ignoré volontairement
+    // Ressource distante (Cloudinary) ou fichier local — même fiche, suppression adaptée.
+    if (asset.cloudinaryId && cloudinaryConfigured()) {
+      await cloudinaryDestroy(asset.cloudinaryId, asset.kind)
+    } else {
+      try {
+        await rm(join(UPLOADS_DIR, asset.filename), { force: true })
+      } catch {
+        // ignoré volontairement
+      }
     }
 
     await db.mediaAsset.delete({ where: { id } })
