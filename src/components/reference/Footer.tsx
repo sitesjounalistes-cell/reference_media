@@ -175,11 +175,6 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
               </button>
             </li>
             <li>
-              <button type="button" onClick={() => navigate({ type: "dashboard" })} className={linkClass}>
-                {t("header.dashboard")}
-              </button>
-            </li>
-            <li>
               <button type="button" onClick={() => navigate({ type: "about" })} className={linkClass}>
                 {t("header.about")}
               </button>
@@ -276,7 +271,9 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
           <div className="flex items-center gap-5">
             <button
               type="button"
-              onClick={() => navigate({ type: "cockpit" })}
+              onClick={() => {
+                window.location.href = "/admin"
+              }}
               title={t("header.cockpitFull")}
               className="transition-colors hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
             >

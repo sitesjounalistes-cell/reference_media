@@ -260,19 +260,6 @@ function DesktopNav({
         <div className="flex items-stretch">
           <span aria-hidden="true" className="my-2.5 w-px bg-border" />
           <NavItem
-            label={t("header.dashboard")}
-            icon={LayoutDashboard}
-            active={view.type === "dashboard"}
-            onClick={() => navigate({ type: "dashboard" })}
-          />
-          <NavItem
-            label={t("header.cockpit")}
-            icon={SquarePen}
-            active={view.type === "cockpit"}
-            tone="cockpit"
-            onClick={() => navigate({ type: "cockpit" })}
-          />
-          <NavItem
             label={t("header.about")}
             active={view.type === "about"}
             onClick={() => navigate({ type: "about" })}
@@ -372,18 +359,6 @@ function MobileMenu({
 
   const staticLinks: Array<{ label: string; view: View; active: boolean; icon?: LucideIcon }> = [
     { label: t("header.home"), view: { type: "home" }, active: view.type === "home" },
-    {
-      label: t("header.dashboard"),
-      view: { type: "dashboard" },
-      active: view.type === "dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      label: t("header.cockpitFull"),
-      view: { type: "cockpit" },
-      active: view.type === "cockpit",
-      icon: SquarePen,
-    },
     { label: t("common.search"), view: { type: "search", q: "" }, active: view.type === "search" },
     { label: t("header.about"), view: { type: "about" }, active: view.type === "about" },
     { label: t("header.contact"), view: { type: "contact" }, active: view.type === "contact" },

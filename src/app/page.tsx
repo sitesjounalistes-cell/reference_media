@@ -32,7 +32,12 @@ export default function Home() {
 }
 
 function HomeInner() {
-  const [view, setView] = React.useState<View>({ type: "home" })
+  // Arrivée depuis /admin (aperçu d'article) : ouvre directement l'article.
+  const [view, setView] = React.useState<View>(() => {
+    if (typeof window === "undefined") return { type: "home" }
+    const article = new URLSearchParams(window.location.search).get("article")
+    return article ? { type: "article", slug: article } : { type: "home" }
+  })
   const [searchOpen, setSearchOpen] = React.useState(false)
   /** Masque les rails fixes lorsque le pied de page entre dans le viewport. */
   const [railsHidden, setRailsHidden] = React.useState(false)
