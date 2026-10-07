@@ -741,7 +741,7 @@ export function CockpitEditor({
                     placeholder="Rédigez votre article — la barre d'outils gère le gras, les titres, les listes et les liens…"
                     plugins={[
                       headingsPlugin(),
-                      listsPlugin(),
+                      listsPlugin({ listItemMarker: "-" }),
                       quotePlugin(),
                       thematicBreakPlugin(),
                       linkPlugin(),
@@ -758,7 +758,7 @@ export function CockpitEditor({
                         ),
                       }),
                     ]}
-                    contentEditableClassName="min-h-[500px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
+                    contentEditableClassName="mdx-editor-reference min-h-[500px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
                     className="min-h-[440px]"
                   />
                 </div>

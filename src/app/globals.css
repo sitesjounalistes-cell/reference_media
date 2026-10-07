@@ -312,6 +312,32 @@
     overflow-x: clip;
   }
 
+  /* Listes de l'éditeur riche : puces carrées rouges et numéros bleus,
+     identiques au rendu public des articles. */
+  .mdx-editor-reference ul {
+    list-style: square;
+    padding-left: 1.4rem;
+    margin: 0.9rem 0;
+  }
+  .mdx-editor-reference ul > li::marker {
+    color: var(--brand-red, #e8192c);
+  }
+  .mdx-editor-reference ol {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    margin: 0.9rem 0;
+  }
+  .mdx-editor-reference ol > li::marker {
+    font-weight: 700;
+  }
+  .mdx-editor-reference li {
+    margin: 0.35rem 0;
+  }
+  .mdx-editor-reference h2 { font-size: 1.5rem; font-weight: 700; margin: 1.4rem 0 0.6rem; }
+  .mdx-editor-reference h3 { font-size: 1.2rem; font-weight: 700; margin: 1.1rem 0 0.5rem; }
+  .mdx-editor-reference blockquote { border-left: 3px solid #1b5fd9; padding-left: 1rem; font-style: italic; margin: 1rem 0; }
+  .mdx-editor-reference a { color: #1b5fd9; text-decoration: underline; }
+
   /* Barres internes invisibles sur tous les navigateurs. */
   .nice-scrollbar {
     scrollbar-width: none;

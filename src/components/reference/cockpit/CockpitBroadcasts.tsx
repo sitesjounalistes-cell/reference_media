@@ -239,14 +239,17 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
               )}
             </div>
             <div className="space-y-1.5">
-              <Label className="kicker text-muted-foreground" htmlFor="bc-drive">Lier un audio Google Drive (lecture directe)</Label>
+              {/* Libellé adapté à l'antenne : audio côté FM, vidéo côté TV */}
+              <Label className="kicker text-muted-foreground" htmlFor="bc-drive">
+                {kind === "AUDIO" ? "Lier un audio Google Drive (lecture directe)" : "Lier une vidéo Google Drive (ou collez un lien YouTube dans Média)"}
+              </Label>
               <div className="flex gap-2">
                 <Input
                   id="bc-drive"
                   value={driveUrl}
                   onChange={(e) => setDriveUrl(e.target.value)}
                   className="h-10 rounded-none font-mono text-xs"
-                  placeholder="https://drive.google.com/file/d/…/view"
+                  placeholder={kind === "AUDIO" ? "https://drive.google.com/file/d/… (audio partagé)" : "https://drive.google.com/file/d/… (vidéo) ou https://youtube.com/watch?v=…"}
                 />
                 <Button variant="outline" onClick={() => void importFromDrive()} disabled={!driveUrl.trim() || importing} className="min-h-10 shrink-0 rounded-none">
                   {importing ? <Spinner /> : null}
@@ -254,7 +257,7 @@ export function CockpitBroadcasts({ refreshKey, onMutated }: { refreshKey: numbe
                 </Button>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                L'audio reste dans Drive — le site le lit directement, rien n'est copié (Vercel/Cloudinary intacts). Partage requis : « Tous les utilisateurs disposant du lien ».
+                Le média reste dans Drive — le site le lit directement, rien n'est copié (Vercel/Cloudinary intacts). Partage requis : « Tous les utilisateurs disposant du lien ».
                 Astuce TV : collez simplement un lien YouTube dans « Média » — le lecteur s'intègre automatiquement.
               </p>
             </div>
