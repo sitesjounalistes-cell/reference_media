@@ -78,6 +78,7 @@ function CampaignDialog({
     body: "",
     ctaLabel: "Découvrir",
     ctaView: "home",
+    imageUrl: "",
     color: "#1B5FD9",
     weight: "1",
     active: true,
@@ -95,6 +96,7 @@ function CampaignDialog({
         body: campaign?.body ?? "",
         ctaLabel: campaign?.ctaLabel ?? "Découvrir",
         ctaView: campaign?.ctaView ?? "home",
+        imageUrl: campaign?.imageUrl ?? "",
         color: campaign?.color ?? "#1B5FD9",
         weight: String(campaign?.weight ?? 1),
         active: campaign?.active ?? true,
@@ -120,6 +122,7 @@ function CampaignDialog({
       body: form.body.trim(),
       ctaLabel: form.ctaLabel.trim(),
       ctaView: form.ctaView.trim() || "home",
+      imageUrl: form.imageUrl.trim() || null,
       color: form.color,
       slots: Array.from(form.slots),
       active: form.active,
@@ -222,15 +225,47 @@ function CampaignDialog({
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="camp-ctaview">Destination</Label>
+              <Label htmlFor="camp-ctaview">Destination (lien)</Label>
               <Input
                 id="camp-ctaview"
                 value={form.ctaView}
                 onChange={(e) => setForm((c) => ({ ...c, ctaView: e.target.value }))}
-                placeholder="home · about · contact:publicite · category:sciences"
+                placeholder="https://votre-site.com/page — ou interne : home · about · contact:publicite · category:sciences"
                 className="rounded-none font-mono text-xs"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Collez un lien https : le clic sur l'annonce ouvrira cette page.
+              </p>
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="camp-image">Image de la créa</Label>
+            <div className="flex gap-2">
+              <Input
+                id="camp-image"
+                value={form.imageUrl}
+                onChange={(e) => setForm((c) => ({ ...c, imageUrl: e.target.value }))}
+                placeholder="Visuel de l'annonce (bouton ci-contre pour choisir dans la médiathèque)"
+                className="rounded-none font-mono text-xs"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 shrink-0 rounded-none"
+                onClick={() => setPickImage(true)}
+              >
+                Choisir…
+              </Button>
+            </div>
+            {form.imageUrl ? (
+               
+              <img
+                src={form.imageUrl}
+                alt="Aperçu de la créa"
+                className="mt-2 max-h-28 border object-contain"
+              />
+            ) : null}
+            <ImagePicker open={pickImage} onOpenChange={setPickImage} onPick={(url) => setForm((cf) => ({ ...cf, imageUrl: url }))} />
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="space-y-1.5">
@@ -310,6 +345,10 @@ function CampaignDialog({
 }
 function CampaignImagePicker({ open, onOpenChange, onPick }: { open: boolean; onOpenChange: (o: boolean) => void; onPick: (url: string) => void }) {
   return <MediaPickerDialog open={open} onOpenChange={onOpenChange} kind="IMAGE" onPick={(asset) => onPick(asset.url)} />
+}
+
+function ImagePicker({ open, onOpenChange, onPick }: { open: boolean; onOpenChange: (o: boolean) => void; onPick: (url: string) => void }) {
+  return <MediaPickerDialog open={open} onOpenChange={onOpenChange} kind="IMAGE" onPick={(a) => onPick(a.url)} />
 }
 
 export function CockpitCampaigns({ refreshKey, onMutated }: { refreshKey: number; onMutated: () => void }) {

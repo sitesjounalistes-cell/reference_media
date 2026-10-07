@@ -37,25 +37,13 @@ function driveFileId(url: string): string | null {
 
 /** Lecteur audio streamé DIRECTEMENT depuis Google Drive (aucune copie). En cas de blocage Google, repli sur le player officiel intégré. */
 function DriveAudioPlayer({ fileId, title }: { fileId: string; title: string }) {
-  const [fallback, setFallback] = React.useState(false)
-  if (fallback) {
-    return (
-      <iframe
-        src={`https://drive.google.com/file/d/${fileId}/preview`}
-        title={title}
-        allow="autoplay"
-        loading="lazy"
-        className="aspect-video w-full max-w-xl border bg-zinc-100"
-      />
-    )
-  }
   return (
-    <audio
-      src={`https://drive.google.com/uc?export=download&id=${fileId}`}
-      controls
-      preload="metadata"
-      onError={() => setFallback(true)}
-      className="w-full"
+    <iframe
+      src={`https://drive.google.com/file_d/${fileId}/preview`.replace("file_d/", "file/d/")}
+      title={title}
+      allow="autoplay"
+      loading="lazy"
+      className="h-[120px] w-full max-w-xl border bg-zinc-100"
     />
   )
 }

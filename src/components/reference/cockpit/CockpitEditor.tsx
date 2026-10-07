@@ -24,6 +24,22 @@ import {
   X,
 } from "lucide-react"
 import ReactMarkdown from "react-markdown"
+import {
+  BlockTypeSelect,
+  BoldItalicUnderlineToggles,
+  CreateLink,
+  ListsToggle,
+  MDXEditor,
+  UndoRedo,
+  headingsPlugin,
+  linkPlugin,
+  listsPlugin,
+  markdownShortcutPlugin,
+  quotePlugin,
+  thematicBreakPlugin,
+  toolbarPlugin,
+} from "@mdxeditor/editor"
+import "@mdxeditor/editor/editor.css"
 
 import { cn } from "@/lib/utils"
 import { fetchJson, useFetch } from "@/components/reference/lib"
@@ -737,13 +753,36 @@ export function CockpitEditor({
                     Vidéo
                   </button>
                 </div>
-                <Textarea
-                  ref={contentRef}
-                  value={form.content}
-                  onChange={(event) => set("content", event.target.value)}
-                  placeholder={"Rédigez ici en markdown.\n\n## Un titre\n\nDu texte en **gras**, un [lien](https://…), une citation :\n> Verbum sap…"}
-                  className="min-h-[440px] rounded-none font-mono text-[13px] leading-relaxed"
-                />
+                {/* Éditeur riche WYSIWYG (comme Word) : gras, italique, titres, listes, liens
+    par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main. */}
+                <div className="min-h-[440px] border">
+                  <MDXEditor
+                    markdown={form.content}
+                    onChange={(value) => set("content", value)}
+                    placeholder="Rédigez votre article — la barre d'outils gère le gras, les titres, les listes et les liens…"
+                    plugins={[
+                      headingsPlugin(),
+                      listsPlugin(),
+                      quotePlugin(),
+                      thematicBreakPlugin(),
+                      linkPlugin(),
+                      markdownShortcutPlugin(),
+                      toolbarPlugin({
+                        toolbarContents: () => (
+                          <div className="flex flex-wrap items-center gap-1 p-1">
+                            <UndoRedo />
+                            <BoldItalicUnderlineToggles />
+                            <ListsToggle />
+                            <BlockTypeSelect />
+                            <CreateLink />
+                          </div>
+                        ),
+                      }),
+                    ]}
+                    contentEditableClassName="min-h-[380px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
+                    className="min-h-[440px]"
+                  />
+                </div>
                 {errors.content ? (
                   <p className="mt-1.5 text-xs font-medium text-brand-red">{errors.content}</p>
                 ) : null}
