@@ -8,6 +8,8 @@ import type { Locale } from "date-fns/locale"
 import { useTheme } from "next-themes"
 import {
   ChevronRight,
+  Radio,
+  Tv,
   LayoutDashboard,
   Mail,
   Menu,
@@ -130,6 +132,33 @@ function UtilityBar({ navigate }: { navigate: Navigate }) {
 /*            Étage 1 — manchette blanche : logo, recherche, burger            */
 /* -------------------------------------------------------------------------- */
 
+/** Ouvre le panneau FM/TV (écouté par FmTvBar). */
+function openBroadcast(mode: "FM" | "TV") {
+  window.dispatchEvent(new CustomEvent("reference:fmtv", { detail: mode }))
+}
+
+function FmTvNavButtons() {
+  const { data } = useFetch<SiteSettingsResponse>("/api/settings")
+  const s = data?.settings ?? {}
+  if (s.fmEnabled !== "true" && s.tvEnabled !== "true") return null
+  const btn =
+    "inline-flex h-11 items-center gap-1.5 px-2.5 text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+  return (
+    <>
+      {s.fmEnabled === "true" ? (
+        <button type="button" onClick={() => openBroadcast("FM")} className={btn} title={(s.fmLabel?.trim() || "Radio FM") + " — podcasts, chroniques, interviews"}>
+          <Radio className="size-[18px]" aria-hidden="true" />
+        </button>
+      ) : null}
+      {s.tvEnabled === "true" ? (
+        <button type="button" onClick={() => openBroadcast("TV")} className={btn} title={(s.tvLabel?.trim() || "Chaîne TV") + " — reportages, émissions"}>
+          <Tv className="size-[18px]" aria-hidden="true" />
+        </button>
+      ) : null}
+    </>
+  )
+}
+
 function Masthead({
   navigate,
   onOpenSearch,
@@ -170,6 +199,7 @@ function Masthead({
               ⌘K
             </kbd>
           </button>
+          <FmTvNavButtons />
           <LanguageSwitcher className="lg:hidden" />
           <ThemeToggle />
 

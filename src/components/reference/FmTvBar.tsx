@@ -89,6 +89,16 @@ export function FmTvBar() {
 
   const [panel, setPanel] = React.useState<null | "FM" | "TV">(null)
 
+  // Ouverture depuis la navigation du site (boutons FM/TV de l'en-tête).
+  React.useEffect(() => {
+    const onOpen = (event: Event) => {
+      const mode = (event as CustomEvent<"FM" | "TV">).detail
+      setPanel(mode)
+    }
+    window.addEventListener("reference:fmtv", onOpen)
+    return () => window.removeEventListener("reference:fmtv", onOpen)
+  }, [])
+
   if (!fmOn && !tvOn) return null
 
   return (

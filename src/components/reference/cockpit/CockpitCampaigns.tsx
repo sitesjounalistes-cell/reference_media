@@ -8,6 +8,7 @@ import { Megaphone, Plus, SquarePen, Trash2 } from "lucide-react"
 
 import { formatViews } from "@/components/reference/lib"
 import { cn } from "@/lib/utils"
+import { MediaPickerDialog } from "@/components/reference/cockpit/CockpitEditor"
 import { fetchJson } from "@/components/reference/lib"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -83,6 +84,7 @@ function CampaignDialog({
     slots: new Set<AdSlotName>(),
   })
   const [saving, setSaving] = React.useState(false)
+  const [pickImage, setPickImage] = React.useState(false)
 
   React.useEffect(() => {
     if (open) {
@@ -305,6 +307,9 @@ function CampaignDialog({
       </DialogContent>
     </Dialog>
   )
+}
+function CampaignImagePicker({ open, onOpenChange, onPick }: { open: boolean; onOpenChange: (o: boolean) => void; onPick: (url: string) => void }) {
+  return <MediaPickerDialog open={open} onOpenChange={onOpenChange} kind="IMAGE" onPick={(asset) => onPick(asset.url)} />
 }
 
 export function CockpitCampaigns({ refreshKey, onMutated }: { refreshKey: number; onMutated: () => void }) {

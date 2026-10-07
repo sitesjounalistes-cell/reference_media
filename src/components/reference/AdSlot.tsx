@@ -106,7 +106,12 @@ const SELF_SERVE: AdCampaignDto = {
   slots: [],
 }
 
-function parseCtaView(ctaView: string): View {
+function parseCtaView(ctaView: string): View | null {
+  // Destination externe libre : ouverture dans un nouvel onglet.
+  if (/^https?:\/\//i.test(ctaView)) {
+    window.open(ctaView, "_blank", "noopener,noreferrer")
+    return null
+  }
   if (ctaView.startsWith("category:")) {
     return { type: "category", slug: ctaView.slice("category:".length) }
   }
@@ -880,7 +885,8 @@ export function AdSlot({ slot, navigate, className, bare = false, onDark = false
     if (!isSelfServe) {
       void trackEvent({ campaignId: campaign.id, slot, type: "click" })
     }
-    navigate(parseCtaView(campaign.ctaView))
+    const view = parseCtaView(campaign.ctaView)
+    if (view) navigate(view)
   }, [campaign, isSelfServe, navigate, slot])
 
   // Pendant le premier chargement, on réserve à peine la place du libellé.

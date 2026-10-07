@@ -42,6 +42,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
@@ -123,11 +124,53 @@ const TOOLS: Tool[] = [
   { label: "Titre secondaire", icon: Heading3, prefix: "### " },
   { label: "Gras", icon: Bold, wrap: ["**", "**"] },
   { label: "Italique", icon: Italic, wrap: ["*", "*"] },
-  { label: "Lien", icon: Link2, wrap: ["[", "](https://…)"] },
   { label: "Citation", icon: Quote, prefix: "> " },
   { label: "Liste", icon: List, prefix: "- " },
-  { label: "Image", icon: ImagePlus, wrap: ["![légende]", "(/uploads/…)"] },
 ]
+
+/** Dialog d'insertion de lien : libellé + URL — plus de syntaxe à écrire à la main. */
+function LinkDialog({
+  open,
+  onOpenChange,
+  onInsert,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onInsert: (label: string, url: string) => void
+}) {
+  const [label, setLabel] = React.useState("")
+  const [url, setUrl] = React.useState("")
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md rounded-none">
+        <DialogHeader>
+          <DialogTitle className="font-serif">Insérer un lien</DialogTitle>
+          <DialogDescription>Le libellé visible et la destination du lien.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <label className="kicker text-muted-foreground" htmlFor="link-label">Libellé affiché</label>
+            <Input id="link-label" value={label} onChange={(e) => setLabel(e.target.value)} className="h-10 rounded-none" placeholder="En savoir plus" />
+          </div>
+          <div className="space-y-1.5">
+            <label className="kicker text-muted-foreground" htmlFor="link-url">Adresse (URL)</label>
+            <Input id="link-url" value={url} onChange={(e) => setUrl(e.target.value)} className="h-10 rounded-none font-mono text-xs" placeholder="https://exemple.com/page" />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" className="rounded-none" onClick={() => onOpenChange(false)}>Annuler</Button>
+          <Button
+            className="rounded-none"
+            disabled={!/^https?:\/\//i.test(url.trim()) || !label.trim()}
+            onClick={() => { onInsert(label.trim(), url.trim()); setLabel(""); setUrl(""); onOpenChange(false) }}
+          >
+            Insérer le lien
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 /* -------------------------- sélecteur de médiathèque ---------------------- */
 
@@ -264,7 +307,7 @@ function TypographyCard({
   )
 }
 
-function MediaPickerDialog({
+export function MediaPickerDialog({
   open,
   onOpenChange,
   kind,
@@ -357,8 +400,8 @@ export function CockpitEditor({
   const [slugTouched, setSlugTouched] = React.useState(Boolean(article))
   const [saving, setSaving] = React.useState(false)
   const [savedArticle, setSavedArticle] = React.useState<AdminArticleDto | null>(article)
-  const [tab, setTab] = React.useState("write")
   const [pickerKind, setPickerKind] = React.useState<"IMAGE" | "VIDEO" | null>(null)
+  const [linkOpen, setLinkOpen] = React.useState(false)
   const [pickerTarget, setPickerTarget] = React.useState<"cover" | "video" | "content">("cover")
   const [uploadingField, setUploadingField] = React.useState<"cover" | "video" | null>(null)
 
@@ -450,7 +493,6 @@ export function CockpitEditor({
     const position = textarea ? textarea.selectionStart : form.content.length
     const next = form.content.slice(0, position) + snippet + form.content.slice(position)
     set("content", next)
-    setTab("write")
   }
 
   /* --------------------------------- uploads ------------------------------- */
@@ -643,22 +685,16 @@ export function CockpitEditor({
           </Field>
 
           <div>
-            <Tabs value={tab} onValueChange={setTab}>
+            <div>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <TabsList className="h-9 rounded-none bg-muted/60 p-0">
-                  <TabsTrigger value="write" className="h-9 rounded-none px-4 text-xs">
-                    Écrire
-                  </TabsTrigger>
-                  <TabsTrigger value="preview" className="h-9 rounded-none px-4 text-xs">
-                    Aperçu
-                  </TabsTrigger>
-                </TabsList>
+                <p className="kicker text-muted-foreground">Rédaction — aperçu en direct</p>
                 <p className="text-[11px] tabular-nums text-muted-foreground">
                   {words} mot{words > 1 ? "s" : ""}
                 </p>
               </div>
 
-              <TabsContent value="write" className="mt-0">
+              <div className="grid gap-4 xl:grid-cols-2">
+              <div>
                 <div className="mb-2 flex flex-wrap items-center gap-1 border p-1">
                   {TOOLS.map((tool) => (
                     <button
@@ -675,15 +711,30 @@ export function CockpitEditor({
                   <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
                   <button
                     type="button"
-                    onClick={() => {
-                      setPickerTarget("content")
-                      setPickerKind("IMAGE")
-                    }}
+                    onClick={() => setLinkOpen(true)}
+                    title="Insérer un lien"
+                    className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <Link2 className="size-4" aria-hidden="true" />
+                    Lien
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setPickerTarget("content"); setPickerKind("IMAGE") }}
                     title="Insérer une image de la médiathèque"
                     className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
                   >
+                    <ImagePlus className="size-4" aria-hidden="true" />
+                    Image
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setPickerTarget("content"); setPickerKind("VIDEO") }}
+                    title="Insérer une vidéo de la médiathèque"
+                    className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                  >
                     <FileImage className="size-4" aria-hidden="true" />
-                    Médiathèque
+                    Vidéo
                   </button>
                 </div>
                 <Textarea
@@ -696,9 +747,9 @@ export function CockpitEditor({
                 {errors.content ? (
                   <p className="mt-1.5 text-xs font-medium text-brand-red">{errors.content}</p>
                 ) : null}
-              </TabsContent>
+              </div>
 
-              <TabsContent value="preview" className="mt-0">
+              <div>
                 <article className="min-h-[440px] border bg-muted/10 p-5 md:p-8">
                   {form.content.trim() ? (
                     <div
@@ -713,8 +764,9 @@ export function CockpitEditor({
                     </p>
                   )}
                 </article>
-              </TabsContent>
-            </Tabs>
+              </div>
+              </div>
+              </div>
           </div>
         </div>
 
@@ -955,6 +1007,11 @@ export function CockpitEditor({
         </div>
       </div>
 
+      <LinkDialog
+        open={linkOpen}
+        onOpenChange={setLinkOpen}
+        onInsert={(label, url) => insertAtCursor(`[${label}](${url})`)}
+      />
       <MediaPickerDialog
         open={pickerOpen}
         onOpenChange={closePicker}
