@@ -703,42 +703,18 @@ export function CockpitEditor({
           <div>
             <div>
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <p className="kicker text-muted-foreground">Rédaction — aperçu en direct</p>
+                <p className="kicker text-muted-foreground">Rédaction de l'article</p>
                 <p className="text-[11px] tabular-nums text-muted-foreground">
                   {words} mot{words > 1 ? "s" : ""}
                 </p>
               </div>
 
-              <div className="grid gap-4 xl:grid-cols-2">
-              <div>
-                <div className="mb-2 flex flex-wrap items-center gap-1 border p-1">
-                  {TOOLS.map((tool) => (
-                    <button
-                      key={tool.label}
-                      type="button"
-                      title={tool.label}
-                      aria-label={tool.label}
-                      onClick={() => applyTool(tool)}
-                      className="inline-flex size-8 items-center justify-center text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                    >
-                      <tool.icon className="size-4" aria-hidden="true" />
-                    </button>
-                  ))}
-                  <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
-                  <button
-                    type="button"
-                    onClick={() => setLinkOpen(true)}
-                    title="Insérer un lien"
-                    className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
-                  >
-                    <Link2 className="size-4" aria-hidden="true" />
-                    Lien
-                  </button>
+              <div className="mb-2 flex flex-wrap items-center gap-1">
                   <button
                     type="button"
                     onClick={() => { setPickerTarget("content"); setPickerKind("IMAGE") }}
                     title="Insérer une image de la médiathèque"
-                    className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                    className="inline-flex h-8 items-center gap-1.5 border px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <ImagePlus className="size-4" aria-hidden="true" />
                     Image
@@ -747,15 +723,18 @@ export function CockpitEditor({
                     type="button"
                     onClick={() => { setPickerTarget("content"); setPickerKind("VIDEO") }}
                     title="Insérer une vidéo de la médiathèque"
-                    className="inline-flex h-8 items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                    className="inline-flex h-8 items-center gap-1.5 border px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <FileImage className="size-4" aria-hidden="true" />
                     Vidéo
                   </button>
+                  <p className="ml-1 text-[11px] text-muted-foreground">
+                    Sélectionnez du texte puis utilisez la barre ci-dessus (gras, titres, liens).
+                  </p>
                 </div>
                 {/* Éditeur riche WYSIWYG (comme Word) : gras, italique, titres, listes, liens
     par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main. */}
-                <div className="min-h-[440px] border">
+                <div className="min-h-[560px] border">
                   <MDXEditor
                     markdown={form.content}
                     onChange={(value) => set("content", value)}
@@ -779,32 +758,10 @@ export function CockpitEditor({
                         ),
                       }),
                     ]}
-                    contentEditableClassName="min-h-[380px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
+                    contentEditableClassName="min-h-[500px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
                     className="min-h-[440px]"
                   />
                 </div>
-                {errors.content ? (
-                  <p className="mt-1.5 text-xs font-medium text-brand-red">{errors.content}</p>
-                ) : null}
-              </div>
-
-              <div>
-                <article className="min-h-[440px] border bg-muted/10 p-5 md:p-8">
-                  {form.content.trim() ? (
-                    <div
-                      className="article-body"
-                      style={textStyleToCss(form.typography.content)}
-                    >
-                      <ReactMarkdown>{form.content}</ReactMarkdown>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Rien à prévisualiser pour l'instant — commencez à écrire.
-                    </p>
-                  )}
-                </article>
-              </div>
-              </div>
               </div>
           </div>
         </div>
