@@ -39,7 +39,7 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor"
-import "@mdxeditor/editor/editor.css"
+import "@mdxeditor/editor/style.css"
 
 import { cn } from "@/lib/utils"
 import { fetchJson, useFetch } from "@/components/reference/lib"
