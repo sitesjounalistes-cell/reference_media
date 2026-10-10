@@ -159,7 +159,7 @@ function HomeInner() {
       <aside
         aria-label="Espace publicitaire latéral"
         className={cn(
-          "fixed left-2 top-1/2 z-30 hidden w-[150px] -translate-y-1/2 transition-opacity duration-300 2xl:block",
+          "fixed left-2 top-1/2 z-30 hidden w-[150px] -translate-y-1/2 transition-opacity duration-300 lg:block",
           railsHidden && "pointer-events-none opacity-0"
         )}
       >
@@ -168,7 +168,7 @@ function HomeInner() {
       <aside
         aria-label="Espace publicitaire latéral"
         className={cn(
-          "fixed right-2 top-1/2 z-30 hidden w-[150px] -translate-y-1/2 transition-opacity duration-300 2xl:block",
+          "fixed right-2 top-1/2 z-30 hidden w-[150px] -translate-y-1/2 transition-opacity duration-300 lg:block",
           railsHidden && "pointer-events-none opacity-0"
         )}
       >

@@ -33,6 +33,27 @@ export function SmartImage({
 }: SmartImageProps) {
   const Icon = getCategoryIcon(fallbackIcon)
 
+  // Média vidéo (mp4/webm/mov…) : rendu en lecteur muet en boucle —
+  // les GIF animés, eux, passent nativement dans <img>.
+  const isVideoMedia = Boolean(
+    src && /\.(mp4|webm|mov|m4v)(\?|$)/i.test(src)
+  )
+  if (isVideoMedia) {
+    return (
+      <div className={cn('relative overflow-hidden', wrapperClassName)}>
+        <video
+          src={src ?? undefined}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={cn('size-full object-cover', className)}
+          {...(props as React.VideoHTMLAttributes<HTMLVideoElement>)}
+        />
+      </div>
+    )
+  }
+
   if (!src) {
     return (
       <div

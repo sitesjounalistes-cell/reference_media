@@ -350,7 +350,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(`${window.location.origin}/#${slug}`)
+      await navigator.clipboard.writeText(`${window.location.origin}/article/${slug}`)
       toast({
         title: "Lien copié !",
         description: "Le lien vers cet article est dans votre presse-papiers.",
