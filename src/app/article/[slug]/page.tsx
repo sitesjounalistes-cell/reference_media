@@ -5,15 +5,20 @@ import { db } from "@/lib/db"
 
 /**
  * REFERENCE.COM — URL publique et partageable d'un article : /article/[slug].
- * Serve la même application, mais avec les métadonnées Open Graph/Twitter de
- * l'article (titre, chapô, image) — c'est ce que WhatsApp, Facebook, LinkedIn
- * et les autres réseaux affichent lors du partage.
+ * Émet les métadonnées Open Graph/Twitter de l'article (titre, chapô, image)
+ * pour WhatsApp, Facebook, LinkedIn, puis ouvre l'application sur l'article.
+ *
+ * Note : pas de <html>/<body> ici — le layout racine les fournit déjà.
  */
 
-function absoluteUrl(path: string | null | undefined, origin: string): string | undefined {
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://reference-media.vercel.app"
+).replace(/\/$/, "")
+
+function absoluteUrl(path: string | null | undefined): string | undefined {
   if (!path) return undefined
   if (path.startsWith("http")) return path
-  return `${origin}${path}`
+  return `${SITE_URL}${path}`
 }
 
 export async function generateMetadata({
@@ -23,15 +28,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const article = await db.article
-    .findUnique({ where: { slug }, select: { title: true, excerpt: true, coverImage: true, status: true } })
+    .findUnique({
+      where: { slug },
+      select: { title: true, excerpt: true, coverImage: true, status: true },
+    })
     .catch(() => null)
 
   if (!article || article.status !== "PUBLISHED") {
-    return { title: "Article introuvable — REFERENCE.COM" }
+    return { title: "Article introuvable — REFERENCE.COM", robots: { index: false } }
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? ""
-  const image = absoluteUrl(article.coverImage, origin)
+  const image = absoluteUrl(article.coverImage)
+  const url = `${SITE_URL}/article/${slug}`
 
   return {
     title: `${article.title} — REFERENCE.COM`,
@@ -41,8 +49,10 @@ export async function generateMetadata({
       title: article.title,
       description: article.excerpt,
       type: "article",
+      url,
       siteName: "REFERENCE.COM",
-      ...(image ? { images: [{ url: image }] } : {}),
+      locale: "fr_FR",
+      ...(image ? { images: [{ url: image, width: 1200, height: 675 }] } : {}),
     },
     twitter: {
       card: image ? "summary_large_image" : "summary",
@@ -53,7 +63,7 @@ export async function generateMetadata({
   }
 }
 
-/** Ouvre l'application sur cet article (l'URL reste partageable telle quelle). */
+/** Ouvre l'application sur cet article (l'URL partagée reste inchangée). */
 function OpenArticle({ slug }: { slug: string }) {
   return (
     <script
@@ -79,24 +89,22 @@ export default async function ArticlePage({
   }
 
   return (
-    <html lang="fr">
-      <body style={{ margin: 0, background: "#f4f2ec" }}>
-        <main
-          style={{
-            fontFamily: "Georgia, serif",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "100vh",
-            color: "#0a1e3c",
-          }}
-        >
-          <p style={{ fontSize: 14, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            REFERENCE.COM — ouverture de l'article…
-          </p>
-        </main>
-        <OpenArticle slug={slug} />
-      </body>
-    </html>
+    <section
+      style={{
+        margin: 0,
+        minHeight: "60vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#f4f2ec",
+        color: "#0a1e3c",
+        fontFamily: "Georgia, serif",
+      }}
+    >
+      <p style={{ fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+        REFERENCE.COM — ouverture de l'article…
+      </p>
+      <OpenArticle slug={slug} />
+    </section>
   )
 }
