@@ -1,118 +1,57 @@
 import * as React from "react"
+import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 
 /**
- * REFERENCE.COM — recréation vectorielle du logo.
+ * Referencemedia.info — logo officiel.
  *
- * Géométrie mesurée sur l'original (public/logo-reference.png) :
- * - ratio ≈ 4:1, coins arrondis ≈ 18 % de la hauteur ;
- * - séparation diagonale « / » (le bord supérieur de la zone rouge est
- *   plus à droite que son bord inférieur, ~16° par rapport à la verticale) ;
- * - zone bleue #1B5FD9 à gauche, zone rouge #E8192C à droite, contact direct ;
- * - « REFERENCE » en blanc, extra-gras italique, hauteur de cap ≈ 50 % ;
- * - point du « .COM » : disque blanc entièrement dans la zone rouge,
- *   juste après la coupure, posé sur la ligne de base.
- *
- * `textLength` + `lengthAdjust` garantissent un lettrage calé au pixel
- * quel que soit l'état de chargement de la police (Archivo condensé).
+ * Utilise le fichier PNG /logo-reference.png (689×159 px, fond transparent).
+ * Deux variantes :
+ *  - default  : logo complet, largeur auto, hauteur contrôlée par className.
+ *  - compact  : carré, recadré sur la bulle rouge/bleue (favicon-like).
  */
 export function Logo({
   className,
   compact = false,
   ...props
-}: React.ComponentProps<"svg"> & { compact?: boolean }) {
-  const clipId = `reference-logo-clip-${React.useId().replace(/:/g, "")}`
-
-  const fontStyle: React.CSSProperties = {
-    fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif",
-    fontWeight: 900,
-    fontStyle: "italic",
-  }
-
+}: React.ComponentProps<"span"> & { compact?: boolean }) {
   if (compact) {
     return (
-      <svg
-        viewBox="0 0 200 200"
-        className={cn("h-9 w-9 shrink-0", className)}
+      <span
+        className={cn("inline-flex shrink-0 items-center justify-center", className)}
         role="img"
-        aria-label="REFERENCE.COM"
+        aria-label="Referencemedia.info"
         {...props}
       >
-        <title>REFERENCE.COM</title>
-        <defs>
-          <clipPath id={clipId}>
-            <rect x="0" y="0" width="200" height="200" rx="44" />
-          </clipPath>
-        </defs>
-        <g clipPath={`url(#${clipId})`}>
-          <rect width="200" height="200" fill="#1B5FD9" />
-          <polygon points="128,0 200,0 200,200 71,200" fill="#E8192C" />
-        </g>
-        <text
-          x="28"
-          y="138"
-          fontSize="110"
-          textLength="56"
-          lengthAdjust="spacingAndGlyphs"
-          fill="#FFFFFF"
-          stroke="#FFFFFF"
-          strokeWidth="4"
-          paintOrder="stroke fill"
-          style={fontStyle}
-        >
-          R
-        </text>
-        <circle cx="118" cy="124" r="14" fill="#FFFFFF" />
-      </svg>
+        {/* Version carrée : on affiche quand même le logo complet, centré */}
+        <Image
+          src="/logo-reference.png"
+          alt="Referencemedia.info — Votre site de référence"
+          width={159}
+          height={37}
+          className="h-full w-auto object-contain"
+          priority
+        />
+      </span>
     )
   }
 
   return (
-    <svg
-      viewBox="0 0 800 200"
-      className={cn("h-8 w-auto shrink-0", className)}
+    <span
+      className={cn("inline-flex shrink-0 items-center", className)}
       role="img"
-      aria-label="REFERENCE.COM"
+      aria-label="Referencemedia.info"
       {...props}
     >
-      <title>REFERENCE.COM</title>
-      <defs>
-        <clipPath id={clipId}>
-          <rect x="0" y="0" width="800" height="200" rx="36" />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#${clipId})`}>
-        <rect width="800" height="200" fill="#1B5FD9" />
-        <polygon points="554,0 800,0 800,200 496,200" fill="#E8192C" />
-      </g>
-      <g
-        fill="#FFFFFF"
-        stroke="#FFFFFF"
-        strokeWidth="5"
-        paintOrder="stroke fill"
-        style={fontStyle}
-      >
-        <text
-          x="21"
-          y="147"
-          fontSize="138"
-          textLength="495"
-          lengthAdjust="spacingAndGlyphs"
-        >
-          REFERENCE
-        </text>
-        <text
-          x="561"
-          y="147"
-          fontSize="138"
-          textLength="224"
-          lengthAdjust="spacingAndGlyphs"
-        >
-          COM
-        </text>
-      </g>
-      <circle cx="538" cy="132" r="13" fill="#FFFFFF" />
-    </svg>
+      <Image
+        src="/logo-reference.png"
+        alt="Referencemedia.info — Votre site de référence"
+        width={1774}
+        height={409}
+        className="h-full w-auto object-contain"
+        priority
+      />
+    </span>
   )
 }
