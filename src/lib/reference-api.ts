@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Helpers API partagés : sérialisation des articles.
+ * Referencemedia.info — Helpers API partagés : sérialisation des articles.
  * Le contrat JSON du frontend est défini dans src/components/reference/types.ts.
  */
 import { Prisma } from "@prisma/client"

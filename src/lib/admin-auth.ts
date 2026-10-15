@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Session administrateur du cockpit rédaction.
+ * Referencemedia.info — Session administrateur du cockpit rédaction.
  *
  * Mécanisme volontairement autonome (aucune dépendance) :
  * - mot de passe unique lu dans ADMIN_PASSWORD (.env) ;

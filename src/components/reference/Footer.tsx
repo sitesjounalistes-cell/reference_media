@@ -45,7 +45,7 @@ function SocialButton({ social }: { social: SocialLinkDto }) {
         target="_blank"
         rel="noopener noreferrer"
         title={label}
-        aria-label={`Suivre REFERENCE.COM sur ${label}`}
+        aria-label={`Suivre Referencemedia.info sur ${label}`}
         className="flex size-10 items-center justify-center border border-white/15 text-zinc-300 transition-colors hover:border-brand-blue hover:bg-brand-blue hover:text-white outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
       >
         <Icon className="size-4" aria-hidden="true" />
@@ -244,7 +244,7 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
           {showSocials ? (
             <ul
               className="mt-5 flex flex-wrap items-center gap-2 border-l border-white/10 pl-4"
-              aria-label="Réseaux sociaux de REFERENCE.COM"
+              aria-label="Réseaux sociaux de Referencemedia.info"
             >
               {socials.map((social) => (
                 <SocialButton key={social.id} social={social} />

@@ -168,7 +168,7 @@ export function SearchDialog({ open, onOpenChange, navigate, categories = [] }: 
                   </CommandItem>
                   <CommandItem onSelect={() => go({ type: "about" })}>
                     <Info aria-hidden="true" />
-                    À propos de REFERENCE.COM
+                    À propos de Referencemedia.info
                   </CommandItem>
                   <CommandItem onSelect={() => go({ type: "contact" })}>
                     <Mail aria-hidden="true" />

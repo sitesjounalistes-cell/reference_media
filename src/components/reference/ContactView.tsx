@@ -501,7 +501,7 @@ export function ContactView({ initialSubject }: { initialSubject?: string }) {
               <Logo compact className="h-10 w-10" />
               <div className="min-w-0">
                 <p className="font-display text-sm font-bold italic">
-                  REFERENCE.COM
+                  Referencemedia.info
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Comprendre le monde, article par article.

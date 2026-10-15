@@ -553,7 +553,7 @@ export function ArticleView({ slug, navigate, preview = false }: ArticleViewProp
           <figcaption className="mt-2 flex items-center justify-between gap-4 text-xs text-zinc-500 dark:text-zinc-400">
             <span className="truncate">{t("article.illustration")} — {article.category.name}</span>
             <span className="shrink-0 text-[9px] font-bold uppercase tracking-[0.22em]">
-              © REFERENCE.COM
+              © Referencemedia.info
             </span>
           </figcaption>
         </figure>

@@ -97,7 +97,7 @@ async function trackEvent(payload: {
 const SELF_SERVE: AdCampaignDto = {
   id: "__self_serve__",
   name: "Inventaire disponible",
-  advertiser: "Régie REFERENCE.COM",
+  advertiser: "Régie Referencemedia.info",
   headline: "Votre marque ici",
   body: "Cet emplacement est disponible. Diffusez votre message auprès de 120 000 lecteurs curieux, exigeants et fidèles.",
   ctaLabel: "Réserver cet emplacement",

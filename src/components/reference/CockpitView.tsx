@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Cockpit rédactionnel REFERENCE.COM — écran plein de gestion du site.
+ * Cockpit rédactionnel Referencemedia.info — écran plein de gestion du site.
  * Sidebar sombre + sections : tableau de bord, articles, éditeur, médiathèque,
  * rubriques & auteurs, campagnes pub, messages, paramètres.
  */
@@ -241,7 +241,7 @@ export function CockpitView({
             Se déconnecter
           </button>
           <p className="mt-3 px-1 text-[11px] text-zinc-600">
-            Rédaction REFERENCE.COM · © 2025
+            Rédaction Referencemedia.info · © 2025
           </p>
         </div>
       </aside>

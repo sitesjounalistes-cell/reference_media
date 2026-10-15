@@ -1,4 +1,4 @@
-/** Contrat d'API REFERENCE.COM — typage partagé du frontend. */
+/** Contrat d'API Referencemedia.info — typage partagé du frontend. */
 
 export interface Category {
   id: string

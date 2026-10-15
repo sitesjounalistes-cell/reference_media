@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Client Cloudinary minimal (REST signé, sans SDK).
+ * Referencemedia.info — Client Cloudinary minimal (REST signé, sans SDK).
  * Activé par CLOUDINARY_CLOUD_NAME + API_KEY + API_SECRET dans .env ;
  * en leur absence, la médiathèque retombe sur le stockage local.
  */

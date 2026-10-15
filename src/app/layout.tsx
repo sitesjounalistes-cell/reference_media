@@ -31,7 +31,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "REFERENCE.COM — Le portail de référence",
+  title: "Referencemedia.info — Le portail de référence",
   description:
     "Comprendre le monde, article par article. Sciences, histoire, technologie, santé, culture, société, économie et nature : des dossiers rigoureux, clairs et sourcés.",
   keywords: [
@@ -47,18 +47,18 @@ export const metadata: Metadata = {
     "nature",
     "dossiers",
   ],
-  authors: [{ name: "REFERENCE.COM" }],
+  authors: [{ name: "Referencemedia.info" }],
   openGraph: {
-    title: "REFERENCE.COM — Le portail de référence",
+    title: "Referencemedia.info — Le portail de référence",
     description:
       "Comprendre le monde, article par article. Des dossiers rigoureux, clairs et sourcés.",
-    siteName: "REFERENCE.COM",
+    siteName: "Referencemedia.info",
     type: "website",
     locale: "fr_FR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "REFERENCE.COM — Le portail de référence",
+    title: "Referencemedia.info — Le portail de référence",
     description:
       "Comprendre le monde, article par article. Des dossiers rigoureux, clairs et sourcés.",
   },

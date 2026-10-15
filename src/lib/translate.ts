@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Traduction serveur des contenus éditoriaux (FR → cible).
+ * Referencemedia.info — Traduction serveur des contenus éditoriaux (FR → cible).
  *
  * Stratégie :
  * - point d'accès public de Google Translate (client gtx, sans clé) ;

@@ -410,7 +410,7 @@ function MobileMenu({
                 aria-label={t("header.homeAria")}
               >
                 <Logo className="h-8" />
-                <span className="sr-only">REFERENCE.COM</span>
+                <span className="sr-only">Referencemedia.info</span>
               </button>
             </SheetTitle>
           </div>
@@ -476,7 +476,7 @@ function MobileMenu({
           {/* Bloc contact direct */}
           <div className="px-4 pt-6 sm:px-5">
             <a
-              href="mailto:redaction@reference.com"
+              href="mailto:redaction@referencemedia.info"
               className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-white px-4 text-sm font-bold uppercase tracking-[0.13em] text-[#0a1e3c] transition-colors hover:bg-brand-red hover:text-white focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-white/40"
             >
               <Mail className="size-4" aria-hidden="true" />

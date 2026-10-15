@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * REFERENCE.COM — Contexte de langue du site public.
+ * Referencemedia.info — Contexte de langue du site public.
  *
  * - persiste la langue choisie (localStorage) ;
  * - expose `t(key, params)` pour les libellés d'interface ;

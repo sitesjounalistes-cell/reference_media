@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * REFERENCE.COM — FM & TV : bibliothèque de contenus structurés.
+ * Referencemedia.info — FM & TV : bibliothèque de contenus structurés.
  * Barre flottante (si activée au cockpit) ouvrant un panneau plein écran :
  * FM → podcasts / chroniques / interviews (lecteurs audio en ligne) ;
  * TV → reportages / émissions (lecteurs vidéo). Le flux "live" reste
@@ -156,7 +156,7 @@ function BroadcastPanel({
         <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-background px-4 py-3 sm:px-6">
           <p className="kicker flex items-center gap-2 text-brand-red">
             {isTv ? <Tv className="size-4" aria-hidden="true" /> : <Radio className="size-4" aria-hidden="true" />}
-            {isTv ? "TV" : "Radio FM"} — REFERENCE.COM
+            {isTv ? "TV" : "Radio FM"} — Referencemedia.info
           </p>
           <button
             type="button"

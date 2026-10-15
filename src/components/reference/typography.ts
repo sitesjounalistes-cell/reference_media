@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Typographie éditoriale partagée.
+ * Referencemedia.info — Typographie éditoriale partagée.
  * Conversion des préférences de police/gras/italique (stockées sur l'article)
  * en CSS : utilisée par l'éditeur (aperçu live) et la vue article (rendu).
  */

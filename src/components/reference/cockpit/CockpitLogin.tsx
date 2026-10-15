@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * REFERENCE.COM — Portail de connexion du cockpit rédaction.
+ * Referencemedia.info — Portail de connexion du cockpit rédaction.
  * Écran sombre plein cadre : tant que la session administrateur n'est pas
  * ouverte, aucune donnée ni aucun écran de gestion n'est chargé.
  */

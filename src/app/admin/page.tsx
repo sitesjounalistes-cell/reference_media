@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * REFERENCE.COM — Accès administration : /admin.
+ * Referencemedia.info — Accès administration : /admin.
  * Porte d'entrée unique du cockpit (tableau de bord, articles, médias, FM/TV…),
  * protégée par la session administrateur (voir CockpitLogin).
  */

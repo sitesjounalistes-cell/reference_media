@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { db } from "@/lib/db"
 
 /**
- * REFERENCE.COM — URL publique et partageable d'un article : /article/[slug].
+ * Referencemedia.info — URL publique et partageable d'un article : /article/[slug].
  * Émet les métadonnées Open Graph/Twitter de l'article (titre, chapô, image)
  * pour WhatsApp, Facebook, LinkedIn, puis ouvre l'application sur l'article.
  *
@@ -35,14 +35,14 @@ export async function generateMetadata({
     .catch(() => null)
 
   if (!article || article.status !== "PUBLISHED") {
-    return { title: "Article introuvable — REFERENCE.COM", robots: { index: false } }
+    return { title: "Article introuvable — Referencemedia.info", robots: { index: false } }
   }
 
   const image = absoluteUrl(article.coverImage)
   const url = `${SITE_URL}/article/${slug}`
 
   return {
-    title: `${article.title} — REFERENCE.COM`,
+    title: `${article.title} — Referencemedia.info`,
     description: article.excerpt,
     alternates: { canonical: `/article/${slug}` },
     openGraph: {
@@ -50,7 +50,7 @@ export async function generateMetadata({
       description: article.excerpt,
       type: "article",
       url,
-      siteName: "REFERENCE.COM",
+      siteName: "Referencemedia.info",
       locale: "fr_FR",
       ...(image ? { images: [{ url: image, width: 1200, height: 675 }] } : {}),
     },
@@ -102,7 +102,7 @@ export default async function ArticlePage({
       }}
     >
       <p style={{ fontSize: 13, letterSpacing: "0.14em", textTransform: "uppercase" }}>
-        REFERENCE.COM — ouverture de l'article…
+        Referencemedia.info — ouverture de l'article…
       </p>
       <OpenArticle slug={slug} />
     </section>

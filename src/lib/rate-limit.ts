@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Limitation de débit en mémoire (fenêtre fixe par clé).
+ * Referencemedia.info — Limitation de débit en mémoire (fenêtre fixe par clé).
  *
  * Volontairement sans dépendance : adapté à un déploiement mono-processus.
  * Pour du multi-instances, remplacer le Map par un store partagé (Redis,

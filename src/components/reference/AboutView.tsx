@@ -141,7 +141,7 @@ export function AboutView({ navigate, categories }: AboutViewProps) {
               Notre mission
             </p>
             <p className="drop-cap mt-5 font-serif text-lg leading-[1.85] text-foreground/90 md:text-xl md:leading-[1.85]">
-              REFERENCE.COM est un portail de connaissance francophone indépendant.
+              Referencemedia.info est un portail de connaissance francophone indépendant.
               Notre mission : prendre les questions que tout le monde se pose —
               pourquoi le ciel est bleu, comment fonctionne l&apos;IA, que valent
               vraiment les chiffres de l&apos;inflation — et y répondre avec rigueur,
@@ -154,7 +154,7 @@ export function AboutView({ navigate, categories }: AboutViewProps) {
             </p>
             <p className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
               <span aria-hidden="true" className="size-2 shrink-0 bg-brand-red" />
-              La rédaction de REFERENCE.COM
+              La rédaction de Referencemedia.info
             </p>
           </motion.div>
 

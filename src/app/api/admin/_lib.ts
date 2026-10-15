@@ -1,5 +1,5 @@
 /**
- * REFERENCE.COM — Cockpit rédaction : helpers partagés des routes /api/admin.
+ * Referencemedia.info — Cockpit rédaction : helpers partagés des routes /api/admin.
  * Fichier privé (préfixé _) : n'est jamais exposé comme route, uniquement
  * des fonctions et schémas réutilisés par les route handlers voisins.
  */
