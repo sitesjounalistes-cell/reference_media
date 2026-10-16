@@ -173,22 +173,22 @@ function Masthead({
   const { t } = useI18n()
   return (
     <div className="border-b bg-background">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 md:h-20">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-1 px-2 sm:gap-3 sm:px-6 md:h-20 md:px-4">
         <button
           type="button"
           onClick={() => navigate({ type: "home" })}
           aria-label={t("header.homeAria")}
           className="shrink-0 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
         >
-          <Logo className="h-9 md:h-11" />
+          <Logo className="h-7 shrink sm:h-9 md:h-11" />
         </button>
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1.5 md:gap-2">
           {/* Recherche : bloc rouge de marque (signature charte). */}
           <button
             type="button"
             onClick={onOpenSearch}
-            className="inline-flex h-11 items-center justify-center gap-2 bg-brand-red px-3 text-white transition-colors hover:bg-[#c8101f] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:px-4"
+            className="inline-flex h-11 items-center justify-center gap-1.5 bg-brand-red px-2.5 sm:gap-2 sm:px-4 text-white transition-colors hover:bg-[#c8101f] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 sm:px-4"
             aria-label={t("header.searchAria")}
           >
             <Search className="size-4 shrink-0" aria-hidden="true" />

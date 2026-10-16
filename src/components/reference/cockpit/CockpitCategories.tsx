@@ -127,7 +127,7 @@ function CategoryDialog({
         </DialogHeader>
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="cat-name">Nom</Label>
+            <Label htmlFor="cat-name">Nom (2 caractères min.)</Label>
             <Input id="cat-name" value={name} onChange={(e) => setName(e.target.value)} className="rounded-none" />
           </div>
           <div className="space-y-1.5">
@@ -141,7 +141,7 @@ function CategoryDialog({
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="cat-desc">Description</Label>
+            <Label htmlFor="cat-desc">Description (10 caractères min. — le bouton s'active ensuite)</Label>
             <Textarea
               id="cat-desc"
               value={description}

@@ -34,7 +34,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         aria-label={t("lang.choose")}
       >
         <Globe className="size-[18px]" aria-hidden="true" />
-        <span className="font-mono text-xs font-bold tracking-wider">
+        <span className="hidden font-mono text-xs font-bold tracking-wider sm:inline">
           {current?.short ?? "FR"}
         </span>
       </DropdownMenuTrigger>
