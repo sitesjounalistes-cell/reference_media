@@ -409,7 +409,7 @@ function MobileMenu({
                 className="outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
                 aria-label={t("header.homeAria")}
               >
-                <Logo className="h-8" />
+                <Logo onDark className="h-9" />
                 <span className="sr-only">Referencemedia.info</span>
               </button>
             </SheetTitle>

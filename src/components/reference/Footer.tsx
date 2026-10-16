@@ -123,7 +123,7 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
 
       {/* Grande manchette de marque */}
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-10 pt-12 sm:px-6 md:flex-row md:items-end md:justify-between">
-        <Logo className="h-10 brightness-110" />
+        <Logo onDark className="h-12" />
         <div className="md:text-right">
           <p className="headline text-lg font-bold italic text-white">
             {t("footer.brandLine")}

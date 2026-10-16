@@ -194,7 +194,7 @@ export function CockpitView({
     <div className="border-b border-white/10 px-4 py-5">
       <p className="kicker text-brand-red">Espace rédaction</p>
       <div className="mt-2">
-        <Logo className="h-7" />
+        <Logo onDark className="h-8" />
       </div>
       <p className="mt-2 text-xs text-zinc-500">Cockpit de gestion — tout le site est modifiable.</p>
     </div>
@@ -204,7 +204,7 @@ export function CockpitView({
   if (authState === "checking") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-950">
-        <Logo className="h-8" />
+        <Logo onDark className="h-9" />
         <p className="text-sm font-medium text-zinc-400" role="status">
           Vérification de la session…
         </p>

@@ -50,7 +50,7 @@ export function CockpitLogin({
       <div className="w-full max-w-sm">
         {/* En-tête de marque */}
         <div className="flex flex-col items-center text-center">
-          <Logo className="h-9" />
+          <Logo onDark className="h-11" />
           <p className="kicker mt-5 text-brand-red">Espace rédaction</p>
           <h1 className="mt-2 font-serif text-2xl font-bold tracking-tight text-white">
             Accès au cockpit
