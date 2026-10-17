@@ -312,6 +312,16 @@
     overflow-x: clip;
   }
 
+  /* Éditeur d'article sur cockpit sombre : texte blanc garanti sur fond noir
+     (la racine MDXEditor porte la classe dark-theme, ces règles ceinturent). */
+  .mdx-editor-reference {
+    color: #f4f4f5; /* zinc-100 */
+    caret-color: #f4f4f5;
+  }
+  .mdx-editor-reference:focus {
+    outline: none;
+  }
+
   /* Listes de l'éditeur riche : puces carrées rouges et numéros bleus,
      identiques au rendu public des articles. */
   .mdx-editor-reference ul {
@@ -336,7 +346,7 @@
   .mdx-editor-reference h2 { font-size: 1.5rem; font-weight: 700; margin: 1.4rem 0 0.6rem; }
   .mdx-editor-reference h3 { font-size: 1.2rem; font-weight: 700; margin: 1.1rem 0 0.5rem; }
   .mdx-editor-reference blockquote { border-left: 3px solid #1b5fd9; padding-left: 1rem; font-style: italic; margin: 1rem 0; }
-  .mdx-editor-reference a { color: #1b5fd9; text-decoration: underline; }
+  .mdx-editor-reference a { color: #8ec8f6; text-decoration: underline; }
 
   /* Barres internes invisibles sur tous les navigateurs. */
   .nice-scrollbar {

@@ -733,7 +733,9 @@ export function CockpitEditor({
                   </p>
                 </div>
                 {/* Éditeur riche WYSIWYG (comme Word) : gras, italique, titres, listes, liens
-    par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main. */}
+    par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main.
+    dark-theme : palette sombre officielle de MDXEditor — le cockpit est habillé
+    zinc-950, le thème clair par défaut y rendait le texte noir sur fond noir. */}
                 <div className="min-h-[560px] border">
                   <MDXEditor
                     markdown={form.content}
@@ -759,7 +761,7 @@ export function CockpitEditor({
                       }),
                     ]}
                     contentEditableClassName="mdx-editor-reference min-h-[500px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
-                    className="min-h-[440px]"
+                    className="dark-theme min-h-[440px]"
                   />
                 </div>
               </div>
