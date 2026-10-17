@@ -288,6 +288,7 @@ export type CockpitSection =
   | "categories"
   | "campaigns"
   | "broadcasts"
+  | "team"
   | "messages"
   | "settings"
 
@@ -299,6 +300,7 @@ export const COCKPIT_SECTIONS: CockpitSection[] = [
   "categories",
   "campaigns",
   "broadcasts",
+  "team",
   "messages",
   "settings",
 ]
@@ -396,11 +398,23 @@ export interface SocialLinkDto {
   visible: boolean
 }
 
+/** Membre de l'équipe éditoriale (page « À propos »). */
+export interface TeamMemberDto {
+  id: string
+  name: string
+  role: string
+  bio: string
+  photoUrl: string | null
+  order: number
+  visible: boolean
+}
+
 /** Réponse publique : tout ce que le site affiche et que le cockpit modifie. */
 export interface SiteSettingsResponse {
   settings: Record<string, string>
   channels: ContactChannelDto[]
   socials: SocialLinkDto[]
+  team: TeamMemberDto[]
 }
 
 /** Vue d'ensemble du cockpit (compteurs temps réel). */

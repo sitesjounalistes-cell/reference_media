@@ -24,18 +24,23 @@ const PUBLIC_SETTING_KEYS = new Set([
 
 /**
  * GET /api/settings — configuration publique du site.
- * Retourne les paramètres généraux autorisés, l'annuaire de contact et les
- * réseaux sociaux visibles (tous modifiables depuis le cockpit rédaction).
+ * Retourne les paramètres généraux autorisés, l'annuaire de contact, les
+ * réseaux sociaux visibles et l'équipe éditoriale (tous modifiables depuis
+ * le cockpit rédaction).
  */
 export async function GET() {
   try {
-    const [settingRows, channelRows, socialRows] = await Promise.all([
+    const [settingRows, channelRows, socialRows, teamRows] = await Promise.all([
       db.siteSetting.findMany(),
       db.contactChannel.findMany({
         where: { visible: true },
         orderBy: [{ order: "asc" }],
       }),
       db.socialLink.findMany({
+        where: { visible: true },
+        orderBy: [{ order: "asc" }],
+      }),
+      db.teamMember.findMany({
         where: { visible: true },
         orderBy: [{ order: "asc" }],
       }),
@@ -62,6 +67,15 @@ export async function GET() {
         url: social.url,
         order: social.order,
         visible: social.visible,
+      })),
+      team: teamRows.map((member) => ({
+        id: member.id,
+        name: member.name,
+        role: member.role,
+        bio: member.bio,
+        photoUrl: member.photoUrl,
+        order: member.order,
+        visible: member.visible,
       })),
     })
   } catch (error) {

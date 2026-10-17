@@ -7,7 +7,7 @@
 
 import * as React from "react"
 
-import { ArrowDown, ArrowUp, Eye, EyeOff, Plus, Save, Trash2 } from "lucide-react"
+import { ArrowDown, ArrowUp, Eye, EyeOff, KeyRound, Plus, Save, Trash2 } from "lucide-react"
 
 import { channelHref, getChannelIcon, getSocialIcon } from "@/components/reference/lib"
 import { fetchJson } from "@/components/reference/lib"
@@ -549,6 +549,142 @@ function SocialsCard({ refreshKey, onMutated }: { refreshKey: number; onMutated:
   )
 }
 
+/* ------------------------------ mot de passe ------------------------------- */
+
+/** Changement du mot de passe administrateur (empreinte scrypt en base). */
+function PasswordCard() {
+  const { toast } = useToast()
+  const [form, setForm] = React.useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  })
+  const [reveal, setReveal] = React.useState(false)
+  const [saving, setSaving] = React.useState(false)
+
+  const valid =
+    form.currentPassword.length > 0 &&
+    form.newPassword.length >= 10 &&
+    form.newPassword === form.confirmPassword &&
+    form.newPassword !== form.currentPassword
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await fetchJson("/api/admin/password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: form.currentPassword,
+          newPassword: form.newPassword,
+        }),
+      })
+      toast({
+        title: "Mot de passe mis à jour",
+        description: "Utilisez le nouveau mot de passe à votre prochaine connexion.",
+      })
+      setForm({ currentPassword: "", newPassword: "", confirmPassword: "" })
+    } catch (err) {
+      toast({
+        title: "Changement impossible",
+        description: err instanceof Error ? err.message : "Une erreur est survenue",
+        variant: "destructive",
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const inputClass = "h-10 rounded-none"
+
+  return (
+    <Card
+      title="Sécurité — mot de passe"
+      description="Modifiez le mot de passe d'accès au cockpit. Il faut connaître l'actuel pour le remplacer."
+    >
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <label htmlFor="pwd-current" className="kicker block text-muted-foreground">
+            Mot de passe actuel
+          </label>
+          <Input
+            id="pwd-current"
+            type={reveal ? "text" : "password"}
+            value={form.currentPassword}
+            onChange={(e) => setForm((f) => ({ ...f, currentPassword: e.target.value }))}
+            className={inputClass}
+            autoComplete="current-password"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <label htmlFor="pwd-new" className="kicker block text-muted-foreground">
+            Nouveau mot de passe
+          </label>
+          <Input
+            id="pwd-new"
+            type={reveal ? "text" : "password"}
+            value={form.newPassword}
+            onChange={(e) => setForm((f) => ({ ...f, newPassword: e.target.value }))}
+            className={inputClass}
+            autoComplete="new-password"
+            placeholder="10 caractères minimum"
+          />
+          {form.newPassword.length > 0 && form.newPassword.length < 10 ? (
+            <p className="text-xs font-medium text-brand-red">
+              Le nouveau mot de passe doit contenir au moins 10 caractères.
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground/80">
+              10 caractères minimum, différents de l&apos;actuel.
+            </p>
+          )}
+        </div>
+        <div className="space-y-1.5">
+          <label htmlFor="pwd-confirm" className="kicker block text-muted-foreground">
+            Confirmer le nouveau mot de passe
+          </label>
+          <Input
+            id="pwd-confirm"
+            type={reveal ? "text" : "password"}
+            value={form.confirmPassword}
+            onChange={(e) => setForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+            className={inputClass}
+            autoComplete="new-password"
+          />
+          {form.confirmPassword.length > 0 && form.confirmPassword !== form.newPassword ? (
+            <p className="text-xs font-medium text-brand-red">
+              Les deux mots de passe ne correspondent pas.
+            </p>
+          ) : null}
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-9 gap-2 rounded-none text-muted-foreground"
+            onClick={() => setReveal((r) => !r)}
+          >
+            {reveal ? (
+              <EyeOff className="size-4" aria-hidden="true" />
+            ) : (
+              <Eye className="size-4" aria-hidden="true" />
+            )}
+            {reveal ? "Masquer" : "Afficher"}
+          </Button>
+          <Button onClick={() => void save()} disabled={!valid || saving} className="min-h-10 gap-2">
+            {saving ? (
+              <Spinner className="text-primary-foreground" />
+            ) : (
+              <KeyRound className="size-4" aria-hidden="true" />
+            )}
+            Changer le mot de passe
+          </Button>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
 /* ------------------------------ section complète --------------------------- */
 
 /* ------------------------------- FM / TV ----------------------------------- */
@@ -694,12 +830,13 @@ export function CockpitSettings({
       <SectionHeader
         kicker="Administration"
         title="Paramètres du site"
-        description="Les informations affichées partout sur le site : identité, contacts et réseaux sociaux. Chaque modification est visible immédiatement."
+        description="Les informations affichées partout sur le site : identité, contacts, réseaux sociaux et sécurité de l'accès cockpit. Chaque modification est visible immédiatement."
       />
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <div className="space-y-6">
           <GeneralCard refreshKey={refreshKey} />
           <FmTvCard refreshKey={refreshKey} />
+          <PasswordCard />
         </div>
         <div className="space-y-6">
           <ChannelsCard refreshKey={refreshKey} onMutated={onMutated} />

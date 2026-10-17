@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       return tooManyRequests(limit.retryAfterS)
     }
 
-    if (!isAdminConfigured()) {
+    if (!(await isAdminConfigured())) {
       return NextResponse.json(
         {
           error:
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       )
     }
 
-    if (!verifyAdminPassword(parsed.data.password)) {
+    if (!(await verifyAdminPassword(parsed.data.password))) {
       audit("login.failed", { method: "POST", path: "/api/admin/login", ip: clientIp(request) })
       return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 401 })
     }

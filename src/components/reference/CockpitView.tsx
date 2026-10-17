@@ -20,6 +20,7 @@ import {
   Newspaper,
   RefreshCw,
   Settings2,
+  Users,
   SquarePen,
   Tags,
   type LucideIcon,
@@ -47,6 +48,7 @@ import { CockpitMedia } from "./cockpit/CockpitMedia"
 import { CockpitCategories } from "./cockpit/CockpitCategories"
 import { CockpitCampaigns } from "./cockpit/CockpitCampaigns"
 import { CockpitBroadcasts } from "./cockpit/CockpitBroadcasts"
+import { CockpitTeam } from "./cockpit/CockpitTeam"
 import { CockpitMessages } from "./cockpit/CockpitMessages"
 import { CockpitSettings } from "./cockpit/CockpitSettings"
 import { useCockpitData } from "./cockpit/cockpit-lib"
@@ -64,6 +66,7 @@ const NAV_ITEMS: Array<{
   { section: "categories", label: "Rubriques & auteurs", icon: Tags },
   { section: "campaigns", label: "Campagnes pub", icon: Megaphone },
   { section: "broadcasts", label: "FM & TV", icon: Radio },
+  { section: "team", label: "Équipe", icon: Users },
   { section: "messages", label: "Messages", icon: Inbox },
   { section: "settings", label: "Paramètres", icon: Settings2 },
 ]
@@ -76,6 +79,7 @@ const SECTION_META: Record<CockpitSection, string> = {
   categories: "Organisation",
   campaigns: "Régie publicitaire",
   broadcasts: "Antennes FM & TV",
+  team: "Rédaction",
   messages: "Courrier des lecteurs",
   settings: "Administration",
 }
@@ -320,6 +324,8 @@ export function CockpitView({
               <CockpitCampaigns refreshKey={refreshKey} onMutated={bumpRefresh} />
             ) : section === "broadcasts" ? (
               <CockpitBroadcasts refreshKey={refreshKey} onMutated={bumpRefresh} />
+            ) : section === "team" ? (
+              <CockpitTeam refreshKey={refreshKey} onMutated={bumpRefresh} />
             ) : section === "messages" ? (
               <CockpitMessages refreshKey={refreshKey} onMutated={bumpRefresh} />
             ) : (

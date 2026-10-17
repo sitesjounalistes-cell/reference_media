@@ -399,6 +399,41 @@ export const authorPatchSchema = authorInputSchema.partial().extend({
     .optional(),
 })
 
+const teamBase = z.object({
+  name: z
+    .string({ error: "Le nom est requis" })
+    .trim()
+    .min(2, "Le nom doit contenir au moins 2 caractères")
+    .max(80, "Le nom ne peut pas dépasser 80 caractères"),
+  role: z
+    .string({ error: "La fonction est requise" })
+    .trim()
+    .min(2, "La fonction doit contenir au moins 2 caractères")
+    .max(80, "La fonction ne peut pas dépasser 80 caractères"),
+  bio: z
+    .string({ error: "La biographie est requise" })
+    .trim()
+    .min(10, "La biographie doit contenir au moins 10 caractères")
+    .max(600, "La biographie ne peut pas dépasser 600 caractères"),
+  photoUrl: z
+    .string()
+    .max(500, "URL de photo trop longue")
+    .nullable()
+    .optional()
+    .refine(isSafeAssetUrl, ASSET_URL_ERROR),
+  order: z
+    .number({ error: "Ordre invalide" })
+    .int("L'ordre doit être un nombre entier")
+    .optional(),
+  visible: z.boolean({ error: "Visible : booléen attendu" }),
+})
+
+export const teamInputSchema = teamBase.extend({
+  visible: z.boolean({ error: "Visible : booléen attendu" }).default(true),
+})
+
+export const teamPatchSchema = teamBase.partial()
+
 export const categoryInputSchema = z.object({
   name: z
     .string({ error: "Le nom est requis" })

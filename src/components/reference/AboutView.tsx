@@ -14,6 +14,7 @@ import type {
   Category,
   Navigate,
   SiteSettingsResponse,
+  TeamMemberDto,
 } from "@/components/reference/types"
 
 interface AboutViewProps {
@@ -21,44 +22,19 @@ interface AboutViewProps {
   categories: Category[]
 }
 
-const TEAM = [
-  {
-    name: "Claire Fontaine",
-    role: "Rédactrice en chef",
-    bio: "Passionnée de vulgarisation scientifique depuis toujours, Claire dirige la rédaction avec une obsession : la rigueur sans l'ennui.",
-    initials: "CF",
-  },
-  {
-    name: "Marc Duval",
-    role: "Journaliste sciences & technologies",
-    bio: "Ancien ingénieur reconverti dans le journalisme, Marc traduit la technique en histoires humaines.",
-    initials: "MD",
-  },
-  {
-    name: "Sophie Marchand",
-    role: "Historienne",
-    bio: "Docteure en histoire, Sophie croque les grandes et petites histoires qui ont fait le monde.",
-    initials: "SM",
-  },
-  {
-    name: "Julien Lefèvre",
-    role: "Spécialiste économie",
-    bio: "Julien démystifie l'économie avec des exemples de la vie de tous les jours.",
-    initials: "JL",
-  },
-  {
-    name: "Amina Benali",
-    role: "Journaliste santé & société",
-    bio: "Amina enquête sur les liens entre corps, esprit et société.",
-    initials: "AB",
-  },
-  {
-    name: "Thomas Girard",
-    role: "Reporter nature & environnement",
-    bio: "Thomas a parcouru les forêts et océans du monde entier pour documenter la crise écologique… et les raisons d'espérer.",
-    initials: "TG",
-  },
-]
+/** Initiales d'un nom : 1re lettre des 2 premiers mots, sans accents. */
+function initialsOf(name: string): string {
+  const letters = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("")
+  return letters || "?"
+}
 
 const VALUES: Array<{ icon: LucideIcon; title: string; text: string }> = [
   {
@@ -83,11 +59,13 @@ export function AboutView({ navigate, categories }: AboutViewProps) {
   const stats = useFetch<ArticlesResponse>("/api/articles?pageSize=1")
   const articleCount = stats.data?.total ?? null
 
-  // Manifeste éditorial piloté depuis le cockpit (fallback : signature maison).
+  // Manifeste éditorial + équipe pilotés depuis le cockpit (fallbacks maison).
   const settingsState = useFetch<SiteSettingsResponse>("/api/settings")
   const aboutLead =
     settingsState.data?.settings?.aboutLead?.trim() ||
     "Comprendre le monde, article par article."
+  const team: TeamMemberDto[] = settingsState.data?.team ?? []
+  const teamLoading = settingsState.loading
 
   const openCategory = React.useCallback(
     (slug: string) => navigate({ type: "category", slug }),
@@ -190,14 +168,20 @@ export function AboutView({ navigate, categories }: AboutViewProps) {
                   rubriques
                 </span>
               </div>
-              <div className="py-5 first:pt-0 last:pb-0">
-                <span className="editorial-num block text-4xl text-white md:text-5xl">
-                  {TEAM.length}
-                </span>
-                <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
-                  journalistes
-                </span>
-              </div>
+              {!teamLoading && team.length === 0 ? null : (
+                <div className="py-5 first:pt-0 last:pb-0">
+                  <span className="editorial-num block text-4xl text-white md:text-5xl">
+                    {teamLoading ? (
+                      <Skeleton className="h-10 w-16 bg-white/20" />
+                    ) : (
+                      team.length
+                    )}
+                  </span>
+                  <span className="mt-2 block text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
+                    journalistes
+                  </span>
+                </div>
+              )}
             </div>
           </motion.aside>
         </div>
@@ -257,55 +241,90 @@ export function AboutView({ navigate, categories }: AboutViewProps) {
       </section>
 
       {/* -------------------------------- Équipe ------------------------------- */}
-      <section
-        aria-labelledby="team-heading"
-        className="mx-auto max-w-7xl px-4 pt-16 sm:px-6"
-      >
-        <div className="border-b-2 border-foreground pb-3">
-          <p className="kicker flex items-center gap-2 text-brand-red">
-            <span aria-hidden="true" className="brand-square bg-brand-red" />
-            La rédaction
-          </p>
-          <h2
-            id="team-heading"
-            className="headline mt-1.5 text-2xl font-bold tracking-tight md:text-[1.75rem]"
-          >
-            L&apos;équipe éditoriale
-          </h2>
-        </div>
-        <div className="mt-6 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {TEAM.map((member, index) => (
-            <motion.article
-              key={member.name}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.35, delay: (index % 3) * 0.06 }}
-              className="bg-background p-6"
+      {teamLoading ? (
+        <section aria-labelledby="team-heading" className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
+          <div className="border-b-2 border-foreground pb-3">
+            <p className="kicker flex items-center gap-2 text-brand-red">
+              <span aria-hidden="true" className="brand-square bg-brand-red" />
+              La rédaction
+            </p>
+            <h2
+              id="team-heading"
+              className="headline mt-1.5 text-2xl font-bold tracking-tight md:text-[1.75rem]"
             >
-              <div className="flex items-center gap-3.5">
-                <span
-                  aria-hidden="true"
-                  className="flex size-12 shrink-0 items-center justify-center bg-brand-blue text-sm font-bold text-white"
-                >
-                  {member.initials}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="headline truncate text-base font-bold tracking-tight">
-                    {member.name}
-                  </h3>
-                  <p className="truncate text-[10px] font-bold uppercase tracking-[0.14em] text-brand-blue">
-                    {member.role}
-                  </p>
-                </div>
+              L&apos;équipe éditoriale
+            </h2>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-background p-6">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="mt-3.5 h-4 w-2/3" />
               </div>
-              <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
-                {member.bio}
-              </p>
-            </motion.article>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      ) : team.length > 0 ? (
+        <section
+          aria-labelledby="team-heading"
+          className="mx-auto max-w-7xl px-4 pt-16 sm:px-6"
+        >
+          <div className="border-b-2 border-foreground pb-3">
+            <p className="kicker flex items-center gap-2 text-brand-red">
+              <span aria-hidden="true" className="brand-square bg-brand-red" />
+              La rédaction
+            </p>
+            <h2
+              id="team-heading"
+              className="headline mt-1.5 text-2xl font-bold tracking-tight md:text-[1.75rem]"
+            >
+              L&apos;équipe éditoriale
+            </h2>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+            {team.map((member, index) => (
+              <motion.article
+                key={member.id}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.35, delay: (index % 3) * 0.06 }}
+                className="bg-background p-6"
+              >
+                <div className="flex items-center gap-3.5">
+                  {member.photoUrl ? (
+                     
+                    <img
+                      src={member.photoUrl}
+                      alt=""
+                      className="size-12 shrink-0 object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="flex size-12 shrink-0 items-center justify-center bg-brand-blue text-sm font-bold text-white"
+                    >
+                      {initialsOf(member.name)}
+                    </span>
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="headline truncate text-base font-bold tracking-tight">
+                      {member.name}
+                    </h3>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-[0.14em] text-brand-blue">
+                      {member.role}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
+                  {member.bio}
+                </p>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {/* ------------------------------ Catégories ----------------------------- */}
       <section

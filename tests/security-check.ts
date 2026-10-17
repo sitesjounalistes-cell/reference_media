@@ -2,7 +2,13 @@
  * Tests des modules de sécurité — exécution : bun tests/security-check.ts
  * Vérifie session HMAC, mot de passe, rate limiting et détection magic bytes.
  */
-import { createSessionToken, verifySessionToken, verifyAdminPassword } from "../src/lib/admin-auth"
+import {
+  createSessionToken,
+  verifySessionToken,
+  verifyEnvAdminPassword,
+  scryptEncode,
+  scryptMatches,
+} from "../src/lib/admin-auth"
 import { rateLimit } from "../src/lib/rate-limit"
 
 // Valeurs de TEST dédiées — jamais les vrais secrets du .env.
@@ -37,9 +43,17 @@ check("jeton signé avec un autre secret rejeté", verifySessionToken(`${Date.no
 
 /* ------------------------------ Mot de passe ------------------------------ */
 console.log("\n[2] Mot de passe administrateur")
-check("bon mot de passe accepté", verifyAdminPassword("MotDePasse-De-Test-1234") === true)
-check("mauvais mot de passe refusé", verifyAdminPassword("mauvais") === false)
-check("mot de passe vide refusé", verifyAdminPassword("") === false)
+check("bon mot de passe env accepté", verifyEnvAdminPassword("MotDePasse-De-Test-1234") === true)
+check("mauvais mot de passe env refusé", verifyEnvAdminPassword("mauvais") === false)
+check("mot de passe env vide refusé", verifyEnvAdminPassword("") === false)
+
+console.log("\n[2b] Empreinte scrypt (mot de passe changé depuis le cockpit)")
+const stored = scryptEncode("Nouveau-MotDePasse-2026")
+check("empreinte au format scrypt", stored.startsWith("scrypt:"))
+check("bon mot de passe scrypt accepté", scryptMatches("Nouveau-MotDePasse-2026", stored) === true)
+check("mauvais mot de passe scrypt refusé", scryptMatches("MotDePasse-De-Test-1234", stored) === false)
+check("empreinte malformée refusée", scryptMatches("x", "scrypt:zz:zz") === false)
+check("empreinte vide refusée", scryptMatches("x", "") === false)
 
 /* ------------------------------- Rate limit ------------------------------- */
 console.log("\n[3] Limitation de débit")

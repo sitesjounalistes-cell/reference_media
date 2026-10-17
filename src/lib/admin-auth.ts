@@ -2,7 +2,10 @@
  * Referencemedia.info — Session administrateur du cockpit rédaction.
  *
  * Mécanisme volontairement autonome (aucune dépendance) :
- * - mot de passe unique lu dans ADMIN_PASSWORD (.env) ;
+ * - mot de passe : valeur initiale lue dans ADMIN_PASSWORD (.env), puis
+ *   remplaçable à tout moment depuis le cockpit (empreinte scrypt salée
+ *   conservée dans SiteSetting — la variable d'environnement reste la clé
+ *   de secours tant qu'aucun changement n'a été effectué) ;
  * - session = cookie httpOnly porteur d'un jeton signé HMAC-SHA256
  *   (charge utile « expiration.nonce », signature vérifiée à temps constant) ;
  * - garde `requireAdmin()` à appeler en tête de chaque handler /api/admin/* ;
@@ -12,7 +15,7 @@
  * Limites assumées : administrateur unique, sessions en cookie 12 h,
  * invalidation par rotation de ADMIN_SESSION_SECRET ou changement de mot de passe.
  */
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto"
+import { createHash, createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto"
 
 import { NextResponse } from "next/server"
 
@@ -80,13 +83,57 @@ export function verifySessionToken(token: string | null | undefined): boolean {
 
 /* ------------------------------- Mot de passe ------------------------------ */
 
-export function isAdminConfigured(): boolean {
-  const expected = process.env.ADMIN_PASSWORD
-  return typeof expected === "string" && expected.length >= 8
+/** Clé SiteSetting portant l'empreinte scrypt du mot de passe cockpit. */
+const PASSWORD_SETTING_KEY = "admin.password.hash"
+
+/** Empreinte scrypt du mot de passe actif, si un changement a déjà eu lieu. */
+async function getStoredPasswordHash(): Promise<string | null> {
+  try {
+    const row = await db.siteSetting.findUnique({
+      where: { key: PASSWORD_SETTING_KEY },
+      select: { value: true },
+    })
+    return row?.value ?? null
+  } catch (error) {
+    // Base injoignable : on retombe sur ADMIN_PASSWORD (la connexion doit
+    // rester possible même pendant un cold-start ou une panne Neon).
+    console.error("[admin-auth] lecture du mot de passe impossible", error)
+    return null
+  }
 }
 
-/** Comparaison à temps constant via empreintes de longueur égale. */
-export function verifyAdminPassword(candidate: string): boolean {
+/** Empreinte scrypt salée, format « scrypt:<sel hex>:<hash hex> ». */
+export function scryptEncode(password: string): string {
+  const salt = randomBytes(16)
+  const hash = scryptSync(password, salt, 64)
+  return `scrypt:${salt.toString("hex")}:${hash.toString("hex")}`
+}
+
+/** Vérifie un candidat contre une empreinte « scrypt:<sel>:<hash> ». */
+export function scryptMatches(candidate: string, stored: string): boolean {
+  const parts = stored.split(":")
+  if (parts.length !== 3 || parts[0] !== "scrypt") return false
+  try {
+    const salt = Buffer.from(parts[1], "hex")
+    const expected = Buffer.from(parts[2], "hex")
+    if (salt.length === 0 || expected.length === 0) return false
+    const actual = scryptSync(candidate, salt, expected.length)
+    return actual.length === expected.length && timingSafeEqual(actual, expected)
+  } catch {
+    return false
+  }
+}
+
+export async function isAdminConfigured(): Promise<boolean> {
+  const envReady =
+    typeof process.env.ADMIN_PASSWORD === "string" &&
+    process.env.ADMIN_PASSWORD.length >= 8
+  if (envReady) return true
+  return (await getStoredPasswordHash()) !== null
+}
+
+/** Comparaison du mot de passe d'environnement, à temps constant (tests). */
+export function verifyEnvAdminPassword(candidate: string): boolean {
   const expected = process.env.ADMIN_PASSWORD
   if (typeof expected !== "string" || expected.length < 8 || !candidate) {
     return false
@@ -94,6 +141,59 @@ export function verifyAdminPassword(candidate: string): boolean {
   const a = createHash("sha256").update(candidate, "utf8").digest()
   const b = createHash("sha256").update(expected, "utf8").digest()
   return timingSafeEqual(a, b)
+}
+
+/**
+ * Vérifie le mot de passe administrateur : empreinte scrypt de la base si un
+ * changement a eu lieu, sinon ADMIN_PASSWORD (comparaison à temps constant
+ * via empreintes sha256 de longueur égale).
+ */
+export async function verifyAdminPassword(candidate: string): Promise<boolean> {
+  if (!candidate) return false
+
+  const stored = await getStoredPasswordHash()
+  if (stored) {
+    if (scryptMatches(candidate, stored)) return true
+    // Empreinte illisible → secours env plutôt qu'administrateur bloqué.
+    if (!stored.startsWith("scrypt:")) {
+      console.error("[admin-auth] empreinte de mot de passe malformée — secours env")
+    } else {
+      return false
+    }
+  }
+
+  return verifyEnvAdminPassword(candidate)
+}
+
+export type PasswordChangeResult =
+  | { ok: true }
+  | { ok: false; status: number; error: string }
+
+/**
+ * Change le mot de passe administrateur : exige le mot de passe actuel,
+ * refuse un mot de passe identique au précédent, puis persiste l'empreinte
+ * scrypt en base (la variable ADMIN_PASSWORD devient inopérante).
+ */
+export async function changeAdminPassword(
+  current: string,
+  next: string
+): Promise<PasswordChangeResult> {
+  if (!(await verifyAdminPassword(current))) {
+    return { ok: false, status: 401, error: "Mot de passe actuel incorrect" }
+  }
+  if (next === current) {
+    return {
+      ok: false,
+      status: 400,
+      error: "Le nouveau mot de passe doit être différent de l'actuel",
+    }
+  }
+  await db.siteSetting.upsert({
+    where: { key: PASSWORD_SETTING_KEY },
+    create: { key: PASSWORD_SETTING_KEY, value: scryptEncode(next) },
+    update: { value: scryptEncode(next) },
+  })
+  return { ok: true }
 }
 
 /* --------------------------------- Cookies -------------------------------- */

@@ -179,11 +179,26 @@ model ContactChannel {
 }
 
 model SocialLink {
-  id      String  @id @default(cuid())
+  id        String  @id @default(cuid())
   platform String // x | facebook | instagram | youtube | linkedin | tiktok | rss
-  url     String
-  order   Int     @default(0)
-  visible Boolean @default(true)
+  url      String
+  order    Int     @default(0)
+  visible  Boolean @default(true)
+}
+
+// ----------------------------------------------------------------------------
+// Équipe éditoriale affichée sur la page « À propos ». Chaque membre est
+// géré depuis le cockpit (nom, fonction, biographie, photo, ordre, visibilité).
+// ----------------------------------------------------------------------------
+
+model TeamMember {
+  id       String  @id @default(cuid())
+  name     String
+  role     String // fonction : « Rédactrice en chef », « Reporter », …
+  bio      String
+  photoUrl String? // visuel (médiathèque/Cloudinary) — sinon initiales
+  order    Int     @default(0)
+  visible  Boolean @default(true)
 }
 
 // ----------------------------------------------------------------------------
