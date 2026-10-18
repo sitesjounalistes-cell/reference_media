@@ -126,6 +126,7 @@ const T = {
   "footer.followOn": ["Suivre REFERENCE.COM sur {platform}", "Follow REFERENCE.COM on {platform}", "Siga REFERENCE.COM en {platform}", "Segui REFERENCE.COM su {platform}", "تابع REFERENCE.COM على {platform}", "在 {platform} 上关注 REFERENCE.COM"],
   "footer.legal": ["Mentions légales", "Legal notice", "Aviso legal", "Note legali", "إشعارات قانونية", "法律声明"],
   "footer.privacy": ["Confidentialité", "Privacy", "Privacidad", "Privacy", "الخصوصية", "隐私政策"],
+  "footer.designedBy": ["Site conçu par", "Website designed by", "Sitio web diseñado por", "Sito web progettato da", "تصميم الموقع", "网站设计"],
   "about.title": ["À propos", "About", "Acerca de", "Chi siamo", "من نحن", "关于我们"],
   "about.mission": ["Notre mission", "Our mission", "Nuestra misión", "La nostra missione", "مهمتنا", "我们的使命"],
   "about.values": ["Nos valeurs", "Our values", "Nuestros valores", "I nostri valori", "قيمنا", "我们的价值观"],

@@ -303,6 +303,21 @@ export function Footer({ navigate, categories, onOpenSearch }: FooterProps) {
           </div>
         </div>
       </div>
+
+      {/* Crédit de conception — EINSOF DIGIT */}
+      <div className="border-t border-white/5">
+        <p className="mx-auto max-w-7xl px-4 py-3.5 text-center text-[11px] tracking-wide text-zinc-600 sm:px-6">
+          {t("footer.designedBy")}{" "}
+          <a
+            href="https://www.einsofdigit.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold uppercase text-zinc-400 underline-offset-4 transition-colors hover:text-white hover:underline outline-none focus-visible:ring-[3px] focus-visible:ring-white/30"
+          >
+            EINSOF DIGIT
+          </a>
+        </p>
+      </div>
     </footer>
   )
 }
