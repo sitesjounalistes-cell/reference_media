@@ -11,13 +11,9 @@ import {
   Bold,
   Eye,
   FileImage,
-  Heading2,
-  Heading3,
   ImagePlus,
   Italic,
   Link2,
-  List,
-  Quote,
   Send,
   Type,
   Upload,
@@ -32,6 +28,7 @@ import {
   MDXEditor,
   UndoRedo,
   headingsPlugin,
+  imagePlugin,
   linkPlugin,
   listsPlugin,
   markdownShortcutPlugin,
@@ -39,6 +36,7 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
 } from "@mdxeditor/editor"
+import type { MDXEditorMethods } from "@mdxeditor/editor"
 import "@mdxeditor/editor/style.css"
 
 import { cn } from "@/lib/utils"
@@ -131,18 +129,7 @@ function toForm(article: AdminArticleDto | null): FormState {
   }
 }
 
-/* ------------------------------ barre markdown ---------------------------- */
-
-type Tool = { label: string; icon: typeof Bold; wrap?: [string, string]; prefix?: string }
-
-const TOOLS: Tool[] = [
-  { label: "Titre majeur", icon: Heading2, prefix: "## " },
-  { label: "Titre secondaire", icon: Heading3, prefix: "### " },
-  { label: "Gras", icon: Bold, wrap: ["**", "**"] },
-  { label: "Italique", icon: Italic, wrap: ["*", "*"] },
-  { label: "Citation", icon: Quote, prefix: "> " },
-  { label: "Liste", icon: List, prefix: "- " },
-]
+/* ------------------------------ liens & médias ---------------------------- */
 
 /** Dialog d'insertion de lien : libellé + URL — plus de syntaxe à écrire à la main. */
 function LinkDialog({
@@ -421,7 +408,7 @@ export function CockpitEditor({
   const [pickerTarget, setPickerTarget] = React.useState<"cover" | "video" | "content">("cover")
   const [uploadingField, setUploadingField] = React.useState<"cover" | "video" | null>(null)
 
-  const contentRef = React.useRef<HTMLTextAreaElement>(null)
+  const mdxRef = React.useRef<MDXEditorMethods>(null)
   const coverInputRef = React.useRef<HTMLInputElement>(null)
   const videoInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -475,40 +462,19 @@ export function CockpitEditor({
   }
   const valid = Object.values(errors).every((value) => !value)
 
-  /* ------------------------------- insertion markdown ---------------------- */
+  /* --------------------------- insertion dans l'article -------------------- */
 
-  const applyTool = (tool: Tool) => {
-    const textarea = contentRef.current
-    if (!textarea) return
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const value = form.content
-    let next: string
-    let cursor: number
-
-    if (tool.wrap) {
-      const [before, after] = tool.wrap
-      next = value.slice(0, start) + before + value.slice(start, end) + after + value.slice(end)
-      cursor = end + before.length + after.length
-    } else if (tool.prefix) {
-      const lineStart = value.lastIndexOf("\n", Math.max(start - 1, 0)) + 1
-      next = value.slice(0, lineStart) + tool.prefix + value.slice(lineStart)
-      cursor = end + tool.prefix.length
-    } else {
-      return
-    }
-    set("content", next)
-    requestAnimationFrame(() => {
-      textarea.focus()
-      textarea.setSelectionRange(cursor, cursor)
-    })
-  }
-
-  const insertAtCursor = (snippet: string) => {
-    const textarea = contentRef.current
-    const position = textarea ? textarea.selectionStart : form.content.length
-    const next = form.content.slice(0, position) + snippet + form.content.slice(position)
-    set("content", next)
+  /**
+   * Insère un fragment markdown à la position du curseur de l'éditeur riche
+   * (commande officielle MDXEditor : le markdown du champ n'est lu qu'au
+   * montage, toute insertion doit passer par insertMarkdown pour être vue
+   * et conservée — images, vidéos et liens en nombre illimité).
+   */
+  const insertContent = (snippet: string) => {
+    const editor = mdxRef.current
+    if (!editor) return
+    editor.focus()
+    editor.insertMarkdown(snippet)
   }
 
   /* --------------------------------- uploads ------------------------------- */
@@ -728,8 +694,17 @@ export function CockpitEditor({
                     <FileImage className="size-4" aria-hidden="true" />
                     Vidéo
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setLinkOpen(true)}
+                    title="Insérer un lien"
+                    className="inline-flex h-8 items-center gap-1.5 border px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <Link2 className="size-4" aria-hidden="true" />
+                    Lien
+                  </button>
                   <p className="ml-1 text-[11px] text-muted-foreground">
-                    Sélectionnez du texte puis utilisez la barre ci-dessus (gras, titres, liens).
+                    Insérez autant d&apos;images et de vidéos que voulu — elles s&apos;intercalent à la position du curseur.
                   </p>
                 </div>
                 {/* Éditeur riche WYSIWYG (comme Word) : gras, italique, titres, listes, liens
@@ -738,6 +713,7 @@ export function CockpitEditor({
     zinc-950, le thème clair par défaut y rendait le texte noir sur fond noir. */}
                 <div className="min-h-[560px] border">
                   <MDXEditor
+                    ref={mdxRef}
                     markdown={form.content}
                     onChange={(value) => set("content", value)}
                     placeholder="Rédigez votre article — la barre d'outils gère le gras, les titres, les listes et les liens…"
@@ -747,6 +723,7 @@ export function CockpitEditor({
                       quotePlugin(),
                       thematicBreakPlugin(),
                       linkPlugin(),
+                      imagePlugin(),
                       markdownShortcutPlugin(),
                       toolbarPlugin({
                         toolbarContents: () => (
@@ -1008,7 +985,7 @@ export function CockpitEditor({
       <LinkDialog
         open={linkOpen}
         onOpenChange={setLinkOpen}
-        onInsert={(label, url) => insertAtCursor(`[${label}](${url})`)}
+        onInsert={(label, url) => insertContent(`[${label}](${url})`)}
       />
       <MediaPickerDialog
         open={pickerOpen}
@@ -1017,7 +994,14 @@ export function CockpitEditor({
         onPick={(asset) => {
           if (pickerTarget === "cover") set("coverImage", asset.url)
           else if (pickerTarget === "video") set("videoUrl", asset.url)
-          else insertAtCursor(`\n![${asset.originalName}](${asset.url})\n`)
+          else {
+            // Insertion illimitée dans le corps : les vidéos portent un marqueur 🎬
+            // (rendu en lecteur plein écran sur le site public) et les images
+            // s'affichent en aperçu directement dans l'éditeur.
+            const label =
+              asset.kind === "VIDEO" ? `🎬 ${asset.originalName}` : asset.originalName
+            insertContent(`\n![${label}](${asset.url})\n`)
+          }
         }}
       />
     </div>

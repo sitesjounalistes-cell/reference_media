@@ -322,6 +322,26 @@
     outline: none;
   }
 
+  /* Médias insérés dans le corps (autant que voulu) : images en aperçu
+     encadré, vidéos en pastille sombre 16:9 (lecteur plein sur le site). */
+  .mdx-editor-reference img {
+    display: block;
+    max-width: min(100%, 640px);
+    margin: 1rem auto;
+    border: 1px solid #3f3f46;
+  }
+  .mdx-editor-reference img[src$=".mp4"],
+  .mdx-editor-reference img[src$=".webm"],
+  .mdx-editor-reference img[src$=".mov"],
+  .mdx-editor-reference img[src$=".m4v"],
+  .mdx-editor-reference img[src$=".ogv"] {
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: #000;
+    border-color: #52525b;
+    padding: 1.5rem 0;
+  }
+
   /* Listes de l'éditeur riche : puces carrées rouges et numéros bleus,
      identiques au rendu public des articles. */
   .mdx-editor-reference ul {

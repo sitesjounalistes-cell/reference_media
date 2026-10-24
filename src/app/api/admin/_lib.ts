@@ -166,7 +166,16 @@ export const MAX_UPLOAD_SIZE = MAX_UPLOAD_SIZE_MO * 1024 * 1024
 
 /* ------------------------- Typographie éditoriale ------------------------- */
 
-export const ARTICLE_FONTS = ["serif", "sans", "archivo", "mono"] as const
+export const ARTICLE_FONTS = [
+  "serif",
+  "lora",
+  "sans",
+  "poppins",
+  "montserrat",
+  "archivo",
+  "oswald",
+  "mono",
+] as const
 
 const textStyleSchema = z.object({
   font: z.enum(ARTICLE_FONTS, { error: "Police invalide" }).optional(),

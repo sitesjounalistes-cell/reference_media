@@ -31,7 +31,15 @@ export interface ArticleCategoryRef {
 /* -------------------- Typographie éditoriale (titre/chapô/contenu) -------- */
 
 /** Police proposée à la rédaction (variables CSS du thème). */
-export type ArticleFont = "serif" | "sans" | "archivo" | "mono"
+export type ArticleFont =
+  | "serif"
+  | "lora"
+  | "sans"
+  | "poppins"
+  | "montserrat"
+  | "archivo"
+  | "oswald"
+  | "mono"
 
 /** Style d'un champ : police + gras + italique (tous optionnels). */
 export interface ArticleTextStyle {

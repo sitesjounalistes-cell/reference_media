@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Archivo, Playfair_Display } from "next/font/google";
+import {
+  Archivo,
+  Geist,
+  Geist_Mono,
+  Lora,
+  Montserrat,
+  Oswald,
+  Playfair_Display,
+  Poppins,
+} from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/reference/theme-provider";
@@ -27,6 +36,37 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+/* Polices éditoriales supplémentaires proposées dans le cockpit
+   (sélecteur de police par champ : titre, chapô, corps d'article). */
+const lora = Lora({
+  variable: "--font-lora",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const oswald = Oswald({
+  variable: "--font-oswald",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -72,7 +112,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} ${playfair.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${archivo.variable} ${playfair.variable} ${lora.variable} ${poppins.variable} ${montserrat.variable} ${oswald.variable} antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"
