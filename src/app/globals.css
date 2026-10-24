@@ -334,7 +334,9 @@
   .mdx-editor-reference img[src$=".webm"],
   .mdx-editor-reference img[src$=".mov"],
   .mdx-editor-reference img[src$=".m4v"],
-  .mdx-editor-reference img[src$=".ogv"] {
+  .mdx-editor-reference img[src$=".ogv"],
+  .mdx-editor-reference img[src*="youtube.com"],
+  .mdx-editor-reference img[src*="youtu.be"] {
     aspect-ratio: 16 / 9;
     object-fit: contain;
     background: #000;

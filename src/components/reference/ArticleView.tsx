@@ -22,6 +22,7 @@ import {
   formatDate,
   formatDateShort,
   formatViews,
+  youTubeId,
 } from "@/components/reference/lib"
 import { useI18n, useI18nFetch } from "@/components/reference/lang-context"
 import { AdSlot } from "@/components/reference/AdSlot"
@@ -157,11 +158,22 @@ function createMarkdownComponents({ lead = false } = {}): MarkdownComponents {
     ),
     img: ({ src, alt }) => {
       const url = typeof src === "string" ? src : undefined
+      // Vidéo YouTube insérée en markdown (![](…youtube…)) → lecteur intégré.
+      const ytId = url ? youTubeId(url) : null
       // Un fichier vidéo inséré en markdown (![](…mp4)) est rendu en lecteur.
       const isVideo = Boolean(url && /\.(mp4|webm|mov|m4v|ogv)(\?|$)/i.test(url))
       return (
         <span className="my-8 block border border-border bg-muted">
-          {isVideo ? (
+          {ytId ? (
+            <iframe
+              src={`https://www.youtube.com/embed/${ytId}`}
+              title={alt || "Vidéo YouTube"}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+              className="block aspect-video w-full bg-black"
+            />
+          ) : isVideo ? (
             <video
               src={url}
               controls

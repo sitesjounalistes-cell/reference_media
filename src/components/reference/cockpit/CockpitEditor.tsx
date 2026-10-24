@@ -18,6 +18,7 @@ import {
   Type,
   Upload,
   X,
+  Youtube,
 } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import {
@@ -40,8 +41,9 @@ import type { MDXEditorMethods } from "@mdxeditor/editor"
 import "@mdxeditor/editor/style.css"
 
 import { cn } from "@/lib/utils"
-import { fetchJson, useFetch } from "@/components/reference/lib"
+import { fetchJson, useFetch, youTubeId } from "@/components/reference/lib"
 import {
+  ARTICLE_FONT_FAMILIES,
   ARTICLE_FONT_LABELS,
   textStyleToCss,
 } from "@/components/reference/typography"
@@ -175,6 +177,69 @@ function LinkDialog({
   )
 }
 
+/* --------------------------- dialog vidéo YouTube -------------------------- */
+
+/** Dialog d'insertion YouTube : URL seule — lecteur intégré sur le site. */
+function YouTubeDialog({
+  open,
+  onOpenChange,
+  onInsert,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onInsert: (url: string) => void
+}) {
+  const [url, setUrl] = React.useState("")
+  const valid = Boolean(youTubeId(url.trim()))
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md rounded-none">
+        <DialogHeader>
+          <DialogTitle className="font-serif">Insérer une vidéo YouTube</DialogTitle>
+          <DialogDescription>
+            La vidéo est lue directement sur le site via YouTube, sans téléchargement.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <label className="kicker text-muted-foreground" htmlFor="yt-url">
+              Adresse de la vidéo (URL)
+            </label>
+            <Input
+              id="yt-url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              className="h-10 rounded-none font-mono text-xs"
+              placeholder="https://www.youtube.com/watch?v=…"
+            />
+            {url.trim() && !valid ? (
+              <p className="text-xs font-medium text-brand-red">
+                Adresse YouTube invalide (formats acceptés : watch, youtu.be, shorts, embed).
+              </p>
+            ) : null}
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" className="rounded-none" onClick={() => onOpenChange(false)}>
+            Annuler
+          </Button>
+          <Button
+            className="rounded-none"
+            disabled={!valid}
+            onClick={() => {
+              onInsert(url.trim())
+              setUrl("")
+              onOpenChange(false)
+            }}
+          >
+            Insérer la vidéo
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 /* -------------------------- sélecteur de médiathèque ---------------------- */
 
 /* --------------------- typographie par champ (panneau) -------------------- */
@@ -187,11 +252,16 @@ const TYPOGRAPHY_ROWS: Array<{ field: TypographyField; label: string }> = [
   { field: "content", label: "Contenu" },
 ]
 
-const FONT_OPTIONS: Array<{ value: ArticleFont | ""; label: string }> = [
+const FONT_OPTIONS: Array<{
+  value: ArticleFont | ""
+  label: string
+  fontFamily?: string
+}> = [
   { value: "", label: "Thème du site" },
   ...(Object.keys(ARTICLE_FONT_LABELS) as ArticleFont[]).map((font) => ({
     value: font,
     label: ARTICLE_FONT_LABELS[font],
+    fontFamily: ARTICLE_FONT_FAMILIES[font],
   })),
 ]
 
@@ -281,7 +351,11 @@ function TypographyCard({
                   </SelectTrigger>
                   <SelectContent className="rounded-none">
                     {FONT_OPTIONS.map((option) => (
-                      <SelectItem key={option.value || "theme"} value={option.value || "theme"}>
+                      <SelectItem
+                        key={option.value || "theme"}
+                        value={option.value || "theme"}
+                        style={option.fontFamily ? { fontFamily: option.fontFamily } : undefined}
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -405,6 +479,7 @@ export function CockpitEditor({
   const [savedArticle, setSavedArticle] = React.useState<AdminArticleDto | null>(article)
   const [pickerKind, setPickerKind] = React.useState<"IMAGE" | "VIDEO" | null>(null)
   const [linkOpen, setLinkOpen] = React.useState(false)
+  const [ytOpen, setYtOpen] = React.useState(false)
   const [pickerTarget, setPickerTarget] = React.useState<"cover" | "video" | "content">("cover")
   const [uploadingField, setUploadingField] = React.useState<"cover" | "video" | null>(null)
 
@@ -473,8 +548,9 @@ export function CockpitEditor({
   const insertContent = (snippet: string) => {
     const editor = mdxRef.current
     if (!editor) return
-    editor.focus()
-    editor.insertMarkdown(snippet)
+    // L'insertion passe par le rappel de focus : la dernière position du
+    // curseur est restaurée avant l'insertion (médias et liens au bon endroit).
+    editor.focus(() => editor.insertMarkdown(snippet))
   }
 
   /* --------------------------------- uploads ------------------------------- */
@@ -703,6 +779,15 @@ export function CockpitEditor({
                     <Link2 className="size-4" aria-hidden="true" />
                     Lien
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setYtOpen(true)}
+                    title="Insérer une vidéo YouTube"
+                    className="inline-flex h-8 items-center gap-1.5 border px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground outline-none transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    <Youtube className="size-4" aria-hidden="true" />
+                    YouTube
+                  </button>
                   <p className="ml-1 text-[11px] text-muted-foreground">
                     Insérez autant d&apos;images et de vidéos que voulu — elles s&apos;intercalent à la position du curseur.
                   </p>
@@ -711,7 +796,13 @@ export function CockpitEditor({
     par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main.
     dark-theme : palette sombre officielle de MDXEditor — le cockpit est habillé
     zinc-950, le thème clair par défaut y rendait le texte noir sur fond noir. */}
-                <div className="min-h-[560px] border">
+                {/* La typographie « Contenu » s'applique en direct à la surface
+                    de rédaction (la police choisie se voit pendant l'écriture,
+                    exactement comme sur le site public). */}
+                <div
+                  className="min-h-[560px] border"
+                  style={textStyleToCss(form.typography.content)}
+                >
                   <MDXEditor
                     ref={mdxRef}
                     markdown={form.content}
@@ -986,6 +1077,11 @@ export function CockpitEditor({
         open={linkOpen}
         onOpenChange={setLinkOpen}
         onInsert={(label, url) => insertContent(`[${label}](${url})`)}
+      />
+      <YouTubeDialog
+        open={ytOpen}
+        onOpenChange={setYtOpen}
+        onInsert={(url) => insertContent(`\n![🎬 YouTube](${url})\n`)}
       />
       <MediaPickerDialog
         open={pickerOpen}

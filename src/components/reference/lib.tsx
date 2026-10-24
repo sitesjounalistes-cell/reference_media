@@ -57,6 +57,14 @@ export interface AsyncState<T> {
   retry: () => void
 }
 
+/** Extrait l'identifiant d'une URL YouTube (watch, youtu.be, shorts, embed, live). */
+export function youTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  )
+  return match ? match[1] : null
+}
+
 /** Petit hook de récupération avec abort, états de chargement/erreur et retry. */
 export function useFetch<T>(url: string | null): AsyncState<T> {
   const [data, setData] = React.useState<T | null>(null)
