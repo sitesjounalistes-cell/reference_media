@@ -794,8 +794,8 @@ export function CockpitEditor({
                 </div>
                 {/* Éditeur riche WYSIWYG (comme Word) : gras, italique, titres, listes, liens
     par boutons — le rédacteur n'écrit jamais de syntaxe markdown à la main.
-    dark-theme : palette sombre officielle de MDXEditor — le cockpit est habillé
-    zinc-950, le thème clair par défaut y rendait le texte noir sur fond noir. */}
+    Aucun thème forcé : l'éditeur suit le thème du site (texte noir sur fond
+    clair, blanc sur fond sombre — contraste garanti par les tokens). */}
                 {/* La typographie « Contenu » s'applique en direct à la surface
                     de rédaction (la police choisie se voit pendant l'écriture,
                     exactement comme sur le site public). */}
@@ -829,7 +829,7 @@ export function CockpitEditor({
                       }),
                     ]}
                     contentEditableClassName="mdx-editor-reference min-h-[500px] px-4 py-3 text-[15px] leading-relaxed focus:outline-none"
-                    className="dark-theme min-h-[440px]"
+                    className="min-h-[440px]"
                   />
                 </div>
               </div>
